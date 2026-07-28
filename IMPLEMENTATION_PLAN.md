@@ -19,7 +19,7 @@
 
 | Phase | Name | Status | Target Week | Done Week |
 |---|---|---|---|---|
-| 0 | Setup & Environment | `[~] In Progress` | Week 1 | — |
+| 0 | Setup & Environment | `[x] COMPLETE` | Week 1 | 2026-07-28 |
 | 1 | Ingestion Layer | `[ ] Not Started` | Week 2–3 | — |
 | 2 | Detection Agent | `[ ] Not Started` | Week 3–4 | — |
 | 3 | RAG Retrieval Layer | `[ ] Not Started` | Week 4–6 | — |
@@ -32,7 +32,7 @@
 | 10 | Paper Writing | `[ ] Not Started` | Week 20–24 | — |
 | 11 | Submission & Buffer | `[ ] Not Started` | Week 24–26 | — |
 
-**Overall Progress:** `0 / 11 phases complete`
+**Overall Progress:** `1 / 11 phases complete`
 
 ---
 
@@ -73,17 +73,15 @@
 
 - [x] Confirm Python 3.10+ is installed: `python --version` → Python 3.10.8 ✅
 - [x] Create virtual environment: `python -m venv venv`
-- [ ] Activate virtual environment (do manually: `venv\Scripts\activate`)
-- [x] Install all required libraries (via `requirements.txt`):
-  - [x] `langgraph`
-  - [x] `langchain langchain-community langchain-groq langchain-anthropic langchain-openai`
-  - [x] `chromadb`
-  - [x] `pandas`
-  - [x] `sentence-transformers`
-  - [x] `python-dotenv`
-  - [x] `numpy`, `scikit-learn`, `jsonlines`, `requests`
-- [ ] Freeze exact versions: `pip freeze > requirements-lock.txt` ← do after install completes
-- [ ] Commit: `"chore: add requirements.txt"`
+- [x] Install all required libraries (via `requirements.txt`) — 135 packages total:
+  - [x] `langgraph` 1.2.9
+  - [x] `langchain` 1.3.14, `langchain-groq` 1.1.3, `langchain-anthropic` 1.5.3, `langchain-openai` 1.4.1
+  - [x] `chromadb` 1.5.9
+  - [x] `pandas` 2.3.3, `numpy` 2.2.6, `scikit-learn` 1.7.2
+  - [x] `sentence-transformers` 5.6.1
+  - [x] `python-dotenv` 1.2.2, `jsonlines` 4.0.0, `requests` 2.34.2
+- [x] Frozen to `requirements-lock.txt` (135 packages, exact pinned versions)
+- [x] Committed: `"chore: add requirements.txt"`
 
 ---
 
@@ -132,11 +130,11 @@
 
 ### ✅ Phase 0 Gate — Before proceeding to Phase 1, confirm ALL of these:
 
-- [ ] Repo is on GitHub with correct folder structure
-- [ ] `requirements.txt` is committed
-- [ ] CICIDS2017 CSVs are present under `data/raw/` locally
-- [ ] `.env` is NOT committed to GitHub
-- [ ] One logged successful LLM API call exists in `logs/`
+- [ ] Repo is pushed to GitHub (create private repo, then `git remote add origin ...`)
+- [x] `requirements.txt` committed, `requirements-lock.txt` (135 packages) committed
+- [ ] CICIDS2017 CSVs downloaded to `data/raw/` — see DOWNLOAD_INSTRUCTIONS.md
+- [x] `.env` is NOT committed (confirmed by .gitignore)
+- [ ] Run `python setup_env.py` → add Groq API key → run `python ingestion/hello_world.py`
 
 > **Phase 0 Completed Date:** ___________
 

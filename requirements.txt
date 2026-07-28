@@ -1,4 +1,12 @@
 # ============================================================
+# NOTE: sentence-transformers pulls in torch as a dependency.
+# For CPU-only machines (no GPU), install torch separately first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Then run: pip install -r requirements.txt
+# This avoids downloading the 2.5GB GPU version of torch.
+# ============================================================
+
+# ============================================================
 # Core Agent Framework
 # ============================================================
 langgraph>=0.2.0
