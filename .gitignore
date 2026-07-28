@@ -1,0 +1,56 @@
+# ============================================================
+# adversarial-rag-soc — .gitignore
+# ============================================================
+
+# --- Secrets & credentials (NEVER commit these) ---
+.env
+*.key
+*.pem
+
+# --- Python ---
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Large raw data (too big for git, sensitive) ---
+data/raw/
+data/chroma_clean/
+data/chroma_poisoned/
+
+# --- Logs (too large and machine-specific) ---
+logs/
+
+# --- IDE & OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- Sentence-transformers cache ---
+.cache/
+
+# --- ChromaDB ---
+*.sqlite3
+chroma.sqlite3
