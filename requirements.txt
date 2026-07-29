@@ -1,9 +1,13 @@
 # ============================================================
-# NOTE: sentence-transformers pulls in torch as a dependency.
-# For CPU-only machines (no GPU), install torch separately first:
-#   pip install torch --index-url https://download.pytorch.org/whl/cpu
-# Then run: pip install -r requirements.txt
-# This avoids downloading the 2.5GB GPU version of torch.
+# MACHINE: Intel Iris GPU (integrated) — CPU-only torch required
+# PyTorch GPU acceleration needs NVIDIA CUDA only. Intel Iris = CPU mode.
+#
+# INSTALL ORDER for fresh setup:
+#   1. pip install torch --index-url https://download.pytorch.org/whl/cpu
+#   2. pip install -r requirements.txt
+#
+# This installs the ~200MB CPU torch instead of the ~2.5GB GPU version.
+# All project code runs correctly on CPU — no GPU needed.
 # ============================================================
 
 # ============================================================
