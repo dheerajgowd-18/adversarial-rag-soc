@@ -1,0 +1,87 @@
+DOCUMENT_ID: kb_ddos_001
+CATEGORY: attack_pattern
+ATTACK_TYPE: ddos
+TITLE: DDoS Attack Signatures and Statistical Indicators in Network Flows
+
+## Overview
+Distributed Denial of Service (DDoS) attacks flood a target with traffic from multiple
+sources simultaneously, overwhelming it until it cannot serve legitimate users. DDoS is
+among the hardest attack types to detect because individual flows look statistically
+normal — the threat is in volume across many sources, not in any single flow.
+
+## Why DDoS Is Hard to Detect Per-Flow
+
+The fundamental challenge of DDoS detection at the flow level is that a single DDoS
+flow is INDISTINGUISHABLE from a legitimate connection:
+
+- A legitimate HTTPS request sends 4–8 packets to a server
+- A DDoS flood sends exactly the same 4–8 packets per source
+- The malice is in 10,000 sources all doing this simultaneously
+- Per-flow features (packet_length_mean, fwd_packets, flow_bytes_per_sec)
+  are identical between DDoS and legitimate web browsing
+
+This is why rule-based IDS systems (Snort, Suricata) fail at DDoS detection
+when configured at the single-flow level. They require aggregate counters.
+
+## CICIDS2017 DDoS Statistical Profile
+
+From real captured data in the CICIDS2017 Wednesday+Friday dataset:
+
+  Flow duration:        median 1,876,028 microseconds (1.88 seconds)
+  Forward packets:      median 4 (range 1–9)
+  Backward packets:     median 4 (range 0–7)
+  Total bytes:          median 11,627 bytes (range 24–11,669)
+  Packet length mean:   median 833 bytes (range 5–1661)
+  Flow bytes/sec:       median 159 B/s (range 1–53,100,000)
+
+COMPARISON — Normal benign traffic in same dataset:
+  Flow duration:        median 32,288 microseconds
+  Total bytes:          median 234 bytes
+  Packet length mean:   median 60 bytes
+
+KEY INSIGHT: DDoS flows in CICIDS2017 have LARGER total_bytes and packet_length_mean
+than benign traffic. This is because the attack traffic in this dataset is volumetric
+HTTP/HTTPS-like floods that mimic real web requests, not raw packet floods.
+
+## Attack Variants in CICIDS2017
+
+LOIT (Low Orbit Ion Cannon) DDoS:
+  - Sends high-volume HTTP GET requests
+  - Each request is a complete, valid HTTP transaction
+  - Indistinguishable from aggressive web crawling per-flow
+
+HTTP Flood:
+  - Valid HTTP POST/GET requests at very high rate
+  - Target: exhaust web server thread pool
+  - Flow signature: normal HTTP, high concurrent connection count
+
+UDP Flood:
+  - Spoofed UDP packets to random ports
+  - Creates reflection amplification
+  - Per-flow: very short, very few bytes
+
+## Detection Indicators (Aggregate Level — Not Per-Flow)
+
+1. RATE ANOMALY: Sudden spike in connection rate from many unique sources to one IP
+2. TEMPORAL PATTERN: Simultaneous flow starts within a 1-second window
+3. PORT CONCENTRATION: Thousands of flows all targeting same dst_port
+4. SOURCE DIVERSITY: High unique source IP count in short time window
+5. PROTOCOL CONCENTRATION: 95%+ of traffic is single protocol (TCP/UDP)
+6. SYN WITHOUT ACK: Many SYN packets with no completed handshakes
+
+## Triage Guidance for SOC Analysts
+
+When classifying a flow as potentially DDoS:
+- A single flow with typical HTTP packet counts (4-8 packets, 10-12KB) COULD be DDoS
+- Look at the destination port — DDoS commonly targets 80, 443, 8080
+- Check if flow_bytes_per_sec is at the HIGH end (>10,000 B/s) even if packet count is low
+- Check notes for any contextual indicators: high concurrent connection alerts,
+  geographic anomalies, or known C2 infrastructure IPs
+- DDoS flows that look like HTTPS should be classified SUSPICIOUS pending correlation
+  with other flows — they cannot be cleared as benign based on per-flow features alone
+
+## Severity Assessment
+  Severity: CRITICAL
+  Impact: Complete service unavailability
+  Business risk: Revenue loss, SLA breach, reputational damage
+  Recommended action: Immediate rate limiting, upstream blackhole routing, ISP contact

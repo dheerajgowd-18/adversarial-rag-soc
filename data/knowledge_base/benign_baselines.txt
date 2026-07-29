@@ -1,0 +1,104 @@
+DOCUMENT_ID: kb_benign_001
+CATEGORY: baseline_traffic
+ATTACK_TYPE: benign
+TITLE: Normal Network Traffic Baselines - What Benign Looks Like
+
+## Overview
+Understanding what NORMAL traffic looks like is as important as knowing attack
+signatures. False positives (classifying benign traffic as attacks) are costly —
+they create alert fatigue, waste analyst time, and erode trust in the detection system.
+
+## CICIDS2017 Benign Traffic Profile
+
+Baseline measurements from non-attack hours in the dataset:
+
+  flow_duration_us:    median 32,288 microseconds (0.032 seconds)
+                       Range: 1 to 119,995,732 (33 minutes max)
+  fwd_packets:         median 2 (range 1–400)
+  bwd_packets:         median 2 (range 0–704)
+  total_bytes:         median 234 bytes (range 0–1,054,145)
+  packet_length_mean:  median 60 bytes (range 0–1,660)
+  flow_bytes_per_sec:  median 5,367 B/s (range negative–1,040,000,000)
+
+Note on negative/extreme values: CICIDS2017 contains some measurement artifacts
+where flow_bytes_per_sec is negative or extremely large. These are data quality
+issues in the capture tool, not actual traffic. They should be ignored in analysis.
+
+## Common Legitimate Traffic Patterns
+
+### Web Browsing (HTTP/HTTPS)
+  - Duration: 50ms–2 seconds per request
+  - Packets: 10–50 per page load (many small TCP segments)
+  - Total bytes: 10KB–5MB (text: small, images/video: large)
+  - Protocol: TCP, port 80 or 443
+
+### DNS Resolution
+  - Duration: < 1ms typically (< 1000 microseconds)
+  - Packets: 1 fwd (query), 1 bwd (response)
+  - Total bytes: 50–500 bytes
+  - Protocol: UDP, dst_port 53
+
+### Email (SMTP/IMAP)
+  - Duration: 1–30 seconds
+  - Packets: 20–200
+  - Total bytes: 10KB–10MB (depends on attachments)
+  - Protocol: TCP, port 25/587 (SMTP) or 143/993 (IMAP)
+
+### Database Queries
+  - Duration: 1ms–5 seconds
+  - Packets: 4–20 (query + results)
+  - Total bytes: 100 bytes–10MB
+  - Protocol: TCP, port 3306 (MySQL) or 5432 (PostgreSQL)
+
+### NTP (Network Time Protocol)
+  - Duration: < 1ms
+  - Packets: 1 fwd, 1 bwd
+  - Total bytes: ~90 bytes
+  - Protocol: UDP, dst_port 123
+
+## Key Separators Between Benign and Attack Traffic
+
+| Feature | Benign Normal | Attack Signal |
+|---|---|---|
+| flow_duration | 32ms median | Either ultra-short (<1ms) OR ultra-long (>30s) |
+| packet_length_mean | 60 bytes median | Either micro (<10B) or attack-specific |
+| total_bytes | 234 bytes median | Either very tiny (<20B) or in attack band |
+| dst_port variety | Random (browsing) | Concentrated to one port (DoS/DDoS) |
+| fwd/bwd ratio | ~1:1 balanced | Highly asymmetric (DoS) or 1:0 (scan) |
+
+## When Benign Traffic Looks Suspicious
+
+These legitimate patterns can trigger false positives:
+
+1. Backup jobs: Large sustained data transfers, high bytes/sec
+   (Looks like: DoS or DDoS if only flow rate is checked)
+
+2. CDN traffic: Very high flow_bytes_per_sec from content delivery networks
+   (Looks like: DDoS from the CDN's IP perspective)
+
+3. Software updates: Large downloads in short bursts
+   (Looks like: Data exfiltration)
+
+4. Video conferencing: Sustained high-rate UDP streams
+   (Looks like: UDP flood)
+
+5. Database replication: Long-duration high-volume TCP flows
+   (Looks like: DoS Slowloris at flow level)
+
+## Triage Guidance — When to Clear as BENIGN
+
+Clear as BENIGN only if ALL of:
+  - Destination is a known good IP (CDN, known service provider)
+  - Traffic follows expected protocol for that port
+  - No anomalous timing patterns (not regular beaconing)
+  - Source is a known internal asset with expected behavior
+  - No associated alerts from same source in this session
+
+DO NOT clear as BENIGN based on packet counts or bytes alone —
+DDoS specifically mimics these normal-looking metrics.
+
+## False Positive Reduction Strategies
+  1. Maintain baseline: learn what "normal" looks like for each asset
+  2. Use destination reputation: CDN IPs should be whitelisted
+  3. Correlate across time: isolated suspicious flow vs. sustained pattern
+  4. Check protocol compliance: HTTP on port 80 is expected; SSH on 443 is not

@@ -1,0 +1,106 @@
+DOCUMENT_ID: kb_brute_force_001
+CATEGORY: attack_pattern
+ATTACK_TYPE: brute_force
+TITLE: Brute Force Attacks on Authentication Services - SSH, FTP, RDP
+
+## Overview
+Brute force attacks systematically try username/password combinations against
+authentication services until a valid credential is found. They are among the most
+common and destructive attack types, responsible for ~5% of all data breaches.
+
+## Target Services in CICIDS2017
+
+### SSH Brute Force (FTP-Patator / SSH-Patator tools)
+Target port: 22 (SSH)
+Method: Patator tool — multi-threaded credential testing framework
+Pattern per flow:
+  - Complete TCP connection (SYN → SYN-ACK → ACK → SSH banner)
+  - Authentication exchange (challenge + response)
+  - Authentication failure (server closes connection)
+  - Total: 10–50 packets per attempt
+  - Duration: 0.5–5 seconds per attempt
+
+### FTP Brute Force
+Target port: 21 (FTP control)
+Pattern:
+  - FTP greeting (220 banner)
+  - USER command (username)
+  - PASS command (password)
+  - 530 Login incorrect (failure)
+  - Total: 6–12 packets per attempt
+
+### RDP Brute Force
+Target port: 3389
+Method: Multiple authentication attempts over single persistent connection
+More difficult to detect — attempts share one TCP session
+
+## Statistical Profile (CICIDS2017)
+
+SSH-Patator / FTP-Patator flows:
+  fwd_packets:         10–100 (bidirectional auth exchange)
+  bwd_packets:         8–80
+  total_bytes:         2,000–20,000 bytes (full protocol handshake)
+  packet_length_mean:  50–300 bytes (SSH/FTP protocol overhead)
+  flow_duration_us:    100,000–1,000,000 (0.1–1 second per attempt)
+  dst_port:            22 (SSH) or 21 (FTP)
+
+DISTINGUISHING FACTOR: Brute force flows target ports 22/21/3389 AND have
+a balanced fwd/bwd ratio (the server is actively responding to each attempt).
+This is different from DoS (one-way) or port scan (no exchange).
+
+## Detection Indicators
+
+Per-flow indicators:
+  1. dst_port in {22, 21, 3389, 5900, 23} (auth service ports)
+  2. fwd_packets > 10 AND bwd_packets > 5 (active exchange)
+  3. Moderate flow duration (0.1–10 seconds per attempt)
+  4. packet_length_mean: 50–300 bytes (auth protocol overhead)
+
+Aggregate indicators (stronger signal):
+  1. Same source IP making 10+ connections to port 22 in 60 seconds
+  2. Repeated TCP connection establishment/teardown to auth port
+  3. Authentication failure log entries on target server (auth.log)
+  4. Pattern: source sends identical packet sequence, server resets, repeat
+
+## Distinguishing Auth Traffic from Brute Force
+
+Legitimate SSH:
+  - 1–2 connections per user session
+  - Successful authentication (session continues with encrypted data)
+  - Varied inter-connection timing (human operator behavior)
+
+Brute Force:
+  - 100–10,000 connection attempts in rapid succession
+  - All connections terminate quickly (auth failure → close)
+  - Regular timing (tool-driven, not human)
+  - Same source, same port, repeating pattern
+
+## Common Attack Tools
+  - Hydra: Most common, supports 30+ protocols
+  - Medusa: Parallel login brute-forcer
+  - Patator: Modular brute-forcer (used in CICIDS2017 dataset)
+  - Ncrack: High-speed network authentication cracker
+
+## Triage Guidance
+
+Classify as BRUTE FORCE (SUSPICIOUS) if:
+  - dst_port in {22, 21, 3389} AND fwd_packets > 15 AND bwd_packets > 8
+  - Source IP appears in > 10 flows to same auth port within 1 minute
+  - Flow terminates quickly (< 2 seconds) with no data transfer phase
+
+Escalate to CRITICAL if:
+  - Any successful login follows the brute force pattern (compromise confirmed)
+  - Source IP is external (internet-facing brute force attempt)
+  - Target is a privileged account or production server
+
+## Countermeasures
+  - Fail2ban: Auto-block IPs after N failures
+  - Port knocking or non-standard SSH port
+  - Key-based authentication (disables password auth entirely)
+  - Multi-factor authentication (makes stolen passwords useless)
+  - Rate limiting: max 3 auth attempts per minute per IP
+
+## Severity Assessment
+  Severity: HIGH (attempt) to CRITICAL (successful compromise)
+  Impact: Unauthorized system access, potential lateral movement
+  Recommended action: Block source IP, enforce MFA, check auth logs for success

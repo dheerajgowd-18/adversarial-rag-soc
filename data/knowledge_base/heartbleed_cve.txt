@@ -1,0 +1,86 @@
+DOCUMENT_ID: kb_heartbleed_001
+CATEGORY: vulnerability_exploit
+ATTACK_TYPE: heartbleed
+TITLE: Heartbleed (CVE-2014-0160) - Exploit Signatures and Detection
+
+## Overview
+Heartbleed is a critical buffer over-read vulnerability in OpenSSL's implementation
+of the TLS/DTLS heartbeat extension (RFC 6520). It allows attackers to read arbitrary
+memory from a vulnerable server — including private keys, passwords, and session tokens.
+
+## CVE Details
+  CVE:          CVE-2014-0160
+  CVSS Score:   7.5 (HIGH)
+  Published:    2014-04-07
+  Affected:     OpenSSL 1.0.1 through 1.0.1f, 1.0.2-beta
+  Fixed in:     OpenSSL 1.0.1g, 1.0.2-beta2
+  Still found:  Legacy systems, embedded devices, unpatched IoT
+
+## How the Exploit Works
+
+1. Attacker sends a TLS HeartbeatRequest message with a FAKE length field
+   Example: "Respond with 64KB" but only sends 1 byte of actual data
+2. Vulnerable OpenSSL reads 64KB from memory starting at that 1 byte
+3. The 64KB response contains whatever was in server memory adjacent to the buffer
+4. This memory often contains: SSL private keys, session cookies, plaintext passwords
+
+The attack is completely SILENT from the server's perspective — it logs nothing unusual,
+returns what appears to be a normal heartbeat response, just with leaked memory attached.
+
+## Network Flow Signature
+
+Heartbleed is exploited as a repeated memory-reading loop:
+  - Attacker sends many HeartbeatRequest messages
+  - Each response leaks 64KB of memory
+  - Attacker reassembles leaked memory fragments to find valuable data
+
+CICIDS2017 Heartbleed Flow Profile (the single sample in dataset):
+  fwd_packets:         2,782   ← MASSIVE (thousands of heartbeat requests)
+  bwd_packets:         2,091   ← Large server responses (with leaked memory)
+  total_bytes:         7,891,800 bytes (7.5 MB) ← huge memory exfiltration
+  packet_length_mean:  1,620 bytes
+  flow_duration_us:    119,259,886 (119 seconds — sustained exfiltration session)
+  dst_port:            444 (non-standard SSL port in this capture)
+  flow_bytes_per_sec:  66,173 B/s
+
+UNIQUE IDENTIFIER: The combination of massive packet count (2000+) with very
+high total_bytes (millions) and sustained duration is unique to Heartbleed in
+the CICIDS2017 dataset. No benign flow has 2,782 packets in a single TCP session.
+
+## Detection at Network Level
+
+Signature rules:
+  1. TLS traffic with heartbeat_type = 1 (HeartbeatRequest) exceeding 14 bytes
+  2. Payload_length field > actual_payload_length in heartbeat message
+  3. Extremely high packet count (>500) in single SSL session
+  4. Server response size much larger than request size (memory leak indicator)
+  5. Repeated pattern: small request → large response, repeated thousands of times
+
+Simplified flow-level detection:
+  - If total flow packets > 1000 AND protocol involves port 443 or 444 → investigate
+  - If fwd_packets > 500 in single session → unusual, flag for analysis
+
+## Why Heartbleed Is Still Relevant (2024)
+  - Billions of systems were patched, but not all
+  - Embedded firmware, IoT devices, legacy systems remain vulnerable
+  - OpenSSL pre-1.0.1g still found in: routers, printers, industrial control systems
+  - Scanning tools (e.g., Metasploit Heartbleed module) still actively used
+
+## Triage Guidance
+
+Classify as HEARTBLEED ATTEMPT (CRITICAL) if:
+  - SSL/TLS traffic with total_packets > 500 in single session
+  - Server memory data appearing in wireshark payloads
+  - NMAP Heartbleed script (nmap --script=ssl-heartbleed) positive result
+
+Immediate actions:
+  1. Isolate affected server immediately
+  2. Rotate ALL private keys and certificates issued by this server
+  3. Invalidate all active sessions (assume all session tokens compromised)
+  4. Notify users to change passwords
+  5. Patch OpenSSL to 1.0.1g or later
+
+## Severity Assessment
+  Severity: CRITICAL
+  Impact: Complete private key compromise, session hijacking, data exfiltration
+  Recommended action: IMMEDIATE isolation, key rotation, forensic investigation

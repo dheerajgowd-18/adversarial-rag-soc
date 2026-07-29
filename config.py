@@ -51,6 +51,11 @@ class Config:
     EVAL_FIXED_SET_PATH: Path = ALERTS_DIR / os.getenv("EVAL_FIXED_SET_PATH", "data/alerts/eval_fixed_set.json").split("/")[-1]
 
     # ── ChromaDB paths ───────────────────────────────────────────────────────
+    CHROMA_DIR: Path = ROOT / "chroma_db"
+    CHROMA_COLLECTION: str = os.getenv("CHROMA_COLLECTION", "soc_threat_intel")
+    KNOWLEDGE_BASE_DIR: Path = DATA_DIR / "knowledge_base"
+
+    # Legacy paths (kept for backwards compatibility)
     CHROMA_CLEAN_PATH: Path = ROOT / os.getenv("CHROMA_CLEAN_PATH", "data/chroma_clean")
     CHROMA_POISONED_PATH: Path = ROOT / os.getenv("CHROMA_POISONED_PATH", "data/chroma_poisoned")
 

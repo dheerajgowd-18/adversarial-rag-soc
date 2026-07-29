@@ -1,0 +1,57 @@
+{
+  "built_at": "2026-07-29T08:37:35.231949Z",
+  "embedding_model": "all-MiniLM-L6-v2",
+  "collection": "soc_threat_intel",
+  "total_documents": 8,
+  "total_chunks": 110,
+  "documents": [
+    {
+      "doc_id": "kb_benign_001",
+      "title": "Normal Network Traffic Baselines - What Benign Looks Like",
+      "attack_type": "benign",
+      "chunks": 13
+    },
+    {
+      "doc_id": "kb_botnet_001",
+      "title": "Botnet C2 Communication Patterns and Detection",
+      "attack_type": "botnet",
+      "chunks": 13
+    },
+    {
+      "doc_id": "kb_brute_force_001",
+      "title": "Brute Force Attacks on Authentication Services - SSH, FTP, RDP",
+      "attack_type": "brute_force",
+      "chunks": 14
+    },
+    {
+      "doc_id": "kb_ddos_001",
+      "title": "DDoS Attack Signatures and Statistical Indicators in Network Flows",
+      "attack_type": "ddos",
+      "chunks": 13
+    },
+    {
+      "doc_id": "kb_dos_001",
+      "title": "DoS Attack Variants - Flow-Level Signatures and Detection",
+      "attack_type": "dos",
+      "chunks": 12
+    },
+    {
+      "doc_id": "kb_heartbleed_001",
+      "title": "Heartbleed (CVE-2014-0160) - Exploit Signatures and Detection",
+      "attack_type": "heartbleed",
+      "chunks": 14
+    },
+    {
+      "doc_id": "kb_portscan_001",
+      "title": "Port Scan Detection - Signatures, Techniques, and Indicators",
+      "attack_type": "portscan",
+      "chunks": 14
+    },
+    {
+      "doc_id": "kb_prompt_injection_001",
+      "title": "Prompt Injection Attacks Against LLM-Based SOC Systems",
+      "attack_type": "prompt_injection",
+      "chunks": 17
+    }
+  ]
+}
