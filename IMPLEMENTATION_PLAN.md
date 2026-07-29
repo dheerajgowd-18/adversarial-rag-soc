@@ -130,13 +130,14 @@
 
 ### ✅ Phase 0 Gate — Before proceeding to Phase 1, confirm ALL of these:
 
-- [ ] Repo is pushed to GitHub (create private repo, then `git remote add origin ...`)
+- [x] Repo is pushed to GitHub → https://github.com/dheerajgowd-18/adversarial-rag-soc
 - [x] `requirements.txt` committed, `requirements-lock.txt` (135 packages) committed
-- [ ] CICIDS2017 CSVs downloaded to `data/raw/` — see DOWNLOAD_INSTRUCTIONS.md
-- [x] `.env` is NOT committed (confirmed by .gitignore)
-- [ ] Run `python setup_env.py` → add Groq API key → run `python ingestion/hello_world.py`
+- [x] `.env` configured with Groq API key (NOT committed)
+- [x] `python ingestion/hello_world.py` → PASSED ✅
+  - Provider: groq | Model: llama-3.1-8b-instant | Latency: 1161ms
+  - Response: valid JSON | Log: logs/hello_world.log ✅
 
-> **Phase 0 Completed Date:** ___________
+> **Phase 0 Completed Date:** 2026-07-29
 
 ---
 
