@@ -20,7 +20,7 @@
 | Phase | Name | Status | Target Week | Done Week |
 |---|---|---|---|---|
 | 0 | Setup & Environment | `[x] COMPLETE` | Week 1 | 2026-07-28 |
-| 1 | Ingestion Layer | `[ ] Not Started` | Week 2–3 | — |
+| 1 | Ingestion Layer | `[x] COMPLETE` | Week 2–3 | 2026-07-29 |
 | 2 | Detection Agent | `[ ] Not Started` | Week 3–4 | — |
 | 3 | RAG Retrieval Layer | `[ ] Not Started` | Week 4–6 | — |
 | 4 | Triage Reasoning Agent | `[ ] Not Started` | Week 6–9 | — |
@@ -32,7 +32,7 @@
 | 10 | Paper Writing | `[ ] Not Started` | Week 20–24 | — |
 | 11 | Submission & Buffer | `[ ] Not Started` | Week 24–26 | — |
 
-**Overall Progress:** `1 / 11 phases complete`
+**Overall Progress:** `2 / 11 phases complete`
 
 ---
 
