@@ -13,8 +13,8 @@
 ## 🗺️ Quick Phase Map
 
 ```
-Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 ✅  →  Phase 5 🔄  →  ...
-  Setup         Data In       Detection       RAG KB        LLM Triage    Baseline Eval
+Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 ✅  →  Phase 5 ✅  →  Phase 6 🔄  →  ...
+  Setup         Data In       Detection       RAG KB        LLM Triage    Baseline Eval   Attack Layer
 ```
 
 | Phase | Name | Status | Date Done |
@@ -24,7 +24,8 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 2 | Detection Agent | ✅ Complete | 2026-07-29 |
 | 3 | RAG Retrieval Layer | ✅ Complete | 2026-07-29 |
 | 4 | Triage Reasoning Agent | ✅ Complete | 2026-07-30 |
-| 5 | Baseline Evaluation | 🔄 Next | — |
+| 5 | Baseline Evaluation | ✅ Complete | 2026-07-30 |
+| 6 | Attack Layer | 🔄 Next | — |
 | 6 | Attack Layer | ⏳ Pending | — |
 | 7 | Attack Evaluation | ⏳ Pending | — |
 | 8 | Defense Layer | ⏳ Pending | — |
