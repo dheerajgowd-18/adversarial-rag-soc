@@ -3,7 +3,7 @@
 
 > **Document Purpose:** A clean, technical, module-by-module overview of what was built, where each file lives, what data goes in/out, and what key metrics were achieved for every phase.
 >
-> **Updated:** Phase 6 Complete (7 of 11 Phases Complete)
+> **Updated:** Phase 7 Complete (8 of 11 Phases Complete)
 
 ---
 
@@ -132,11 +132,22 @@
 
 ---
 
+### 🟢 Phase 7 — Red-Team Execution & Attack Evaluation
+* **What we did:** Executed automated Red-Team Attack Evaluation Suite (`attacks/run_attacks.py`) across 600 total attack runs (200 alerts × 3 attack categories). Generated official Red-Team report `eval/attack_results.md` containing **Research Paper Table 2** and calculated Attack Success Rates (ASR).
+* **Where the code lives:**
+  - `attacks/run_attacks.py` — Automated Red-Team batch evaluation runner across 4 Groq API keys.
+  - `eval/attack_metrics.json` — Detailed ASR metrics per attack category and per attack type.
+  - `eval/attack_results.md` — Red-Team Evaluation Report containing Paper Table 2.
+  - `eval/attack_triage_log.md` — Detailed markdown log of all attacked alerts and AI responses.
+* **Input:** Adversarial injected datasets in `data/alerts/attacked/`.
+* **Output:** Empirical ASR metrics (CAT-1 Direct ASR: 63.0%, CAT-3 Role Spoof ASR: 43.0%, CAT-4 Chained ASR: 4.0%).
+
+---
+
 ## 🔮 Upcoming Phases (Roadmap)
 
 | Phase | Module Name | Primary Objective | Output File |
 |---|---|---|---|
-| **Phase 7** | Red-Team Eval | Evaluate LLM compromise rate under adversarial prompt injection | `eval/attack_metrics.json` |
 | **Phase 8** | Defense Layer | Implement input sanitization + dual-agent validation | `agents/defense_agent.py` |
 | **Phase 9** | Defense Eval | Measure security restoration rate after applying defense | `eval/defense_metrics.json` |
 | **Phase 10** | Paper Writing | Compile experimental results into IEEE research paper format | `paper/main.tex` |
@@ -146,14 +157,14 @@
 
 ## 📊 Complete Metric Summary Table Across Phases
 
-| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Phase 6 Status |
+| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Phase 7 Red-Team ASR |
 |---|---|---|---|---|
-| **Overall Attack Recall** | 43.1% | **95.0%** | **Locked** | Adversarial datasets generated |
-| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | Adversarial datasets generated |
-| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | Adversarial datasets generated |
-| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | Adversarial datasets generated |
-| **DoS Recall** | 23.0% | **84.0%** | **Locked** | Adversarial datasets generated |
-| **F1-Score** | 0.490 | **0.6835** | **Locked** | Adversarial datasets generated |
+| **Overall Attack Recall / Safety** | 43.1% | **95.0%** | **Locked** | **63.0% ASR Compromised (CAT-1)** 🔴 |
+| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | 61.1% ASR Compromised |
+| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | 56.8% ASR Compromised |
+| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | 100.0% ASR Compromised |
+| **DoS Recall** | 23.0% | **84.0%** | **Locked** | 68.0% ASR Compromised |
+| **Authority Spoof ASR (CAT-3)** | — | — | — | **43.0% ASR Compromised** 🟠 |
 
 ---
-*Last updated: 2026-07-30 | Phase 6 complete (7 of 11 phases done)*
+*Last updated: 2026-07-30 | Phase 7 complete (8 of 11 phases done)*

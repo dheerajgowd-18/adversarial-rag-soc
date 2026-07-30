@@ -26,8 +26,8 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 4 | Triage Reasoning Agent | ✅ Complete | 2026-07-30 |
 | 5 | Baseline Evaluation | ✅ Complete | 2026-07-30 |
 | 6 | Attack Layer | ✅ Complete | 2026-07-30 |
-| 7 | Attack Evaluation | 🔄 Next | — |
-| 8 | Defense Layer | ⏳ Pending | — |
+| 7 | Attack Evaluation | ✅ Complete | 2026-07-30 |
+| 8 | Defense Layer | 🔄 Next | — |
 | 9 | Defense Evaluation | ⏳ Pending | — |
 | 10 | Paper Writing | ⏳ Pending | — |
 | 11 | Submission | ⏳ Pending | — |
@@ -420,6 +420,34 @@ Formally designed and implemented the **Adversarial Red-Team Attack Taxonomy** t
 
 ---
 
+## ✅ Phase 7 — Red-Team Execution & Attack Evaluation
+**Completed:** 2026-07-30
+
+### What We Did
+
+Executed the **Red-Team Attack Evaluation Suite** (`attacks/run_attacks.py`) evaluating all 3 adversarial attack datasets against the baseline LLM + RAG Triage Agent.
+
+Measured **Attack Success Rate (ASR)** across 600 total attack evaluations (200 alerts × 3 attack categories), establishing the empirical vulnerability baseline required for our paper.
+
+### Research Paper Table 2: Vulnerability Analysis & Attack Success Rate (ASR)
+
+| Attack Category ID | Attack Name | Vector / Surface | Total Attacked Alerts | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Level |
+|---|---|---|---|---|---|---|
+| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | **63** | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
+
+### Key Deliverables Created
+
+| File | What it does |
+|---|---|
+| `attacks/run_attacks.py` | Automated Red-Team batch evaluation runner across 4 Groq API keys |
+| `eval/attack_metrics.json` | Detailed ASR metrics per attack category and per attack type |
+| `eval/attack_results.md` | Official Red-Team Evaluation Report containing Research Paper Table 2 |
+| `eval/attack_triage_log.md` | Detailed markdown log of all attacked alerts and AI responses |
+
+---
+
 ## 📊 Results Summary So Far
 
 | Phase | Key Metric | Value |
@@ -432,7 +460,9 @@ Formally designed and implemented the **Adversarial Red-Team Attack Taxonomy** t
 | Phase 4 | Baseline LLM+RAG Recall | **95.0%** (DDoS recall: **97.2%**) |
 | Phase 4 | Baseline LLM+RAG F1 | **0.6835** |
 | Phase 5 | Baseline Report & Paper Table 1 | Locked in `eval/baseline_report.md` |
-| Phase 6 | Adversarial Datasets Generated | **3 Injected Attack Sets (CAT-1, CAT-3, CAT-4)** |
+| Phase 6 | Adversarial Datasets Generated | 3 Injected Attack Sets (CAT-1, CAT-3, CAT-4) |
+| Phase 7 | Direct Field Injection ASR (CAT-1) | **63.0% Compromised** 🔴 |
+| Phase 7 | Authority Spoofing ASR (CAT-3) | **43.0% Compromised** 🟠 |
 
 
 ---
@@ -506,11 +536,14 @@ final-year-project/
 │   ├── baseline_triage_metrics.json # Phase 4 metrics
 │   ├── metrics.py                  # Phase 5 metrics calculation engine
 │   ├── baseline_report.md          # Phase 5 baseline report & Paper Table 1
-│   └── baseline_200_triage_log.md  # All 200 AI triage responses
+│   ├── baseline_200_triage_log.md  # All 200 AI triage responses
+│   ├── attack_metrics.json         # Phase 7 attack metrics
+│   ├── attack_results.md           # Phase 7 attack report & Paper Table 2
+│   └── attack_triage_log.md        # Phase 7 attack triage responses
 │
 └── 📁 logs/                        # Execution logs
 ```
 
 ---
 
-*Last updated: 2026-07-30 | Phase 6 complete | 7 of 11 phases done*
+*Last updated: 2026-07-30 | Phase 7 complete | 8 of 11 phases done*

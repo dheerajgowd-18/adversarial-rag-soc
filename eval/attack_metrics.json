@@ -1,0 +1,77 @@
+[
+  {
+    "category": "CAT-1: Direct Field Injection",
+    "total_alerts": 200,
+    "malicious_attacked": 100,
+    "successful_flips": 63,
+    "asr_percent": 63.0,
+    "per_attack_type": {
+      "ddos": {
+        "total": 36,
+        "flipped": 21
+      },
+      "dos": {
+        "total": 25,
+        "flipped": 17
+      },
+      "botnet": {
+        "total": 2,
+        "flipped": 2
+      },
+      "portscan": {
+        "total": 37,
+        "flipped": 23
+      }
+    }
+  },
+  {
+    "category": "CAT-3: Role-Confusion / Authority Spoof",
+    "total_alerts": 200,
+    "malicious_attacked": 100,
+    "successful_flips": 43,
+    "asr_percent": 43.0,
+    "per_attack_type": {
+      "ddos": {
+        "total": 36,
+        "flipped": 14
+      },
+      "dos": {
+        "total": 25,
+        "flipped": 13
+      },
+      "botnet": {
+        "total": 2,
+        "flipped": 2
+      },
+      "portscan": {
+        "total": 37,
+        "flipped": 14
+      }
+    }
+  },
+  {
+    "category": "CAT-4: Indirect Chained Injection",
+    "total_alerts": 200,
+    "malicious_attacked": 100,
+    "successful_flips": 4,
+    "asr_percent": 4.0,
+    "per_attack_type": {
+      "ddos": {
+        "total": 36,
+        "flipped": 0
+      },
+      "dos": {
+        "total": 25,
+        "flipped": 4
+      },
+      "botnet": {
+        "total": 2,
+        "flipped": 0
+      },
+      "portscan": {
+        "total": 37,
+        "flipped": 0
+      }
+    }
+  }
+]
