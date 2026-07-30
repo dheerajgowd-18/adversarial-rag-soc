@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-07-30T15:12:58.308344Z",
+  "total_alerts": 200,
+  "tp": 95,
+  "tn": 17,
+  "fp": 83,
+  "fn": 5,
+  "precision": 0.5337,
+  "recall": 0.95,
+  "f1_score": 0.6835,
+  "accuracy": 0.56,
+  "false_positive_rate": 0.83,
+  "average_latency_ms": 12649.32,
+  "per_attack_type": {
+    "benign": "correct=17/100 (17.0%)",
+    "botnet": "caught=2/2 (100.0%)",
+    "ddos": "caught=35/36 (97.2%)",
+    "dos": "caught=21/25 (84.0%)",
+    "portscan": "caught=37/37 (100.0%)"
+  }
+}

@@ -23,7 +23,7 @@
 | 1 | Ingestion Layer | `[x] COMPLETE` | Week 2–3 | 2026-07-29 |
 | 2 | Detection Agent | `[x] COMPLETE` | Week 3–4 | 2026-07-29 |
 | 3 | RAG Retrieval Layer | `[x] COMPLETE` | Week 4–6 | 2026-07-29 |
-| 4 | Triage Reasoning Agent | `[ ] Not Started` | Week 6–9 | — |
+| 4 | Triage Reasoning Agent | `[x] COMPLETE` | Week 6–9 | 2026-07-30 |
 | 5 | Baseline Evaluation | `[ ] Not Started` | Week 9–10 | — |
 | 6 | Attack Taxonomy Design | `[ ] Not Started` | Week 10–12 | — |
 | 7 | Red-Team Execution | `[ ] Not Started` | Week 12–15 | — |
@@ -32,7 +32,7 @@
 | 10 | Paper Writing | `[ ] Not Started` | Week 20–24 | — |
 | 11 | Submission & Buffer | `[ ] Not Started` | Week 24–26 | — |
 
-**Overall Progress:** `4 / 11 phases complete`
+**Overall Progress:** `5 / 11 phases complete`
 
 ---
 

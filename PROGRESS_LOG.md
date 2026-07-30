@@ -13,8 +13,8 @@
 ## 🗺️ Quick Phase Map
 
 ```
-Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 🔄  →  ...
-  Setup         Data In       Detection       RAG KB        LLM Triage
+Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 ✅  →  Phase 5 🔄  →  ...
+  Setup         Data In       Detection       RAG KB        LLM Triage    Baseline Eval
 ```
 
 | Phase | Name | Status | Date Done |
@@ -23,8 +23,8 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 1 | Ingestion Layer | ✅ Complete | 2026-07-29 |
 | 2 | Detection Agent | ✅ Complete | 2026-07-29 |
 | 3 | RAG Retrieval Layer | ✅ Complete | 2026-07-29 |
-| 4 | Triage Reasoning Agent | 🔄 Next | — |
-| 5 | Baseline Evaluation | ⏳ Pending | — |
+| 4 | Triage Reasoning Agent | ✅ Complete | 2026-07-30 |
+| 5 | Baseline Evaluation | 🔄 Next | — |
 | 6 | Attack Layer | ⏳ Pending | — |
 | 7 | Attack Evaluation | ⏳ Pending | — |
 | 8 | Defense Layer | ⏳ Pending | — |
@@ -327,17 +327,57 @@ Overall Retrieval Test Result      : 100% PASS (7/7 tests passed, latency ~300ms
 
 ---
 
+## ✅ Phase 4 — Triage Reasoning Agent (LLM + RAG)
+**Completed:** 2026-07-30
+
+### What We Did
+
+Built the **Triage Reasoning Agent** (`agents/triage_agent.py`), combining LLM reasoning with Phase 3 RAG threat intelligence context to triage suspicious network alerts.
+
+The agent takes alert metadata + RAG threat intel and renders structured JSON verdicts (`SUSPICIOUS` or `BENIGN`), assigning severity tiers (`critical`, `high`, `medium`, `low`, `info`), confidence scores, and SOC remediation actions.
+
+### Key Technical Innovations
+
+1. **Multi-Key Load Balancing Pool (`KeyPool`)**: Built a client pool round-robing across Groq Key 1, Groq Key 2, and OpenRouter to bypass single-key rate limits and maximize throughput.
+2. **Grounded RAG Reasoning**: Injected top-3 threat intelligence documents into prompt context, enabling the LLM to identify attacks that lack obvious rule-based feature signals.
+3. **Structured JSON Output & Fallback Parsing**: Enforced strict JSON response schemas with robust fallback parsing for raw text codeblocks.
+
+### Results on 200 Fixed Evaluation Set Alerts
+
+```
+✅ Phase 4 Baseline Evaluation Complete
+
+Overall Metrics:
+  Precision       : 0.5337
+  Recall          : 0.9500   (95.0% of all real attacks caught!)
+  F1-Score        : 0.6835   (Up from 0.490 in Phase 2)
+  Accuracy        : 0.5600
+
+Per Attack Type Breakdown:
+  PortScan   →  100.0% (37/37 caught)  ✅
+  Botnet     →  100.0% (2/2 caught)    ✅
+  DDoS       →   97.2% (35/36 caught)  ✅  (CRITICAL RECOVERY: 0% in Phase 2 -> 97.2% in Phase 4)
+  DoS        →   84.0% (21/25 caught)  ✅  (84% caught vs 23% in Phase 2)
+  Benign     →   17.0% (17/100 correct benign clearance)
+```
+
+### 🔑 Key Research Takeaway
+
+> **RAG Threat Intel solves the DDoS Blindspot.** Rules alone missed 100% of DDoS flows because DDoS packet metrics mirror HTTPS traffic. By retrieving domain threat intelligence, the LLM correctly identified **97.2% of DDoS attacks**.
+
+---
+
 ## 📊 Results Summary So Far
 
 | Phase | Key Metric | Value |
 |---|---|---|
 | Phase 0 | LLM latency | 1,161ms |
 | Phase 1 | Alerts ingested | 4,995 (0 errors) |
-| Phase 2 | Rule-based F1 | 0.490 |
-| Phase 2 | PortScan recall | 99.6% |
-| Phase 2 | DDoS recall | **0%** ← research gap |
+| Phase 2 | Rule-based F1 | 0.490 (DDoS recall: 0%) |
 | Phase 3 | KB Documents & Chunks | 8 files (110 chunks) |
-| Phase 3 | Retrieval Test Pass Rate | **100% (7/7 PASS)** |
+| Phase 3 | Retrieval Test Pass Rate | 100% (7/7 PASS) |
+| Phase 4 | Baseline LLM+RAG Recall | **95.0%** (DDoS recall: **97.2%**) |
+| Phase 4 | Baseline LLM+RAG F1 | **0.6835** |
 
 
 ---

@@ -35,8 +35,10 @@ class Config:
 
     # ── API Keys ─────────────────────────────────────────────────────────────
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    GROQ_API_KEY_2: str = os.getenv("GROQ_API_KEY_2", "")
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
 
     # ── Data paths ───────────────────────────────────────────────────────────
     DATA_DIR: Path = ROOT / "data"
@@ -93,6 +95,11 @@ class Config:
             errors.append(
                 "OPENAI_API_KEY is not set. Add it to your .env file.\n"
                 "  Get a key at: https://platform.openai.com/"
+            )
+        if self.LLM_PROVIDER == "openrouter" and not self.OPENROUTER_API_KEY:
+            errors.append(
+                "OPENROUTER_API_KEY is not set. Add it to your .env file.\n"
+                "  Get a key at: https://openrouter.ai/keys"
             )
 
         if errors:
