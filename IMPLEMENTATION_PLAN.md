@@ -25,14 +25,14 @@
 | 3 | RAG Retrieval Layer | `[x] COMPLETE` | Week 4–6 | 2026-07-29 |
 | 4 | Triage Reasoning Agent | `[x] COMPLETE` | Week 6–9 | 2026-07-30 |
 | 5 | Baseline Evaluation | `[x] COMPLETE` | Week 9–10 | 2026-07-30 |
-| 6 | Attack Taxonomy Design | `[ ] Not Started` | Week 10–12 | — |
+| 6 | Attack Taxonomy Design | `[x] COMPLETE` | Week 10–12 | 2026-07-30 |
 | 7 | Red-Team Execution | `[ ] Not Started` | Week 12–15 | — |
 | 8 | Defense / Verification Layer | `[ ] Not Started` | Week 15–18 | — |
 | 9 | Full Re-Evaluation | `[ ] Not Started` | Week 18–20 | — |
 | 10 | Paper Writing | `[ ] Not Started` | Week 20–24 | — |
 | 11 | Submission & Buffer | `[ ] Not Started` | Week 24–26 | — |
 
-**Overall Progress:** `6 / 11 phases complete`
+**Overall Progress:** `7 / 11 phases complete`
 
 ---
 
