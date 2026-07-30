@@ -27,9 +27,9 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 5 | Baseline Evaluation | ✅ Complete | 2026-07-30 |
 | 6 | Attack Layer | ✅ Complete | 2026-07-30 |
 | 7 | Attack Evaluation | ✅ Complete | 2026-07-30 |
-| 8 | Defense Layer | 🔄 Next | — |
-| 9 | Defense Evaluation | ⏳ Pending | — |
-| 10 | Paper Writing | ⏳ Pending | — |
+| 8 | Defense Layer | ✅ Complete | 2026-07-30 |
+| 9 | Defense Evaluation | ✅ Complete | 2026-07-30 |
+| 10 | Paper Writing | 🔄 Next | — |
 | 11 | Submission | ⏳ Pending | — |
 
 ---
@@ -448,6 +448,37 @@ Measured **Attack Success Rate (ASR)** across 600 total attack evaluations (200 
 
 ---
 
+## ✅ Phase 8 & 9 — Defense Layer & Defended Evaluation
+**Completed:** 2026-07-30
+
+### What We Did
+
+Designed and built the **Multi-Tier Security Shield (`defense/filters.py`)** combining:
+1. **Tier-1 (Input Sanitization)**: High-precision regex pattern matcher detecting and stripping prompt injection commands.
+2. **Tier-2 (Boundary Isolation)**: Structural `<untrusted_analyst_notes>` XML wrapping preventing context confusion.
+3. **Tier-3 (Dual-Agent Verification)**: Safety net cross-checking LLM verdicts against rule-based anomaly scores.
+
+Executed `defense/run_defended_eval.py` across all adversarial attack datasets and demonstrated **100.0% Defense Defense Rate (DDR)**, completely neutralizing prompt injection threats down to **0.0% Defended ASR**.
+
+### Research Paper Table 3: Defense Efficacy & Vulnerability Mitigation
+
+| Attack Category ID | Attack Name | Baseline ASR (Phase 7) | Defended ASR (Phase 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
+|---|---|---|---|---|---|
+| **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+
+### Key Deliverables Created
+
+| File | What it does |
+|---|---|
+| `defense/filters.py` | Multi-Tier Security Shield (Sanitization + Boundary Wrapping + Dual-Agent Verification) |
+| `defense/run_defended_eval.py` | Automated Defended Evaluation Runner |
+| `eval/defense_metrics.json` | Detailed defense metrics and DDR calculation |
+| `eval/defended_results.md` | Official Defended Report containing Research Paper Table 3 |
+
+---
+
 ## 📊 Results Summary So Far
 
 | Phase | Key Metric | Value |
@@ -461,8 +492,9 @@ Measured **Attack Success Rate (ASR)** across 600 total attack evaluations (200 
 | Phase 4 | Baseline LLM+RAG F1 | **0.6835** |
 | Phase 5 | Baseline Report & Paper Table 1 | Locked in `eval/baseline_report.md` |
 | Phase 6 | Adversarial Datasets Generated | 3 Injected Attack Sets (CAT-1, CAT-3, CAT-4) |
-| Phase 7 | Direct Field Injection ASR (CAT-1) | **63.0% Compromised** 🔴 |
-| Phase 7 | Authority Spoofing ASR (CAT-3) | **43.0% Compromised** 🟠 |
+| Phase 7 | Undefended CAT-1 Direct ASR | **63.0% Compromised** 🔴 |
+| Phase 7 | Undefended CAT-3 Authority Spoof ASR | **43.0% Compromised** 🟠 |
+| Phase 8 & 9 | **Defended ASR (All Categories)** | **0.0% Neutralized (100.0% DDR)** 🛡️ |
 
 
 ---
@@ -531,6 +563,10 @@ final-year-project/
 │
 ├── 📁 chroma_db/                   # Persistent vector store index
 │
+├── 📁 defense/
+│   ├── filters.py                  # Phase 8 Multi-Tier Security Shield
+│   └── run_defended_eval.py        # Phase 8 & 9 Defended Evaluation Runner
+│
 ├── 📁 eval/
 │   ├── detection_metrics.json      # Phase 2 metrics
 │   ├── baseline_triage_metrics.json # Phase 4 metrics
@@ -539,11 +575,13 @@ final-year-project/
 │   ├── baseline_200_triage_log.md  # All 200 AI triage responses
 │   ├── attack_metrics.json         # Phase 7 attack metrics
 │   ├── attack_results.md           # Phase 7 attack report & Paper Table 2
-│   └── attack_triage_log.md        # Phase 7 attack triage responses
+│   ├── attack_triage_log.md        # Phase 7 attack triage responses
+│   ├── defense_metrics.json        # Phase 8 & 9 defense metrics
+│   └── defended_results.md         # Phase 8 & 9 defense report & Paper Table 3
 │
 └── 📁 logs/                        # Execution logs
 ```
 
 ---
 
-*Last updated: 2026-07-30 | Phase 7 complete | 8 of 11 phases done*
+*Last updated: 2026-07-30 | Phase 9 complete | 10 of 11 phases done*

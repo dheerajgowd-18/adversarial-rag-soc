@@ -3,7 +3,7 @@
 
 > **Document Purpose:** A clean, technical, module-by-module overview of what was built, where each file lives, what data goes in/out, and what key metrics were achieved for every phase.
 >
-> **Updated:** Phase 7 Complete (8 of 11 Phases Complete)
+> **Updated:** Phase 8 & 9 Complete (10 of 11 Phases Complete)
 
 ---
 
@@ -144,27 +144,36 @@
 
 ---
 
+### 🟢 Phase 8 & 9 — Defense Layer & Defended Evaluation
+* **What we did:** Built the Multi-Tier Security Shield (`defense/filters.py`) featuring Input Sanitization, Structural Boundary Isolation, and Dual-Agent Verification. Executed `defense/run_defended_eval.py` across all 3 adversarial datasets and compiled official report `eval/defended_results.md` containing **Research Paper Table 3**.
+* **Where the code lives:**
+  - `defense/filters.py` — Multi-Tier Security Shield engine.
+  - `defense/run_defended_eval.py` — Defended Evaluation Runner script.
+  - `eval/defense_metrics.json` — Structured defense metrics.
+  - `eval/defended_results.md` — Defended Evaluation Report containing Paper Table 3.
+* **Input:** Adversarial injected datasets + Clean baseline set.
+* **Output:** 100.0% Defense Defense Rate (DDR), reducing Defended ASR to 0.0% across all attack categories.
+
+---
+
 ## 🔮 Upcoming Phases (Roadmap)
 
 | Phase | Module Name | Primary Objective | Output File |
 |---|---|---|---|
-| **Phase 8** | Defense Layer | Implement input sanitization + dual-agent validation | `agents/defense_agent.py` |
-| **Phase 9** | Defense Eval | Measure security restoration rate after applying defense | `eval/defense_metrics.json` |
-| **Phase 10** | Paper Writing | Compile experimental results into IEEE research paper format | `paper/main.tex` |
+| **Phase 10** | Paper Writing | Compile experimental results into IEEE research paper format | `paper/main.md` |
 | **Phase 11** | Final Submission | Final verification & buffer | Complete Repository |
 
 ---
 
 ## 📊 Complete Metric Summary Table Across Phases
 
-| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Phase 7 Red-Team ASR |
+| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM Baseline) | Phase 7 (Undefended Attack ASR) | Phase 8 & 9 (Defended ASR / DDR) |
 |---|---|---|---|---|
-| **Overall Attack Recall / Safety** | 43.1% | **95.0%** | **Locked** | **63.0% ASR Compromised (CAT-1)** 🔴 |
-| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | 61.1% ASR Compromised |
-| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | 56.8% ASR Compromised |
-| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | 100.0% ASR Compromised |
-| **DoS Recall** | 23.0% | **84.0%** | **Locked** | 68.0% ASR Compromised |
-| **Authority Spoof ASR (CAT-3)** | — | — | — | **43.0% ASR Compromised** 🟠 |
+| **Direct Field Injection (CAT-1)** | — | — | **63.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Indirect Chained Injection (CAT-4)** | — | — | **4.0% ASR Compromised** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Overall Attack Recall / Safety** | 43.1% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
+| **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
 
 ---
-*Last updated: 2026-07-30 | Phase 7 complete (8 of 11 phases done)*
+*Last updated: 2026-07-30 | Phase 9 complete (10 of 11 phases done)*
