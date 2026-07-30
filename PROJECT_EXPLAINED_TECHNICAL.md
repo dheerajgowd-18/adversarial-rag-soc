@@ -3,7 +3,7 @@
 
 > **Document Purpose:** A clean, technical, module-by-module overview of what was built, where each file lives, what data goes in/out, and what key metrics were achieved for every phase.
 >
-> **Updated:** Phase 5 Complete (6 of 11 Phases Complete)
+> **Updated:** Phase 6 Complete (7 of 11 Phases Complete)
 
 ---
 
@@ -119,11 +119,23 @@
 
 ---
 
+### 🟢 Phase 6 — Adversarial Attack Layer (Red-Team Taxonomy)
+* **What we did:** Designed formal research taxonomy defining 4 prompt injection vector categories (CAT-1 Direct, CAT-2 RAG Poisoning, CAT-3 Role Spoofing, CAT-4 Chained). Implemented automated red-team injector `attacks/injector.py` and generated 3 adversarial evaluation sets.
+* **Where the code lives:**
+  - `attacks/taxonomy.md` — Formal attack taxonomy specification and ASR mathematical definitions.
+  - `attacks/injector.py` — Automated adversarial payload injector script.
+  - `data/alerts/attacked/eval_attacked_cat1_direct.json` — Direct Field Injection dataset (200 alerts).
+  - `data/alerts/attacked/eval_attacked_cat3_role_spoof.json` — Role Spoofing dataset (200 alerts).
+  - `data/alerts/attacked/eval_attacked_cat4_chained.json` — Indirect Chained Injection dataset (200 alerts).
+* **Input:** Clean benchmark alerts (`data/alerts/eval_fixed_set.json`).
+* **Output:** Adversarial injected datasets ready for red-team evaluation in Phase 7.
+
+---
+
 ## 🔮 Upcoming Phases (Roadmap)
 
 | Phase | Module Name | Primary Objective | Output File |
 |---|---|---|---|
-| **Phase 6** | Attack Layer | Implement 4 prompt injection attack types into `notes_field` | `data/alerts/attacked/*.json` |
 | **Phase 7** | Red-Team Eval | Evaluate LLM compromise rate under adversarial prompt injection | `eval/attack_metrics.json` |
 | **Phase 8** | Defense Layer | Implement input sanitization + dual-agent validation | `agents/defense_agent.py` |
 | **Phase 9** | Defense Eval | Measure security restoration rate after applying defense | `eval/defense_metrics.json` |
@@ -134,14 +146,14 @@
 
 ## 📊 Complete Metric Summary Table Across Phases
 
-| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Impact of RAG + LLM |
+| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Phase 6 Status |
 |---|---|---|---|---|
-| **Overall Attack Recall** | 43.1% | **95.0%** | **Locked** | **+51.9%** 🚀 |
-| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | **+97.2%** 🎉 |
-| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | +0.4% |
-| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | +33.0% |
-| **DoS Recall** | 23.0% | **84.0%** | **Locked** | +61.0% |
-| **F1-Score** | 0.490 | **0.6835** | **Locked** | **+0.1935** |
+| **Overall Attack Recall** | 43.1% | **95.0%** | **Locked** | Adversarial datasets generated |
+| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | Adversarial datasets generated |
+| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | Adversarial datasets generated |
+| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | Adversarial datasets generated |
+| **DoS Recall** | 23.0% | **84.0%** | **Locked** | Adversarial datasets generated |
+| **F1-Score** | 0.490 | **0.6835** | **Locked** | Adversarial datasets generated |
 
 ---
-*Last updated: 2026-07-30 | Phase 5 complete (6 of 11 phases done)*
+*Last updated: 2026-07-30 | Phase 6 complete (7 of 11 phases done)*

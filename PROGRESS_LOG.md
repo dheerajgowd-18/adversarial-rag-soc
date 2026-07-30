@@ -485,6 +485,10 @@ final-year-project/
 │   ├── retriever.py                # Phase 3 AlertRetriever semantic search
 │   └── test_retriever.py           # Phase 3 automated test suite
 │
+├── 📁 attacks/
+│   ├── taxonomy.md                 # Phase 6 Attack Taxonomy specification
+│   └── injector.py                 # Phase 6 Adversarial Prompt Injector
+│
 ├── 📁 data/
 │   ├── raw/                        # CICIDS2017 CSVs
 │   ├── knowledge_base/             # 8 threat intel text documents (110 chunks)
@@ -492,7 +496,8 @@ final-year-project/
 │       ├── clean_alerts.json       # 4,995 processed alerts
 │       ├── suspicious_queue.json   # 1,416 flagged for LLM
 │       ├── eval_fixed_set.json     # 200 fixed evaluation alerts
-│       └── triage_results.json     # Phase 4 LLM triage results
+│       ├── triage_results.json     # Phase 4 LLM triage results
+│       └── attacked/               # Phase 6 adversarial datasets (CAT-1, CAT-3, CAT-4)
 │
 ├── 📁 chroma_db/                   # Persistent vector store index
 │
@@ -508,4 +513,4 @@ final-year-project/
 
 ---
 
-*Last updated: 2026-07-30 | Phase 5 complete | 6 of 11 phases done*
+*Last updated: 2026-07-30 | Phase 6 complete | 7 of 11 phases done*
