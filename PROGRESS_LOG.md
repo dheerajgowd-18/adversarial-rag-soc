@@ -26,7 +26,6 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 4 | Triage Reasoning Agent | ✅ Complete | 2026-07-30 |
 | 5 | Baseline Evaluation | ✅ Complete | 2026-07-30 |
 | 6 | Attack Layer | 🔄 Next | — |
-| 6 | Attack Layer | ⏳ Pending | — |
 | 7 | Attack Evaluation | ⏳ Pending | — |
 | 8 | Defense Layer | ⏳ Pending | — |
 | 9 | Defense Evaluation | ⏳ Pending | — |
@@ -368,6 +367,33 @@ Per Attack Type Breakdown:
 
 ---
 
+## ✅ Phase 5 — Baseline Evaluation & Reporting
+**Completed:** 2026-07-30
+
+### What We Did
+
+Built `eval/metrics.py` to calculate research metrics across the baseline pipeline and generated the official baseline evaluation report `eval/baseline_report.md` containing **Research Paper Table 1**.
+
+Locked baseline performance metrics prior to introducing adversarial red-team prompt injections in Phase 6.
+
+### Key Deliverables Created
+
+| File | What it does |
+|---|---|
+| `eval/metrics.py` | Automated research metric evaluation script (Precision, Recall, F1, Accuracy, FPR, FNR, P50/P95 Latency) |
+| `eval/baseline_report.md` | Formal baseline evaluation report containing locked Research Paper Table 1 |
+| `eval/baseline_200_triage_log.md` | Markdown table recording all 200 AI triage verdicts, reasoning summaries, and RAG sources |
+
+### Research Paper Table 1: Baseline Comparison
+
+| Pipeline Stage | Overall Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score | Mean Latency |
+|---|---|---|---|---|---|---|---|
+| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | 0.4900 | 0.04 ms |
+| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%** | **84.0%** | **0.6835** | 12,649 ms |
+| **Impact / Gain** | **+51.9%** 🚀 | **+97.2%** 🎉 | +0.4% | +33.0% | +61.0% | **+0.1935** | — |
+
+---
+
 ## 📊 Results Summary So Far
 
 | Phase | Key Metric | Value |
@@ -379,6 +405,7 @@ Per Attack Type Breakdown:
 | Phase 3 | Retrieval Test Pass Rate | 100% (7/7 PASS) |
 | Phase 4 | Baseline LLM+RAG Recall | **95.0%** (DDoS recall: **97.2%**) |
 | Phase 4 | Baseline LLM+RAG F1 | **0.6835** |
+| Phase 5 | Baseline Report & Paper Table 1 | **Locked in `eval/baseline_report.md`** |
 
 
 ---
@@ -411,7 +438,8 @@ final-year-project/
 ├── 📄 requirements.txt             # Install instructions
 ├── 📄 requirements-lock.txt        # Exact pinned versions (135 packages)
 ├── 📄 IMPLEMENTATION_PLAN.md       # Detailed phase-by-phase task tracker
-├── 📄 PROGRESS_LOG.md              # ← This file
+├── 📄 PROGRESS_LOG.md              # Living phase progress tracker
+├── 📄 PROJECT_EXPLAINED_TECHNICAL.md # Technical reference guide
 │
 ├── 📁 ingestion/
 │   ├── schema.py                   # Alert dataclass (pipeline contract)
@@ -421,26 +449,36 @@ final-year-project/
 │
 ├── 📁 agents/
 │   ├── detection_agent.py          # 11-rule scoring engine
-│   └── run_detection.py            # Runner + metrics + output
+│   ├── run_detection.py            # Phase 2 rule runner
+│   ├── triage_agent.py             # Phase 4 LLM+RAG Triage Agent & KeyPool
+│   └── run_triage.py               # Phase 4 parallel batch runner
+│
+├── 📁 retrieval/
+│   ├── build_kb.py                 # Phase 3 KB chunker & ChromaDB indexer
+│   ├── retriever.py                # Phase 3 AlertRetriever semantic search
+│   └── test_retriever.py           # Phase 3 automated test suite
 │
 ├── 📁 data/
-│   ├── raw/                        # CICIDS2017 CSVs (not in git — too large)
+│   ├── raw/                        # CICIDS2017 CSVs
+│   ├── knowledge_base/             # 8 threat intel text documents (110 chunks)
 │   └── alerts/
 │       ├── clean_alerts.json       # 4,995 processed alerts
 │       ├── suspicious_queue.json   # 1,416 flagged for LLM
-│       └── eval_fixed_set.json     # 200 fixed evaluation alerts
+│       ├── eval_fixed_set.json     # 200 fixed evaluation alerts
+│       └── triage_results.json     # Phase 4 LLM triage results
+│
+├── 📁 chroma_db/                   # Persistent vector store index
 │
 ├── 📁 eval/
-│   └── detection_metrics.json      # Phase 2 metrics (precision/recall/F1)
+│   ├── detection_metrics.json      # Phase 2 metrics
+│   ├── baseline_triage_metrics.json # Phase 4 metrics
+│   ├── metrics.py                  # Phase 5 metrics calculation engine
+│   ├── baseline_report.md          # Phase 5 baseline report & Paper Table 1
+│   └── baseline_200_triage_log.md  # All 200 AI triage responses
 │
-├── 📁 logs/
-│   ├── hello_world.log             # Phase 0 LLM test log
-│   ├── ingestion.log               # Phase 1 run log
-│   └── detection.log               # Phase 2 run log
-│
-└── 📁 venv/                        # Python virtualenv (not in git)
+└── 📁 logs/                        # Execution logs
 ```
 
 ---
 
-*Last updated: 2026-07-29 | Phase 2 complete | 3 of 11 phases done*
+*Last updated: 2026-07-30 | Phase 5 complete | 6 of 11 phases done*

@@ -3,7 +3,7 @@
 
 > **Document Purpose:** A clean, technical, module-by-module overview of what was built, where each file lives, what data goes in/out, and what key metrics were achieved for every phase.
 >
-> **Updated:** Phase 4 Complete (5 of 11 Phases Complete)
+> **Updated:** Phase 5 Complete (6 of 11 Phases Complete)
 
 ---
 
@@ -107,29 +107,41 @@
 
 ---
 
+### 🟢 Phase 5 — Baseline Evaluation & Research Metrics
+* **What we did:** Created automated research metric calculator (`eval/metrics.py`) and compiled the official baseline evaluation report `eval/baseline_report.md` containing **Research Paper Table 1**. Formatted all 200 raw AI decisions into a readable markdown table.
+* **Where the code lives:**
+  - `eval/metrics.py` — Metric calculation engine (Precision, Recall, F1, Accuracy, FPR, FNR, P50/P95 Latency).
+  - `eval/baseline_report.md` — Locked baseline evaluation report containing Paper Table 1.
+  - `eval/generate_md_log.py` — Log formatting script.
+  - `eval/baseline_200_triage_log.md` — Formatted log of all 200 AI verdicts, reasoning, and RAG sources.
+* **Input:** `data/alerts/triage_results.json` + `data/alerts/eval_fixed_set.json`.
+* **Output:** Locked Research Paper Table 1 and baseline performance metrics.
+
+---
+
 ## 🔮 Upcoming Phases (Roadmap)
 
 | Phase | Module Name | Primary Objective | Output File |
 |---|---|---|---|
-| **Phase 5** | Baseline Evaluation | Generate comparative plots & summary report for baseline performance | `eval/baseline_report.md` |
 | **Phase 6** | Attack Layer | Implement 4 prompt injection attack types into `notes_field` | `data/alerts/attacked/*.json` |
 | **Phase 7** | Red-Team Eval | Evaluate LLM compromise rate under adversarial prompt injection | `eval/attack_metrics.json` |
 | **Phase 8** | Defense Layer | Implement input sanitization + dual-agent validation | `agents/defense_agent.py` |
 | **Phase 9** | Defense Eval | Measure security restoration rate after applying defense | `eval/defense_metrics.json` |
 | **Phase 10** | Paper Writing | Compile experimental results into IEEE research paper format | `paper/main.tex` |
+| **Phase 11** | Final Submission | Final verification & buffer | Complete Repository |
 
 ---
 
 ## 📊 Complete Metric Summary Table Across Phases
 
-| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Impact of RAG + LLM |
-|---|---|---|---|
-| **Overall Attack Recall** | 43.1% | **95.0%** | **+51.9%** 🚀 |
-| **DDoS Attack Recall** | **0.0%** | **97.2%** | **+97.2%** 🎉 |
-| **PortScan Recall** | 99.6% | **100.0%** | +0.4% |
-| **Botnet Recall** | 67.0% | **100.0%** | +33.0% |
-| **DoS Recall** | 23.0% | **84.0%** | +61.0% |
-| **F1-Score** | 0.490 | **0.6835** | **+0.1935** |
+| Metric | Phase 2 (Rule Gate) | Phase 4 (LLM + RAG Baseline) | Phase 5 Baseline Status | Impact of RAG + LLM |
+|---|---|---|---|---|
+| **Overall Attack Recall** | 43.1% | **95.0%** | **Locked** | **+51.9%** 🚀 |
+| **DDoS Attack Recall** | **0.0%** | **97.2%** | **Locked** | **+97.2%** 🎉 |
+| **PortScan Recall** | 99.6% | **100.0%** | **Locked** | +0.4% |
+| **Botnet Recall** | 67.0% | **100.0%** | **Locked** | +33.0% |
+| **DoS Recall** | 23.0% | **84.0%** | **Locked** | +61.0% |
+| **F1-Score** | 0.490 | **0.6835** | **Locked** | **+0.1935** |
 
 ---
-*Last updated: 2026-07-30 | Phase 4 complete*
+*Last updated: 2026-07-30 | Phase 5 complete (6 of 11 phases done)*
