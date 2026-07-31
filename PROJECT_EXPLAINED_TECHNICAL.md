@@ -3,7 +3,7 @@
 
 > **Document Purpose:** A clean, technical, module-by-module overview of what was built, where each file lives, what data goes in/out, and what key metrics were achieved for every phase.
 >
-> **Updated:** Phase 8 & 9 Complete (10 of 11 Phases Complete)
+> **Updated:** All Phases 0–10 Complete (11 of 11 Phases Complete)
 
 ---
 
@@ -14,7 +14,7 @@
           │
           ▼  (Phase 1)
  [ Ingestion Layer ] ──▶ data/alerts/clean_alerts.json (4,995 Alerts)
-          │
+          │                └─▶ data/alerts/eval_fixed_set.json (200 Benchmark Set)
           ▼  (Phase 2)
   [ Rule Detection ] ──▶ data/alerts/suspicious_queue.json (1,416 Flagged)
           │                └─▶ Rule Recall: 43.1% (DDoS: 0% 🔴)
@@ -23,7 +23,15 @@
           │
           ▼  (Phase 4)
   [ LLM Triage Agent ] ──▶ eval/baseline_triage_metrics.json
-                           └─▶ LLM+RAG Recall: 95.0% (DDoS: 97.2% ✅)
+          │                └─▶ LLM+RAG Recall: 95.0% (DDoS: 97.2% ✅)
+          ▼  (Phase 6 & 7)
+ [ Red-Team Attacks ] ──▶ eval/attack_results.md (CAT-1 ASR: 63%, CAT-3 ASR: 43%)
+          │
+          ▼  (Phase 8 & 9)
+ [ 3-Tier Security Shield ] ──▶ eval/defended_results.md (Defended ASR: 0.0%, 100% DDR 🛡️)
+          │
+          ▼  (Interactive Dashboard)
+  [ Web Command Center ] ──▶ ui/app.py (FastAPI Cyberpunk UI at http://127.0.0.1:8000)
 ```
 
 ---
@@ -32,34 +40,34 @@
 
 ---
 
-### 🟢 Phase 0 — Environment & LLM Client Setup
-* **What we did:** Setup Python virtual environment (`venv`), pinned 135 dependencies in `requirements-lock.txt`, built unified configuration system (`config.py`), and verified Groq/LLM connectivity.
+### 🟢 Phase 0 — Environment & API Infrastructure Setup
+* **What we did:** Setup Python virtual environment (`venv`), pinned 135 dependencies in `requirements-lock.txt`, built unified configuration system (`config.py`), and verified Groq/LLM connectivity with a 4-key API load balancing pool (`KeyPool`).
 * **Where the code lives:**
   - `config.py` — Single source of truth for all paths, API keys, and model parameters.
   - `setup_env.py` — Interactive `.env` generator for API keys.
   - `ingestion/hello_world.py` — Baseline LLM verification script.
-* **Input:** API keys (`GROQ_API_KEY`, `OPENROUTER_API_KEY`).
+* **Input:** API keys (`GROQ_API_KEY_1` through `GROQ_API_KEY_4`).
 * **Output:** Operational `.env`, verified LLM connection (1,161ms latency).
-* **Why it matters:** Guarantees zero path/key errors across all future pipeline layers.
+* **Why it matters:** Guarantees zero path/key errors across all pipeline layers and bypasses free-tier API rate limits.
 
 ---
 
 ### 🟢 Phase 1 — Ingestion Layer & Canonical Alert Schema
 * **What we did:** Parsed 1.39 million raw network flow records from the CICIDS2017 dataset (Wednesday & Friday PCAPs), normalized attributes into a canonical 22-field `Alert` schema, and constructed fixed benchmark evaluation sets.
 * **Where the code lives:**
-  - `ingestion/schema.py` — Canonical `Alert` dataclass definition (contract for the entire pipeline).
+  - `ingestion/schema.py` — Canonical `SOCAlert` dataclass definition (contract for the entire pipeline).
   - `ingestion/build_alerts.py` — CSV parser, cleaner, and JSON builder.
   - `ingestion/generate_synthetic.py` — Synthetic alert generator for unit testing.
 * **Input:** Raw CSVs in `data/raw/` (Wednesday/Friday PCAP exports).
 * **Output:**
   - `data/alerts/clean_alerts.json` (4,995 total processed alerts)
   - `data/alerts/eval_fixed_set.json` (200 fixed evaluation alerts: 100 benign, 100 malicious)
-* **Key Schema Field (`notes_field`):** Free-text field simulating SIEM analyst notes. **This is our primary attack surface for prompt injection in Phase 6.**
+* **Key Schema Field (`notes_field`):** Free-text field simulating SIEM analyst notes and payload commentary. **Primary attack surface for prompt injection.**
 
 ---
 
 ### 🟢 Phase 2 — Rule-Based Detection Gate
-* **What we did:** Built a zero-cost, high-speed rule-based detection engine (`DetectionAgent`) with 11 heuristic network rules calibrated against real CICIDS2017 feature distributions.
+* **What we did:** Built a high-speed rule-based detection engine (`DetectionAgent`) with 11 heuristic network rules calibrated against real CICIDS2017 feature distributions.
 * **Where the code lives:**
   - `agents/detection_agent.py` — 11-rule scoring engine (weighted anomaly score 0.0–1.0, threshold 0.28).
   - `agents/run_detection.py` — Batch runner and metric evaluator.
@@ -75,7 +83,7 @@
 ---
 
 ### 🟢 Phase 3 — RAG Knowledge Base & Retrieval Layer
-* **What we did:** Created a 8-document threat intelligence knowledge base (110 chunks) covering attack signatures, created dense vector embeddings (`all-MiniLM-L6-v2`, 384-dim), and stored them in local ChromaDB vector store. Built semantic search query interface (`AlertRetriever`).
+* **What we did:** Created an 8-document threat intelligence knowledge base (110 chunks) covering attack signatures, created dense vector embeddings (`all-MiniLM-L6-v2`, 384-dim), and stored them in local ChromaDB vector store. Built semantic search query interface (`AlertRetriever`).
 * **Where the code lives:**
   - `data/knowledge_base/*.txt` — Threat intel text files (DDoS, DoS, PortScan, Botnet, Heartbleed, Brute Force, Benign Baselines, Prompt Injection Defense).
   - `retrieval/build_kb.py` — Text chunker, embedder, and ChromaDB vector builder.
@@ -89,7 +97,7 @@
 ---
 
 ### 🟢 Phase 4 — Triage Reasoning Agent (LLM + RAG)
-* **What we did:** Built the LLM Triage Agent (`TriageAgent`) combining LLM reasoning with Phase 3 RAG context. Built a multi-key client pool (`KeyPool`) round-robing across Groq and OpenRouter keys to maximize speed and bypass free-tier rate limits.
+* **What we did:** Built the LLM Triage Agent (`TriageAgent`) combining LLM reasoning with Phase 3 RAG context. Built a multi-key client pool (`KeyPool`) round-robing across 4 Groq API keys to maximize speed and bypass free-tier rate limits.
 * **Where the code lives:**
   - `agents/triage_agent.py` — RAG + LLM prompt builder, multi-key pool, and structured JSON output parser.
   - `agents/run_triage.py` — Batch parallel runner and evaluator.
@@ -156,12 +164,20 @@
 
 ---
 
-## 🔮 Upcoming Phases (Roadmap)
+### 🟢 Interactive Cyberpunk Web Command Center Dashboard
+* **What we did:** Built an interactive FastAPI single-page web dashboard displaying real-time RAG context retrieval, live Red-Team attack simulation, and real-time Multi-Tier Security Shield controls.
+* **Where the code lives:**
+  - `ui/app.py` — FastAPI REST API endpoints.
+  - `ui/templates/index.html` — HTML dashboard layout.
+  - `ui/static/style.css` — Cyberpunk dark mode styling.
+  - `ui/static/main.js` — Frontend state management and live triage logic.
 
-| Phase | Module Name | Primary Objective | Output File |
-|---|---|---|---|
-| **Phase 10** | Paper Writing | Compile experimental results into IEEE research paper format | `paper/main.md` |
-| **Phase 11** | Final Submission | Final verification & buffer | Complete Repository |
+---
+
+### 🟢 Phase 10 — Academic Research Paper Manuscript
+* **What we did:** Compiled experimental findings into an IEEE-formatted academic research manuscript.
+* **Where the code lives:**
+  - `paper/RESEARCH_PAPER_MANUSCRIPT.md` — Publication-ready manuscript.
 
 ---
 
@@ -176,4 +192,4 @@
 | **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
 
 ---
-*Last updated: 2026-07-30 | Phase 9 complete (10 of 11 phases done)*
+*Last updated: 2026-07-31 | All 11 phases complete*

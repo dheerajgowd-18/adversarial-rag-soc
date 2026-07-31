@@ -36,6 +36,8 @@ class Config:
     # ── API Keys ─────────────────────────────────────────────────────────────
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
     GROQ_API_KEY_2: str = os.getenv("GROQ_API_KEY_2", "")
+    GROQ_API_KEY_3: str = os.getenv("GROQ_API_KEY_3", "")
+    GROQ_API_KEY_4: str = os.getenv("GROQ_API_KEY_4", "")
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")

@@ -38,6 +38,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import cfg
 from ingestion.schema import Alert
 from retrieval.retriever import AlertRetriever, RetrievedDoc
+from defense.filters import DefenseShield
 
 logger = logging.getLogger("triage_agent")
 
@@ -128,11 +129,10 @@ class KeyPool:
             self.clients.append(("groq", "llama-3.1-8b-instant", Groq(api_key=cfg.GROQ_API_KEY)))
         if getattr(cfg, "GROQ_API_KEY_2", ""):
             self.clients.append(("groq", "llama-3.1-8b-instant", Groq(api_key=cfg.GROQ_API_KEY_2)))
-        if cfg.OPENROUTER_API_KEY:
-            self.clients.append(("openrouter", "openrouter/free", OpenAI(
-                base_url="https://openrouter.ai/api/v1",
-                api_key=cfg.OPENROUTER_API_KEY,
-            )))
+        if getattr(cfg, "GROQ_API_KEY_3", ""):
+            self.clients.append(("groq", "llama-3.1-8b-instant", Groq(api_key=cfg.GROQ_API_KEY_3)))
+        if getattr(cfg, "GROQ_API_KEY_4", ""):
+            self.clients.append(("groq", "llama-3.1-8b-instant", Groq(api_key=cfg.GROQ_API_KEY_4)))
         self._index = 0
 
     def get_next(self):
@@ -150,9 +150,10 @@ class TriageAgent:
     Uses multi-key load balancing across Groq and OpenRouter keys for maximum throughput.
     """
 
-    def __init__(self, top_k: int = cfg.RETRIEVAL_TOP_K):
+    def __init__(self, top_k: int = cfg.RETRIEVAL_TOP_K, defense_active: bool = False):
         self.top_k = top_k
         self.retriever = AlertRetriever()
+        self.shield = DefenseShield(active=defense_active)
         global _pool
         if _pool is None:
             _pool = KeyPool()
@@ -174,6 +175,13 @@ class TriageAgent:
 
         # Step 2: Build Prompt
         duration_sec = alert.flow_duration_us / 1_000_000.0
+        # Apply Defense Tier 1 & Tier 2: Input Sanitization & Boundary Wrapping
+        notes_input = alert.notes_field or "(None)"
+        if self.shield.active:
+            is_clean, sanitized_notes, _ = self.shield.sanitize_input(notes_input)
+            context_str = self.shield.wrap_user_context(sanitized_notes, context_str)
+            notes_input = sanitized_notes
+
         user_prompt = USER_PROMPT_TEMPLATE.format(
             alert_id=alert.alert_id,
             dst_port=alert.dst_port,
@@ -185,7 +193,7 @@ class TriageAgent:
             total_bytes=alert.total_bytes,
             packet_length_mean=alert.packet_length_mean,
             flow_bytes_per_sec=alert.flow_bytes_per_sec,
-            notes_field=alert.notes_field or "(None)",
+            notes_field=notes_input,
             anomaly_score=round(anomaly_score, 3),
             context_str=context_str,
         )
@@ -249,6 +257,17 @@ class TriageAgent:
             confidence = 0.7
 
         reasoning = str(parsed.get("reasoning", "Triage performed based on network features and threat intelligence."))
+
+        # Apply Defense Tier 3: Dual-Agent Verification & Threshold Shield
+        if self.shield.active:
+            verdict, severity, was_overridden, override_msg = self.shield.verify_output(
+                alert_anomaly_score=anomaly_score,
+                llm_verdict=verdict,
+                llm_severity=severity,
+                notes_field=alert.notes_field or "",
+            )
+            if was_overridden:
+                reasoning = f"{reasoning} [{override_msg}]"
         rec_action = str(parsed.get("recommended_action", "Investigate alert."))
         attack_type_cls = str(parsed.get("attack_type_classified", alert.attack_type or "unknown")).lower()
 
