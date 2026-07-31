@@ -26,6 +26,9 @@ import sys
 import json
 import time
 import logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("groq").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import NamedTuple, Optional, Any

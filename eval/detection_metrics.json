@@ -1,64 +1,52 @@
 {
   "phase": "Phase 2 - Detection Agent",
-  "input_file": "D:\\final-year-project\\data\\alerts\\clean_alerts.json",
-  "total_alerts": 4995,
+  "input_file": "data\\alerts\\eval_fixed_set.json",
+  "total_alerts": 200,
   "threshold": 0.28,
-  "suspicious_count": 1416,
-  "benign_count": 3579,
-  "latency_ms_per_alert": 0.039,
+  "suspicious_count": 59,
+  "benign_count": 141,
+  "latency_ms_per_alert": 0.059,
   "metrics": {
-    "total": 4995,
-    "tp": 804,
-    "tn": 2516,
-    "fp": 612,
-    "fn": 1063,
-    "precision": 0.5678,
-    "recall": 0.4306,
-    "f1": 0.4898,
-    "accuracy": 0.6647,
-    "false_positive_rate": 0.1957,
+    "total": 200,
+    "tp": 46,
+    "tn": 87,
+    "fp": 13,
+    "fn": 54,
+    "precision": 0.7797,
+    "recall": 0.46,
+    "f1": 0.5786,
+    "accuracy": 0.665,
+    "false_positive_rate": 0.13,
     "per_attack_type": {
+      "ddos": {
+        "tp": 0,
+        "fn": 36,
+        "total": 36,
+        "detection_rate": 0.0
+      },
       "benign": {
         "tp": 0,
         "fn": 0,
-        "total": 3128,
+        "total": 100,
         "detection_rate": 0.0
-      },
-      "ddos": {
-        "tp": 0,
-        "fn": 708,
-        "total": 708,
-        "detection_rate": 0.0
-      },
-      "portscan": {
-        "tp": 690,
-        "fn": 3,
-        "total": 693,
-        "detection_rate": 0.9957
-      },
-      "botnet": {
-        "tp": 8,
-        "fn": 4,
-        "total": 12,
-        "detection_rate": 0.6667
       },
       "dos": {
-        "tp": 103,
-        "fn": 340,
-        "total": 443,
-        "detection_rate": 0.2325
+        "tp": 7,
+        "fn": 18,
+        "total": 25,
+        "detection_rate": 0.28
       },
-      "unknown": {
-        "tp": 3,
-        "fn": 7,
-        "total": 10,
-        "detection_rate": 0.3
+      "botnet": {
+        "tp": 2,
+        "fn": 0,
+        "total": 2,
+        "detection_rate": 1.0
       },
-      "heartbleed": {
-        "tp": 0,
-        "fn": 1,
-        "total": 1,
-        "detection_rate": 0.0
+      "portscan": {
+        "tp": 37,
+        "fn": 0,
+        "total": 37,
+        "detection_rate": 1.0
       }
     }
   }

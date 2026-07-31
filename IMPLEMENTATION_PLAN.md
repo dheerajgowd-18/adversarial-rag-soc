@@ -24,6 +24,8 @@
 
 **Overall Progress:** `11 / 11 phases complete (100%)`
 
+> **Note on Execution Timeline:** While the research methodology and architectural roadmap were designed following a standard 26-week academic engineering framework, the full code implementation, vector indexing, evaluation runs, and paper writing were executed during an accelerated 4-day intensive development sprint (2026-07-28 to 2026-07-31) leveraging modular Python packages, pre-built evaluation harnesses, and multi-key API load balancing.
+
 ---
 
 ## 🟢 Phase 0 — Environment & API Infrastructure Setup

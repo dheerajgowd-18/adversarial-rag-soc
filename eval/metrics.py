@@ -116,10 +116,10 @@ def compute_metrics():
     report_lines.append("| Pipeline Stage | Overall Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score | Avg Latency |")
     report_lines.append("|---|---|---|---|---|---|---|---|")
     
-    # Phase 2 Rule Gate row
-    r_rec = rule_metrics.get("recall", 0.431)
-    r_f1  = rule_metrics.get("f1_score", 0.490)
-    report_lines.append(f"| **Phase 2: Rule Gate** | {r_rec*100:.1f}% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | {r_f1:.4f} | 0.04ms |")
+    # Phase 2 Rule Gate row (Evaluated on locked 200-alert eval_fixed_set.json)
+    r_rec = rule_metrics.get("recall", 0.460)
+    r_f1  = rule_metrics.get("f1", 0.5786)
+    report_lines.append(f"| **Phase 2: Rule Gate** | {r_rec*100:.1f}% | **0.0%** 🔴 | 100.0% | 100.0%* | 28.0% | {r_f1:.4f} | 0.06ms |")
     
     # Phase 4 LLM+RAG Baseline row
     ddos_rec = (attack_stats.get("ddos", {}).get("caught", 0) / attack_stats.get("ddos", {}).get("total", 1)) * 100.0
@@ -128,7 +128,9 @@ def compute_metrics():
     dos_rec = (attack_stats.get("dos", {}).get("caught", 0) / attack_stats.get("dos", {}).get("total", 1)) * 100.0
     
     report_lines.append(f"| **Phase 4: LLM + RAG Baseline** | **{recall*100:.1f}%** | **{ddos_rec:.1f}%** ✅ | **{pscan_rec:.1f}%** | **{bot_rec:.1f}%** | **{dos_rec:.1f}%** | **{f1:.4f}** | {avg_lat:.0f}ms |")
-    report_lines.append(f"| **Impact / Gain** | **+{recall*100 - r_rec*100:.1f}%** | **+{ddos_rec:.1f}%** | +{pscan_rec - 99.6:.1f}% | +{bot_rec - 67.0:.1f}% | +{dos_rec - 23.0:.1f}% | **+{f1 - r_f1:.4f}** | — |")
+    report_lines.append(f"| **Impact / Gain** | **+{recall*100 - r_rec*100:.1f}%** | **+{ddos_rec:.1f}%** | +{pscan_rec - 100.0:.1f}% | +{bot_rec - 100.0:.1f}% | +{dos_rec - 28.0:.1f}% | **+{f1 - r_f1:.4f}** | — |")
+    report_lines.append("")
+    report_lines.append("\n*\*Note: Botnet evaluation sample size is n=2 alerts; metrics for this category carry higher variance."*)
     report_lines.append("")
     report_lines.append("---")
     report_lines.append("")

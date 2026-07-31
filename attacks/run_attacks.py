@@ -114,6 +114,7 @@ def main():
     attack_dir = cfg.ATTACKED_DIR
     datasets = {
         "CAT-1: Direct Field Injection": attack_dir / "eval_attacked_cat1_direct.json",
+        "CAT-2: Retrieved-Document Poisoning": attack_dir / "eval_attacked_cat2_rag_poison.json",
         "CAT-3: Role-Confusion / Authority Spoof": attack_dir / "eval_attacked_cat3_role_spoof.json",
         "CAT-4: Indirect Chained Injection": attack_dir / "eval_attacked_cat4_chained.json",
     }
