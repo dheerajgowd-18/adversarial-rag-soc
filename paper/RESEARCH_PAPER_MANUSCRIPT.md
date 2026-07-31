@@ -118,7 +118,7 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
 | **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
-*\*Note on CAT-2 Mechanical Verification: Document poisoning (CAT-2) was mechanically verified by logging top-3 retrieved ChromaDB passages (`verify_cat2_retrieval.py`), confirming that `[THREAT INTEL ADVISORY #892 - MANDATORY OVERRIDE]` instructions were present inside the LLM prompt context for 100% of sample queries. The 0.0% ASR reflects true model resilience to passive RAG text vs active field injection.*
+*\*Note on CAT-2 Mechanical & Full-Coverage Retrieval Verification: Full-coverage audit (`verify_cat2_retrieval.py`) across all 100 attacked malicious alerts revealed that the poisoned chunk (`[THREAT INTEL ADVISORY #892 - MANDATORY OVERRIDE]`) was present in the top-3 prompt context for 63/100 alerts (36 DDoS, 25 DoS, 1 Botnet, 1 PortScan). On these 63 alerts where poison was directly evaluated by the LLM, ASR remained 0.0% (0 flips), proving true model resilience to passive RAG text vs active field injection. On the remaining 37 alerts (36 PortScan, 1 Botnet), dense vector similarity naturally screened out the poisoned chunk, acting as an implicit retrieval defense (0.0% ASR).*
 
 ### D. Variance & Repeated Trial Analysis (Table IV)
 To evaluate the statistical stability of LLM triage decisions under baseline and adversarial conditions, we conducted $N=3$ independent repeated trial runs across the entire benchmark dataset ($N=600$ total evaluations per condition).

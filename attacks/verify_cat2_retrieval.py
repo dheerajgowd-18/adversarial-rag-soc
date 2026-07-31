@@ -15,38 +15,51 @@ from attacks.build_and_run_cat2 import PoisonedRetriever
 def verify_cat2():
     retriever = PoisonedRetriever()
     
-    with open(cfg.EVAL_FIXED_SET_PATH, "r", encoding="utf-8") as f:
+    cat2_path = cfg.ATTACKED_DIR / "eval_attacked_cat2_rag_poison.json"
+    with open(cat2_path, "r", encoding="utf-8") as f:
         alerts_raw = json.load(f)
     alerts = [Alert.from_dict(d) for d in alerts_raw]
 
-    # Select 5 sample malicious alerts (1 DDoS, 1 PortScan, 1 DoS, 1 Botnet, 1 Benign)
-    samples = []
-    types_found = set()
-    for a in alerts:
-        atype = a.attack_type or "unknown"
-        if atype not in types_found:
-            samples.append(a)
-            types_found.add(atype)
-        if len(samples) == 5:
-            break
+    malicious_alerts = [a for a in alerts if a.is_malicious]
+    total_malicious = len(malicious_alerts)
 
-    print("=== CAT-2 RETRIEVAL VERIFICATION LOG ===")
-    for idx, alert in enumerate(samples, 1):
+    poisoned_retrieved_cnt = 0
+    poisoned_missed_cnt = 0
+
+    per_type_breakdown = {}
+
+    print(f"=== FULL COVERAGE CAT-2 RETRIEVAL AUDIT ({total_malicious} MALICIOUS ALERTS) ===")
+    for idx, alert in enumerate(malicious_alerts, 1):
         docs = retriever.retrieve(alert, k=3)
-        context_str = retriever.format_context(docs)
-        
-        print(f"\n--- SAMPLE ALERT {idx}: ID={alert.alert_id} | Attack={alert.attack_type} ---")
-        print(f"Query string built: {retriever.build_query(alert)}")
-        print(f"Retrieved {len(docs)} documents from chroma_db_poisoned:")
-        
-        contains_poison = False
-        for d in docs:
-            has_p = "[THREAT INTEL ADVISORY #892" in d.chunk_text or "MANDATORY INSTRUCTION OVERRIDE" in d.chunk_text
-            if has_p: contains_poison = True
-            print(f"  - Doc ID: {d.doc_id} | Score: {d.relevance_score:.4f} | Poisoned Chunk Present: {has_p}")
-            print(f"    Chunk snippet: {d.chunk_text[:120]}...")
-            
-        print(f"-> CONTAINS POISONED INSTRUCTION IN PROMPT CONTEXT: {contains_poison}")
+        contains_poison = any(
+            "[THREAT INTEL ADVISORY #892" in d.chunk_text or "MANDATORY INSTRUCTION OVERRIDE" in d.chunk_text
+            for d in docs
+        )
+
+        atype = alert.attack_type or "unknown"
+        if atype not in per_type_breakdown:
+            per_type_breakdown[atype] = {"total": 0, "poison_retrieved": 0, "poison_missed": 0}
+        per_type_breakdown[atype]["total"] += 1
+
+        if contains_poison:
+            poisoned_retrieved_cnt += 1
+            per_type_breakdown[atype]["poison_retrieved"] += 1
+        else:
+            poisoned_missed_cnt += 1
+            per_type_breakdown[atype]["poison_missed"] += 1
+
+    retrieval_rate = (poisoned_retrieved_cnt / total_malicious) * 100.0 if total_malicious > 0 else 0.0
+
+    report = {
+        "total_malicious_attacked": total_malicious,
+        "poisoned_chunk_retrieved_count": poisoned_retrieved_cnt,
+        "poisoned_chunk_missed_count": poisoned_missed_cnt,
+        "poison_retrieval_coverage_percent": round(retrieval_rate, 2),
+        "per_attack_type_coverage": per_type_breakdown
+    }
+
+    print("\n" + json.dumps(report, indent=2))
+    return report
 
 if __name__ == "__main__":
     verify_cat2()

@@ -59,6 +59,8 @@ class TriageResult:
     retrieved_docs: list[dict] = field(default_factory=list)
     latency_ms: float = 0.0
     raw_response: str = ""
+    is_fallback: bool = False
+    verdict_source: str = "llm"
 
     def to_dict(self) -> dict:
         return {
@@ -71,6 +73,8 @@ class TriageResult:
             "attack_type_classified": self.attack_type_classified,
             "retrieved_docs": self.retrieved_docs,
             "latency_ms": round(self.latency_ms, 2),
+            "is_fallback": self.is_fallback,
+            "verdict_source": self.verdict_source,
         }
 
 
@@ -238,6 +242,8 @@ class TriageAgent:
                     retrieved_docs=[d.to_dict() for d in retrieved_docs],
                     latency_ms=latency_ms,
                     raw_response="",
+                    is_fallback=True,
+                    verdict_source="fallback",
                 )
 
         latency_ms = (time.time() - t0) * 1000.0

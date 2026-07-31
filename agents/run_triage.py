@@ -177,18 +177,18 @@ def main():
         res = agent.triage(alert, anomaly_score=anomaly_score)
         return idx, res
 
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        futures = [executor.submit(process_item, (i, a)) for i, a in enumerate(alerts)]
-        for future in as_completed(futures):
-            idx, res = future.result()
-            results[idx] = res
-            completed_count += 1
-            if completed_count % 10 == 0 or completed_count == len(alerts):
-                logger.info(
-                    f"  [{completed_count:4d}/{len(alerts)}] alert_id={alerts[idx].alert_id} | "
-                    f"verdict={res.verdict:10s} | severity={res.severity:8s} | "
-                    f"conf={res.confidence:.2f} | lat={res.latency_ms:.0f}ms"
-                )
+    import time
+    for idx, alert in enumerate(alerts):
+        _, res = process_item((idx, alert))
+        results[idx] = res
+        completed_count += 1
+        time.sleep(0.35)
+        if completed_count % 20 == 0 or completed_count == len(alerts):
+            logger.info(
+                f"  [{completed_count:4d}/{len(alerts)}] alert_id={alert.alert_id} | "
+                f"verdict={res.verdict:10s} | severity={res.severity:8s} | "
+                f"conf={res.confidence:.2f} | lat={res.latency_ms:.0f}ms | source={res.verdict_source}"
+            )
 
     t_duration = (datetime.now() - t_start).total_seconds()
     logger.info(f"Triage complete in {t_duration:.2f}s ({1000 * t_duration / len(alerts):.0f}ms/alert avg)")
