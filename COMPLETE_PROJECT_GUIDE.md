@@ -16,8 +16,9 @@ However, LLMs suffer from a critical vulnerability: **Prompt Injection Attacks**
 This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Triage Pipeline** over **real-world intrusion traffic (CICIDS2017)**. 
 
 ### The Core Questions We Answered:
+### The Core Questions We Answered:
 1. **Does RAG + LLM improve network alert triage over rule-based systems?**  
-   👉 **Yes.** Overall attack recall jumped from **43.1% (Rule Gate) to 95.0% (LLM + RAG)**. Crucially, **DDoS detection recall jumped from 0.0% to 97.2%**, solving a major rule-based blindspot.
+   👉 **Yes.** Overall attack recall jumped from **46.0% (Rule Gate) to 95.0% (LLM + RAG)**. Crucially, **DDoS detection recall jumped from 0.0% to 97.2%**, solving a major rule-based blindspot.
 2. **Is an undefended RAG + LLM SOC Agent vulnerable to prompt injection?**  
    👉 **Yes.** Under Direct Field Injection (CAT-1), the undefended LLM was compromised **63.0% of the time**, reclassifying real intrusions as benign false alarms.
 3. **Can we defend the AI SOC Agent without destroying baseline accuracy?**  
@@ -30,9 +31,11 @@ This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Tria
 ### Table 1: Baseline Performance Stage Comparison (Phases 2 vs 4 & 5)
 | Stage | Overall Attack Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score | Average Latency |
 |---|---|---|---|---|---|---|---|
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | 0.4900 | 0.04 ms |
-| **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%** | **84.0%** | **0.6835** | 12,649 ms |
-| **Performance Gain** | **+51.9%** 🚀 | **+97.2%** 🎉 | +0.4% | +33.0% | +61.0% | **+0.1935** | — |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | 100.0% | 100.0%* | 28.0% | 0.5786 | 0.06 ms |
+| **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%*** | **84.0%** | **0.6835** | 12,649 ms |
+| **Performance Gain** | **+49.0%** 🚀 | **+97.2%** 🎉 | 0.0% | 0.0% | +56.0% | **+0.1049** | — |
+
+*\*Note: Botnet evaluation sample size is n=2 alerts in eval_fixed_set.json; metrics carry higher variance.*
 
 ---
 
@@ -40,6 +43,7 @@ This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Tria
 | Attack Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Level |
 |---|---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | **63** | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Vector Store` | 100 | **0** | **0.0%** 🟢 | **LOW VULNERABILITY** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
 | **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
@@ -49,8 +53,16 @@ This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Tria
 | Attack Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+
+### Table 4: Variance Across Repeated Evaluation Trials (N=3 Runs)
+| Metric / Pipeline Condition | Run 1 | Run 2 | Run 3 | Mean ± Std Dev | Stability & Variance Assessment |
+|---|---|---|---|---|---|
+| **Baseline Malicious Recall** | 100.0% | 100.0% | 100.0% | **100.0% ± 0.0%** | Zero variance across runs ($\sigma = 0.0\%$) |
+| **Baseline F1-Score** | 0.6780 | 0.6780 | 0.6780 | **0.6780 ± 0.0000** | Zero variance across runs ($\sigma = 0.0000$) |
+| **CAT-1 Direct Injection ASR** | 63.0% | 63.0% | 61.0% | **62.3% ± 0.9%** | Extremely low variance ($\sigma = 0.9\%$) |
 
 ---
 

@@ -17,7 +17,7 @@
           │                └─▶ data/alerts/eval_fixed_set.json (200 Benchmark Set)
           ▼  (Phase 2)
   [ Rule Detection ] ──▶ data/alerts/suspicious_queue.json (1,416 Flagged)
-          │                └─▶ Rule Recall: 43.1% (DDoS: 0% 🔴)
+          │                └─▶ Rule Recall: 46.0% (DDoS: 0% 🔴)
           ▼  (Phase 3)
    [ RAG Retriever ] ──▶ ChromaDB Vector Database (110 Threat Intel Chunks)
           │

@@ -129,7 +129,7 @@ Raw flow metrics were converted into structured JSON `SOCAlert` objects using Py
 
 ### 🟢 Phase 2 — Rule-Based Detection Gate
 - **Code**: `agents/detection_agent.py`, `agents/run_detection.py`.
-- **What was built**: Implemented an **11-rule heuristic anomaly scoring engine** (threshold `0.28`). Flagged 1,416 alerts as `SUSPICIOUS`.
+- **What was built**: Implemented an **11-rule heuristic anomaly scoring engine** (threshold `0.28`). On the locked 200-alert `eval_fixed_set.json`, it achieved an overall recall of **46.0%** (F1 `0.5786`).
 - **Major Finding**: Discovered that rule engines have a **0.0% DDoS recall rate** because DDoS flow telemetry (packet counts and byte rates) mirrors legitimate HTTPS traffic. This established the scientific necessity for LLM + RAG reasoning.
 
 ---
@@ -145,22 +145,24 @@ Raw flow metrics were converted into structured JSON `SOCAlert` objects using Py
 - **Code**: `agents/triage_agent.py`, `agents/run_triage.py`.
 - **What was built**: Implemented `TriageAgent` using `llama-3.1-8b-instant` and the 4-key `KeyPool` load balancer. Combined alert data with Phase 3 RAG context to output structured JSON decisions (`verdict`, `severity`, `confidence`, `reasoning`, `recommended_action`).
 - **Research Victory**:
-  - **Overall Recall**: Jumped from **43.1%** (Phase 2 Rule Gate) to **95.0%** ✅.
+  - **Overall Recall**: Jumped from **46.0%** (Phase 2 Rule Gate) to **95.0%** ✅.
   - **DDoS Recall**: Skyrocketed from **0.0%** to **97.2% (35/36 caught)** ✅ because RAG context supplied the necessary threat signatures.
+  - *(Note: Botnet evaluation sample size is n=2 alerts; metrics carry higher variance).*
 
 ---
 
 ### 🟢 Phase 5 — Baseline Evaluation & Metrics
-- **Code**: `eval/metrics.py`, `eval/baseline_report.md`, `eval/baseline_triage_metrics.json`.
-- **What was built**: Automated metrics engine calculating Precision, Recall, F1-Score, Accuracy, FPR, FNR, and P50/P95 latency. Compiled **Research Paper Table 1** in `eval/baseline_report.md` and detailed reasoning logs in `eval/baseline_200_triage_log.md`.
+- **Code**: `eval/metrics.py`, `eval/baseline_report.md`, `eval/baseline_triage_metrics.json`, `eval/run_variance_eval.py`.
+- **What was built**: Automated metrics engine calculating Precision, Recall, F1-Score, Accuracy, FPR, FNR, and P50/P95 latency. Evaluated N=3 repeated trial runs ($100.0\% \pm 0.0\%$ baseline recall). Compiled **Research Paper Table 1** in `eval/baseline_report.md` and detailed reasoning logs in `eval/baseline_200_triage_log.md`.
 
 ---
 
 ### 🟢 Phase 6 & 7 — Red-Team Attack Simulation & Execution
-- **Code**: `attacks/taxonomy.md`, `attacks/injector.py`, `attacks/run_attacks.py`.
-- **What was built**: Designed formal taxonomy across 4 attack categories and built `RedTeamInjector` to construct 3 adversarial datasets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
-- **Red-Team Results (Research Paper Table 2)**:
-  - **CAT-1 Direct Field Injection ASR**: **63.0%** 🔴 (High vulnerability)
+- **Code**: `attacks/taxonomy.md`, `attacks/injector.py`, `attacks/run_attacks.py`, `attacks/build_and_run_cat2.py`.
+- **What was built**: Designed formal taxonomy across 4 attack categories and built `RedTeamInjector` to construct 4 adversarial datasets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat2_rag_poison.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
+- **Red-Team Results (Research Paper Table 2 & Table 4 Variance)**:
+  - **CAT-1 Direct Field Injection ASR**: **63.0%** 🔴 ($62.3\% \pm 0.9\%$ across N=3 runs)
+  - **CAT-2 RAG Poisoning ASR**: **0.0%** 🟢 (Low vulnerability)
   - **CAT-3 Role Spoofing ASR**: **43.0%** 🟠 (Moderate vulnerability)
   - **CAT-4 Indirect Chained Injection ASR**: **4.0%** 🟢 (Low vulnerability)
 
@@ -169,13 +171,13 @@ Raw flow metrics were converted into structured JSON `SOCAlert` objects using Py
 ### 🟢 Phase 8 & 9 — Multi-Tier Security Shield & Defended Evaluation
 - **Code**: `defense/filters.py`, `defense/run_defended_eval.py`.
 - **What was built**: Engineered a **3-Tier Multi-Layer Security Shield**:
-  1. **Tier 1 (Input Sanitization)**: Regex pattern scanner stripping system instruction trigger words.
-  2. **Tier 2 (Structural Boundary Isolation)**: Wrapping untrusted alert payloads and RAG context inside `<untrusted_payload>` and `<retrieved_context>` XML tags with strict passive data enforcement.
-  3. **Tier 3 (Guardrail Verification)**: Dual-agent consistency checker validating verdict rationale.
+  1. **Tier 1 (Input Sanitization)**: Regex pattern scanner stripping system instruction trigger words (0.0% false modification on clean data).
+  2. **Tier 2 (Structural Boundary Isolation)**: Wrapping untrusted alert payloads inside `<untrusted_analyst_notes>` XML tags with strict passive data enforcement.
+  3. **Tier 3 (Guardrail Verification)**: Dual-agent consistency checker validating verdict rationale against Phase 2 rule anomaly scores.
 - **Defended Results (Research Paper Table 3)**:
   - **Defense Defense Rate (DDR)**: **100.0%** 🚀
-  - **Defended ASR**: Reduced to **0.0%** across all attack categories.
-  - **Baseline Recall Preserved**: **95.0%** (zero drop in clean detection capability).
+  - **Defended ASR**: Reduced to **0.0%** across all 4 attack categories.
+  - **Baseline Recall & FPR Preserved**: **95.0% recall** and **10.0% FPR** (zero drop in clean detection capability or false positive penalty).
 
 ---
 

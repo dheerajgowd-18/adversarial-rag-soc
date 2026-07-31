@@ -6,9 +6,11 @@
 
 | Pipeline Stage | Overall Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score | Avg Latency |
 |---|---|---|---|---|---|---|---|
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | 0.4900 | 0.04ms |
-| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%** | **84.0%** | **0.6835** | 12649ms |
-| **Impact / Gain** | **+51.9%** | **+97.2%** | +0.4% | +33.0% | +61.0% | **+0.1935** | — |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | 100.0% | 100.0%* | 28.0% | 0.5786 | 0.06ms |
+| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%*** | **84.0%** | **0.6835** | 12649ms |
+| **Impact / Gain** | **+49.0%** | **+97.2%** | 0.0% | 0.0% | +56.0% | **+0.1049** | — |
+
+*\*Note: Botnet evaluation sample size is n=2 alerts in eval_fixed_set.json; metrics carry higher variance.*
 
 ---
 

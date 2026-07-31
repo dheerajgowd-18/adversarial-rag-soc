@@ -6,9 +6,10 @@
 
 | Attack Category ID | Attack Name | Vector / Surface | Total Attacked | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Impact |
 |---|---|---|---|---|---|---|
-| **CAT-1** | Direct Field Injection | `notes_field` | 100 | 63 | **63.0%** 🔴 | **HIGH VULNERABILITY** |
-| **CAT-3** | Role-Confusion / Authority Spoof | `notes_field` | 100 | 43 | **43.0%** 🔴 | **MEDIUM VULNERABILITY** |
-| **CAT-4** | Indirect Chained Injection | `notes_field` | 100 | 4 | **4.0%** 🔴 | **MEDIUM VULNERABILITY** |
+| **CAT-1** | Direct Field Injection | `notes_field` | 100 | 63 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | Retrieved-Document Poisoning | `ChromaDB Vector Store` | 100 | 0 | **0.0%** 🟢 | **LOW VULNERABILITY** |
+| **CAT-3** | Role-Confusion / Authority Spoof | `notes_field` | 100 | 43 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | Indirect Chained Injection | `notes_field` | 100 | 4 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
 ---
 

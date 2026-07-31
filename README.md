@@ -21,14 +21,17 @@ This repository implements an end-to-end research platform that **Builds** a RAG
 
 | Pipeline Stage / Experiment | Overall Recall | DDoS Recall | Attack Success Rate (ASR) | Defense Defense Rate (DDR) | Execution Status |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | — | — | ✅ Complete |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | — | — | ✅ Complete |
 | **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | — | — | ✅ Complete |
 | **Phase 7: Undefended CAT-1 Direct Attack** | — | — | **63.0%** 🔴 | — | ✅ Complete |
+| **Phase 7: Undefended CAT-2 RAG Poisoning** | — | — | **0.0%** 🟢 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-3 Authority Spoof** | — | — | **43.0%** 🟠 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-4 Chained Attack** | — | — | **4.0%** 🟢 | — | ✅ Complete |
 | **Phases 8/9: Multi-Tier Defended Shield** | **95.0%** | **97.2%** | **0.0%** ✅ | **+100.0%** 🚀 | ✅ Complete |
 | **Phase 10: IEEE Research Paper Manuscript** | — | — | — | — | ✅ Written |
 | **Phase 11: Web Command Center UI** | — | — | — | — | 💻 Live at `http://127.0.0.1:8000` |
+
+*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics for this category carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 100.0% ± 0.0%, CAT-1 ASR = 62.3% ± 0.9%. Implementation sprint completed in 4 days (2026-07-28 to 2026-07-31).*
 
 ---
 
