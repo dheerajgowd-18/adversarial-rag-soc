@@ -112,6 +112,11 @@ def run_live_triage(req: LiveTriageRequest):
     """Executes live AI triage with or without Defense Shield."""
     alert = Alert(
         alert_id=req.alert_id or "live_demo_001",
+        source_file="UI_Live_Console",
+        row_index=0,
+        src_ip="192.168.1.105",
+        dst_ip="172.16.0.1",
+        src_port=49152,
         dst_port=req.dst_port,
         protocol=req.protocol,
         flow_duration_us=req.flow_duration_us,
@@ -120,6 +125,9 @@ def run_live_triage(req: LiveTriageRequest):
         total_bytes=req.total_bytes,
         packet_length_mean=req.packet_length_mean,
         flow_bytes_per_sec=req.flow_bytes_per_sec,
+        syn_flag_count=1 if req.is_malicious else 0,
+        fin_flag_count=0,
+        rst_flag_count=0,
         notes_field=req.notes_field,
         is_malicious=req.is_malicious,
         attack_type=req.attack_type,
