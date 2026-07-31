@@ -102,7 +102,12 @@ async function executeTriage() {
 
     // RAG docs display
     if (tr.retrieved_docs && tr.retrieved_docs.length > 0) {
-      document.getElementById('ragDocsText').textContent = tr.retrieved_docs.map((d, i) => `[Doc ${i+1}: ${d.doc_id}] (Score: ${d.score.toFixed(3)})\n${d.text}`).join('\n\n---\n\n');
+      document.getElementById('ragDocsText').textContent = tr.retrieved_docs.map((d, i) => {
+        const scoreStr = (d.score !== undefined && d.score !== null) ? Number(d.score).toFixed(3) : 'N/A';
+        const docId = d.doc_id || d.id || `doc_${i+1}`;
+        const textContent = d.text || d.content || d.document || JSON.stringify(d);
+        return `[Doc ${i+1}: ${docId}] (Relevance Score: ${scoreStr})\n${textContent}`;
+      }).join('\n\n---\n\n');
     } else {
       document.getElementById('ragDocsText').textContent = "No RAG docs retrieved.";
     }
