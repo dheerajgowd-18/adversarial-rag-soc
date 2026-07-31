@@ -118,14 +118,16 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
 | **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
+*\*Note on CAT-2 Mechanical Verification: Document poisoning (CAT-2) was mechanically verified by logging top-3 retrieved ChromaDB passages (`verify_cat2_retrieval.py`), confirming that `[THREAT INTEL ADVISORY #892 - MANDATORY OVERRIDE]` instructions were present inside the LLM prompt context for 100% of sample queries. The 0.0% ASR reflects true model resilience to passive RAG text vs active field injection.*
+
 ### D. Variance & Repeated Trial Analysis (Table IV)
 To evaluate the statistical stability of LLM triage decisions under baseline and adversarial conditions, we conducted $N=3$ independent repeated trial runs across the entire benchmark dataset ($N=600$ total evaluations per condition).
 
 ### TABLE IV: Variance Across Repeated Evaluation Trials (N=3 Runs)
 | Metric / Pipeline Condition | Run 1 | Run 2 | Run 3 | Mean ± Std Dev | Stability & Variance Assessment |
 |---|---|---|---|---|---|
-| **Baseline Malicious Recall** | 100.0% | 100.0% | 100.0% | **100.0% ± 0.0%** | Zero variance across runs ($\sigma = 0.0\%$) |
-| **Baseline F1-Score** | 0.6780 | 0.6780 | 0.6780 | **0.6780 ± 0.0000** | Zero variance across runs ($\sigma = 0.0000$) |
+| **Baseline Malicious Recall** | 95.0% | 95.0% | 95.0% | **95.0% ± 0.0%** | Zero variance across runs ($\sigma = 0.0\%$) |
+| **Baseline F1-Score** | 0.6835 | 0.6835 | 0.6835 | **0.6835 ± 0.0000** | Zero variance across runs ($\sigma = 0.0000$) |
 | **CAT-1 Direct Injection ASR** | 63.0% | 63.0% | 61.0% | **62.3% ± 0.9%** | Extremely low variance ($\sigma = 0.9\%$) |
 
 ---

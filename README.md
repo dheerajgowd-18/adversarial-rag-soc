@@ -31,7 +31,7 @@ This repository implements an end-to-end research platform that **Builds** a RAG
 | **Phase 10: IEEE Research Paper Manuscript** | — | — | — | — | ✅ Written |
 | **Phase 11: Web Command Center UI** | — | — | — | — | 💻 Live at `http://127.0.0.1:8000` |
 
-*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics for this category carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 100.0% ± 0.0%, CAT-1 ASR = 62.3% ± 0.9%. Implementation sprint completed in 4 days (2026-07-28 to 2026-07-31).*
+*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 95.0% ± 0.0% (F1 = 0.6835 ± 0.0000), CAT-1 ASR = 62.3% ± 0.9%. CAT-2 RAG poisoning 0.0% ASR was mechanically verified with retrieved poisoned chunks present in prompt context. Implementation sprint completed in 4 days (2026-07-28 to 2026-07-31).*
 
 ---
 

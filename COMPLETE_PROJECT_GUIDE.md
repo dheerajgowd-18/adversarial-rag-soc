@@ -60,8 +60,8 @@ This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Tria
 ### Table 4: Variance Across Repeated Evaluation Trials (N=3 Runs)
 | Metric / Pipeline Condition | Run 1 | Run 2 | Run 3 | Mean ± Std Dev | Stability & Variance Assessment |
 |---|---|---|---|---|---|
-| **Baseline Malicious Recall** | 100.0% | 100.0% | 100.0% | **100.0% ± 0.0%** | Zero variance across runs ($\sigma = 0.0\%$) |
-| **Baseline F1-Score** | 0.6780 | 0.6780 | 0.6780 | **0.6780 ± 0.0000** | Zero variance across runs ($\sigma = 0.0000$) |
+| **Baseline Malicious Recall** | 95.0% | 95.0% | 95.0% | **95.0% ± 0.0%** | Zero variance across runs ($\sigma = 0.0\%$) |
+| **Baseline F1-Score** | 0.6835 | 0.6835 | 0.6835 | **0.6835 ± 0.0000** | Zero variance across runs ($\sigma = 0.0000$) |
 | **CAT-1 Direct Injection ASR** | 63.0% | 63.0% | 61.0% | **62.3% ± 0.9%** | Extremely low variance ($\sigma = 0.9\%$) |
 
 ---

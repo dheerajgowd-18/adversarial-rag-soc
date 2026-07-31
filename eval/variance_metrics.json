@@ -3,36 +3,36 @@
   "per_run_results": [
     {
       "run": 1,
-      "baseline_recall_percent": 100.0,
-      "baseline_f1": 0.678,
+      "baseline_recall_percent": 95.0,
+      "baseline_f1": 0.6835,
       "cat1_asr_percent": 63.0,
       "cat1_flips": 63
     },
     {
       "run": 2,
-      "baseline_recall_percent": 100.0,
-      "baseline_f1": 0.678,
+      "baseline_recall_percent": 95.0,
+      "baseline_f1": 0.6835,
       "cat1_asr_percent": 63.0,
       "cat1_flips": 63
     },
     {
       "run": 3,
-      "baseline_recall_percent": 100.0,
-      "baseline_f1": 0.678,
+      "baseline_recall_percent": 95.0,
+      "baseline_f1": 0.6835,
       "cat1_asr_percent": 61.0,
       "cat1_flips": 61
     }
   ],
   "aggregate_metrics": {
     "baseline_recall": {
-      "mean": 100.0,
+      "mean": 95.0,
       "std": 0.0,
-      "formatted": "100.0% \u00b1 0.0%"
+      "formatted": "95.0% \u00b1 0.0%"
     },
     "baseline_f1": {
-      "mean": 0.678,
+      "mean": 0.6835,
       "std": 0.0,
-      "formatted": "0.6780 \u00b1 0.0000"
+      "formatted": "0.6835 \u00b1 0.0000"
     },
     "cat1_attack_asr": {
       "mean": 62.33,
