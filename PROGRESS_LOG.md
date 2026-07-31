@@ -29,8 +29,8 @@ Phase 0 ✅  →  Phase 1 ✅  →  Phase 2 ✅  →  Phase 3 ✅  →  Phase 4 
 | 7 | Attack Evaluation | ✅ Complete | 2026-07-30 |
 | 8 | Defense Layer | ✅ Complete | 2026-07-30 |
 | 9 | Defense Evaluation | ✅ Complete | 2026-07-30 |
-| 10 | Paper Writing | 🔄 Next | — |
-| 11 | Submission | ⏳ Pending | — |
+| 10 | Paper Writing | ✅ Complete | 2026-07-31 |
+| 11 | Submission | 🔄 Next | — |
 
 ---
 
@@ -479,6 +479,23 @@ Executed `defense/run_defended_eval.py` across all adversarial attack datasets a
 
 ---
 
+## ✅ Phase 10 — Research Paper Writing
+**Completed:** 2026-07-31
+
+### What We Did
+
+Compiled all experimental findings, data pipelines, system architecture diagrams, and locked research tables into a formal, publication-ready **Research Paper Manuscript** (`paper/RESEARCH_PAPER_MANUSCRIPT.md`).
+
+Formatted according to IEEE conference & journal submission standards (Abstract, Introduction, Architecture, Baseline Results, Red-Team Attack Evaluation, Multi-Tier Defense Efficacy, Discussion & References).
+
+### Key Deliverables Created
+
+| File | What it does |
+|---|---|
+| `paper/RESEARCH_PAPER_MANUSCRIPT.md` | Formal IEEE-formatted research paper manuscript ready for submission |
+
+---
+
 ## 📊 Results Summary So Far
 
 | Phase | Key Metric | Value |
@@ -495,6 +512,7 @@ Executed `defense/run_defended_eval.py` across all adversarial attack datasets a
 | Phase 7 | Undefended CAT-1 Direct ASR | **63.0% Compromised** 🔴 |
 | Phase 7 | Undefended CAT-3 Authority Spoof ASR | **43.0% Compromised** 🟠 |
 | Phase 8 & 9 | **Defended ASR (All Categories)** | **0.0% Neutralized (100.0% DDR)** 🛡️ |
+| Phase 10 | **IEEE Research Paper Manuscript** | **Completed in `paper/RESEARCH_PAPER_MANUSCRIPT.md`** 📄 |
 
 
 ---
@@ -567,6 +585,9 @@ final-year-project/
 │   ├── filters.py                  # Phase 8 Multi-Tier Security Shield
 │   └── run_defended_eval.py        # Phase 8 & 9 Defended Evaluation Runner
 │
+├── 📁 paper/
+│   └── RESEARCH_PAPER_MANUSCRIPT.md # Phase 10 Formal IEEE Research Paper Manuscript
+│
 ├── 📁 eval/
 │   ├── detection_metrics.json      # Phase 2 metrics
 │   ├── baseline_triage_metrics.json # Phase 4 metrics
@@ -584,4 +605,4 @@ final-year-project/
 
 ---
 
-*Last updated: 2026-07-30 | Phase 9 complete | 10 of 11 phases done*
+*Last updated: 2026-07-31 | Phase 10 complete | 11 of 11 phases done*

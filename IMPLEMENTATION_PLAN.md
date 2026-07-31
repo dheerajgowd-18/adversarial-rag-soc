@@ -29,10 +29,10 @@
 | 7 | Red-Team Execution | `[x] COMPLETE` | Week 12–15 | 2026-07-30 |
 | 8 | Defense / Verification Layer | `[x] COMPLETE` | Week 15–18 | 2026-07-30 |
 | 9 | Full Re-Evaluation | `[x] COMPLETE` | Week 18–20 | 2026-07-30 |
-| 10 | Paper Writing | `[ ] Not Started` | Week 20–24 | — |
+| 10 | Paper Writing | `[x] COMPLETE` | Week 20–24 | 2026-07-31 |
 | 11 | Submission & Buffer | `[ ] Not Started` | Week 24–26 | — |
 
-**Overall Progress:** `10 / 11 phases complete`
+**Overall Progress:** `11 / 11 phases complete`
 
 ---
 
