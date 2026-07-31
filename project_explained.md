@@ -201,7 +201,7 @@ Raw flow metrics were converted into structured JSON `SOCAlert` objects using Py
 
 | Pipeline Stage / Metric | Overall Recall | DDoS Recall | Attack Success Rate (ASR) | Defense Defense Rate (DDR) | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Phase 2: Rule Gate** | 43.1% | 0.0% 🔴 | — | — | Complete |
+| **Phase 2: Rule Gate** | 46.0% | 0.0% 🔴 | — | — | Complete |
 | **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | — | — | Complete |
 | **Phase 7: Undefended CAT-1 Direct Attack** | — | — | **63.0%** 🔴 | — | Vulnerable |
 | **Phase 7: Undefended CAT-3 Authority Spoof** | — | — | **43.0%** 🟠 | — | Vulnerable |

@@ -91,7 +91,7 @@ Created 8 domain-specific threat intelligence playbooks in `data/knowledge_base/
 Implemented `TriageAgent` (`agents/triage_agent.py`) powered by `llama-3.1-8b-instant` and the 4-key Groq `KeyPool` load balancer. Combined alert flow data with Phase 3 RAG context to output structured JSON decisions (`verdict`, `severity`, `confidence`, `reasoning`, `recommended_action`).
 
 ### Research Victory
-- **Overall Recall**: Jumped from **43.1%** (Phase 2 Rule Gate) to **95.0%** ✅.
+- **Overall Recall**: Jumped from **46.0%** (Phase 2 Rule Gate) to **95.0%** ✅.
 - **DDoS Recall**: Solved the rule gate blindspot, jumping from **0.0% to 97.2% (35/36 caught)** ✅.
 
 ---
@@ -106,9 +106,11 @@ Built `eval/metrics.py` to calculate research metrics across the baseline pipeli
 
 | Pipeline Stage | Overall Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score | Mean Latency |
 |---|---|---|---|---|---|---|---|
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | 0.4900 | 0.04 ms |
-| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%** | **84.0%** | **0.6835** | 12,649 ms |
-| **Impact / Gain** | **+51.9%** 🚀 | **+97.2%** 🎉 | +0.4% | +33.0% | +61.0% | **+0.1935** | — |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | 100.0% | 100.0%* | 28.0% | 0.5786 | 0.06 ms |
+| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%*** | **84.0%** | **0.6835** | 12,649 ms |
+| **Impact / Gain** | **+49.0%** 🚀 | **+97.2%** 🎉 | 0.0% | 0.0% | +56.0% | **+0.1049** | — |
+
+*\*Note: Botnet evaluation sample size is n=2 alerts in eval_fixed_set.json; metrics carry higher variance.*
 
 ---
 
@@ -180,9 +182,10 @@ Features live alert browsing, real-time ChromaDB vector search context rendering
 | Metric | Phase 2 (Rule Gate) | Phase 4 (LLM Baseline) | Phase 7 (Undefended Attack ASR) | Phase 8 & 9 (Defended ASR / DDR) |
 |---|---|---|---|---|
 | **Direct Field Injection (CAT-1)** | — | — | **63.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Retrieved-Doc Poisoning (CAT-2)** | — | — | **0.0% ASR (63/100 retrieved)** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Indirect Chained Injection (CAT-4)** | — | — | **4.0% ASR Compromised** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
-| **Overall Attack Recall / Safety** | 43.1% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
+| **Overall Attack Recall / Safety** | 46.0% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
 | **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
 
 ---

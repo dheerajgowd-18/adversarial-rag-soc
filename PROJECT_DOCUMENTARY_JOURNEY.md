@@ -103,11 +103,13 @@ When we evaluated the Phase 2 Rule Gate on our 200 evaluation benchmark, we disc
 
 | Metric | Phase 2 Rule Gate Performance |
 |---|---|
-| **Overall Attack Recall** | 43.1% |
-| **PortScan Recall** | 99.6% |
-| **Botnet Recall** | 67.0% |
-| **DoS Recall** | 23.0% |
+| **Overall Attack Recall** | 46.0% |
+| **PortScan Recall** | 100.0% |
+| **Botnet Recall** | 100.0%* |
+| **DoS Recall** | 28.0% |
 | **DDoS Recall** | **0.0%** 🔴 |
+
+*\*Note: Botnet evaluation sample size is n=2 alerts in eval_fixed_set.json.*
 
 **Why did rules get 0% recall on DDoS traffic?**  
 DDoS attacks in CICIDS2017 consist of thousands of individual attackers sending small HTTP GET floods. Each individual flow has a low packet count (~4 to 8 packets) and small byte payload (~11 KB), which statistically **mirrors legitimate HTTPS web traffic**. Static rules cannot differentiate a single DDoS request from benign web browsing without external domain threat intelligence context!
@@ -141,9 +143,9 @@ When RAG threat intelligence context was provided to the LLM, the results were a
 
 | Pipeline Stage | Overall Recall | DDoS Recall | PortScan Recall | Botnet Recall | DoS Recall | F1-Score |
 |---|---|---|---|---|---|---|
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** 🔴 | 99.6% | 67.0% | 23.0% | 0.4900 |
-| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%** | **84.0%** | **0.6835** |
-| **Performance Gain** | **+51.9%** 🚀 | **+97.2%** 🎉 | +0.4% | +33.0% | +61.0% | **+0.1935** |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | 100.0% | 100.0%* | 28.0% | 0.5786 |
+| **Phase 4: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | **100.0%** | **100.0%*** | **84.0%** | **0.6835** |
+| **Performance Gain** | **+49.0%** 🚀 | **+97.2%** 🎉 | 0.0% | 0.0% | +56.0% | **+0.1049** |
 
 **Research Impact:** RAG threat intelligence context completely solved the DDoS detection blindspot, elevating DDoS recall from **0% to 97.2% (35/36 caught)** and overall attack recall to **95.0%**!
 
@@ -238,9 +240,10 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 
 | Pipeline Stage / Experiment | Overall Recall | DDoS Recall | Attack Success Rate (ASR) | Defense Defense Rate (DDR) | Primary Outcome |
 |---|---|---|---|---|---|
-| **Phase 2: Rule Gate** | 43.1% | **0.0%** | — | — | Missed 100% of DDoS flows (statistically silent) |
+| **Phase 2: Rule Gate** | 46.0% | **0.0%** | — | — | Missed 100% of DDoS flows (statistically silent) |
 | **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** | — | — | RAG threat context solved DDoS blindspot |
 | **Phase 7: Undefended CAT-1 Attack** | — | — | **63.0%** | — | **63% of attacks reclassified as benign** |
+| **Phase 7: Undefended CAT-2 Attack** | — | — | **0.0%** (63/100 retrieved) | — | **63/100 retrieved into prompt with 0% ASR** |
 | **Phase 7: Undefended CAT-3 Attack** | — | — | **43.0%** | — | **43% compromised via authority spoofing** |
 | **Phases 8/9: Defended Shield (CAT-1)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
 | **Phases 8/9: Defended Shield (CAT-3)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |

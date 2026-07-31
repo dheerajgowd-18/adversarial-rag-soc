@@ -91,7 +91,7 @@
 - [x] **4.2 Structured Reasoning**: Enforced structured JSON output parsing (`verdict`, `severity`, `confidence`, `reasoning`, `recommended_action`).
 - [x] **4.3 Batch Execution**: Executed `agents/run_triage.py` against the locked 200-alert benchmark evaluation set (`eval_fixed_set.json`).
 - [x] **4.4 Performance Milestones**:
-  - **Overall Recall**: Jumped from **43.1%** (Phase 2 Rule Gate) to **95.0%** ✅.
+  - **Overall Recall**: Jumped from **46.0%** (Phase 2 Rule Gate) to **95.0%** ✅.
   - **DDoS Recall**: Solved the rule gate blindspot, jumping from **0.0% to 97.2% (35/36 caught)** ✅.
 
 > **Phase 4 Gate Status:** PASSED ✅ (Completed: 2026-07-30)

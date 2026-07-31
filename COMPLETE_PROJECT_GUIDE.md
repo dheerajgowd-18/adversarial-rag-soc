@@ -217,6 +217,6 @@ final-year-project/
 
 ## 🏆 Summary of Research Accomplishments
 
-1. **Demonstrated RAG Superiority on Network Intrusion Triage**: Proved that RAG threat intel context elevates triage recall from **43.1% to 95.0%**, successfully resolving rule-based blindspots like DDoS.
+1. **Demonstrated RAG Superiority on Network Intrusion Triage**: Proved that RAG threat intel context elevates triage recall from **46.0% to 95.0%**, successfully resolving rule-based blindspots like DDoS.
 2. **Empirically Proven LLM Prompt Injection Vulnerability**: Demonstrated that an undefended LLM SOC Agent has a **63.0% Attack Success Rate (CAT-1)** and **43.0% Attack Success Rate (CAT-3)** under prompt injection.
 3. **Engineered a 100% Effective Multi-Tier Defense**: Designed an input sanitization and dual-agent verification system that completely neutralizes prompt injection attacks (**0.0% Defended ASR, 100% DDR**) without degrading baseline triage accuracy.

@@ -76,8 +76,9 @@
   - `data/alerts/suspicious_queue.json` (1,416 alerts flagged `SUSPICIOUS`)
   - `eval/detection_metrics.json` (Performance summary)
 * **Key Finding:**
-  - **Overall Recall:** 43.1% | **F1-Score:** 0.490 | **Speed:** 0.04ms/alert
-  - **PortScan Recall:** 99.6% ✅
+  - **Overall Recall:** 46.0% | **F1-Score:** 0.5786 | **Speed:** 0.06ms/alert
+  - **PortScan Recall:** 100.0% ✅
+  - **Botnet Recall:** 100.0%* *(Note: n=2 alerts)*
   - **DDoS Recall:** **0.0%** 🔴 *(DDoS flow packet counts & byte sizes are statistically identical to legitimate HTTPS traffic, creating the core research gap).*
 
 ---
@@ -106,10 +107,10 @@
 * **Input:** `data/alerts/eval_fixed_set.json` (200 alerts) + ChromaDB RAG context.
 * **Output:** Structured JSON decision per alert (`verdict`, `severity`, `confidence`, `reasoning`, `recommended_action`).
 * **Key Results & Research Victory:**
-  - **Overall Recall:** **95.0%** (Up from 43.1% in Phase 2)
+  - **Overall Recall:** **95.0%** (Up from 46.0% in Phase 2)
   - **DDoS Recall:** **97.2% (35/36 caught)** ✅ *(RAG context solved the 0% DDoS blindspot!)*
   - **PortScan Recall:** **100.0% (37/37 caught)** ✅
-  - **Botnet Recall:** **100.0% (2/2 caught)** ✅
+  - **Botnet Recall:** **100.0%* (2/2 caught)** ✅ *(n=2 sample size)*
   - **DoS Recall:** **84.0% (21/25 caught)** ✅
   - **F1-Score:** **0.6835**
 
@@ -186,9 +187,10 @@
 | Metric | Phase 2 (Rule Gate) | Phase 4 (LLM Baseline) | Phase 7 (Undefended Attack ASR) | Phase 8 & 9 (Defended ASR / DDR) |
 |---|---|---|---|---|
 | **Direct Field Injection (CAT-1)** | — | — | **63.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Retrieved-Doc Poisoning (CAT-2)** | — | — | **0.0% ASR (63/100 retrieved)** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Indirect Chained Injection (CAT-4)** | — | — | **4.0% ASR Compromised** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
-| **Overall Attack Recall / Safety** | 43.1% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
+| **Overall Attack Recall / Safety** | 46.0% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
 | **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
 
 ---

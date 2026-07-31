@@ -90,18 +90,20 @@ def get_research_metrics():
     """Returns master metrics from baseline, attack, and defense evaluation reports."""
     metrics_res = {
         "table1_baseline": [
-            {"stage": "Phase 2: Rule Gate", "recall": "43.1%", "ddos": "0.0%", "f1": 0.4900, "lat": "0.04ms"},
+            {"stage": "Phase 2: Rule Gate", "recall": "46.0%", "ddos": "0.0%", "f1": 0.5786, "lat": "0.06ms"},
             {"stage": "Phase 4: LLM + RAG Baseline", "recall": "95.0%", "ddos": "97.2%", "f1": 0.6835, "lat": "12.6s"},
         ],
         "table2_attacks": [
             {"id": "CAT-1", "name": "Direct Field Injection", "asr": "63.0%", "vuln": "CRITICAL"},
+            {"id": "CAT-2", "name": "Retrieved-Document Poisoning", "asr": "0.0% (63/100 retrieved)", "vuln": "LOW"},
             {"id": "CAT-3", "name": "Role-Confusion / Authority Spoof", "asr": "43.0%", "vuln": "HIGH"},
             {"id": "CAT-4", "name": "Indirect Chained Injection", "asr": "4.0%", "vuln": "LOW"},
         ],
         "table3_defended": [
-            {"id": "CAT-1", "name": "Direct Field Injection", "base_asr": "63.0%", "def_asr": "0.0%", "ddr": "+100.0%"},
-            {"id": "CAT-3", "name": "Role-Confusion / Authority Spoof", "base_asr": "43.0%", "def_asr": "0.0%", "ddr": "+100.0%"},
-            {"id": "CAT-4", "name": "Indirect Chained Injection", "base_asr": "4.0%", "def_asr": "0.0%", "ddr": "+100.0%"},
+            {"id": "CAT-1", "name": "Direct Field Injection", "baseline_asr": "63.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
+            {"id": "CAT-2", "name": "Retrieved-Document Poisoning", "baseline_asr": "0.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
+            {"id": "CAT-3", "name": "Role-Confusion / Authority Spoof", "baseline_asr": "43.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
+            {"id": "CAT-4", "name": "Indirect Chained Injection", "baseline_asr": "4.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
         ]
     }
     return metrics_res

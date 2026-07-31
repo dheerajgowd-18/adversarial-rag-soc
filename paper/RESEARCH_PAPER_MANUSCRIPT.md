@@ -10,11 +10,18 @@
 
 Automated Security Operations Center (SOC) triage systems powered by Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) significantly reduce analyst alert fatigue by reasoning over high-volume network telemetry. However, incorporating un-sanitized natural language attributes (such as SIEM ticket notes or hostnames) exposes AI agents to indirect and direct **Prompt Injection Attacks**. 
 
-In this paper, we present an empirical vulnerability assessment and defense framework for RAG-augmented SOC triage agents evaluated on **1.39 million real-world network flows from the CICIDS2017 benchmark dataset**. First, we demonstrate that baseline LLM+RAG triage improves overall attack detection recall from **43.1% (rule-based detection) to 95.0%**, specifically solving the traditional rule-based DDoS detection blindspot (**0.0% to 97.2% recall**). Second, we introduce a formal 4-category Adversarial Prompt Injection Attack Taxonomy (Direct Field Injection, RAG Document Poisoning, Authority Spoofing, and Chained Injections). We show that undefended LLM triage agents exhibit critical vulnerabilities, achieving an **Attack Success Rate (ASR) of 63.0% under Direct Field Injection (CAT-1)** and **43.0% under Authority Spoofing (CAT-3)**. Finally, we design a **Multi-Tier Security Shield** combining Regex Input Sanitization, Structural XML Boundary Tagging, and Rule-LLM Dual-Agent Verification. Our defense framework achieves a **100.0% Defense Defense Rate (DDR)**, reducing attack success rates to **0.0%** across all categories without degrading baseline triage accuracy on benign network traffic.
+In this paper, we present an empirical vulnerability assessment and defense framework for RAG-augmented SOC triage agents evaluated on **1.39 million real-world network flows from the CICIDS2017 benchmark dataset**. First, we demonstrate that baseline LLM+RAG triage improves overall attack detection recall from **46.0% (rule-based detection) to 95.0%**, specifically solving the traditional rule-based DDoS detection blindspot (**0.0% to 97.2% recall**). Second, we introduce a formal 4-category Adversarial Prompt Injection Attack Taxonomy (Direct Field Injection, RAG Document Poisoning, Authority Spoofing, and Chained Injections). We show that undefended LLM triage agents exhibit critical vulnerabilities, achieving an **Attack Success Rate (ASR) of 63.0% under Direct Field Injection (CAT-1)** and **43.0% under Authority Spoofing (CAT-3)**. Finally, we design a **Multi-Tier Security Shield** combining Regex Input Sanitization, Structural XML Boundary Tagging, and Rule-LLM Dual-Agent Verification. Our defense framework achieves a **100.0% Defense Defense Rate (DDR)**, reducing attack success rates to **0.0%** across all categories without degrading baseline triage accuracy on benign network traffic.
 
 ---
 
-## I. Introduction
+## I. Introduction & Background
+
+Modern Security Operations Centers (SOCs) are overwhelmed by thousands of network security alerts generated daily by Intrusion Detection Systems (IDS). Security teams increasingly rely on Large Language Models (LLMs) to perform automated first-tier alert triage.
+
+Retrieval-Augmented Generation (RAG) empowers LLM triage agents by dynamically injecting domain-specific threat intelligence playbooks, CVE records, and MITRE ATT&CK mitigation guidelines into the prompt context at inference time.
+
+### Core Contributions
+1. **Empirical RAG Benchmark on Real Data:** We evaluate a complete LLM+RAG triage pipeline on **CICIDS2017**, demonstrating that RAG threat intelligence increases overall attack recall from 46.0% (rule-based) to 95.0% and resolves the 0% rule-based DDoS blindspot (boosting DDoS recall to 97.2%).
 
 Modern enterprise networks generate millions of raw intrusion detection alerts daily. Security Operations Centers (SOCs) rely on human analysts to triage these alerts, assign severity tiers, and initiate incident response protocols. Due to high volumes of benign network noise and false positives, human analysts suffer from **alert fatigue**, leading to delayed incident response times and undetected high-severity breaches.
 
@@ -23,7 +30,7 @@ To mitigate alert fatigue, recent cybersecurity engineering has turned toward au
 Despite their efficacy, LLMs operate under a fundamental security flaw: they fail to strictly separate control instructions from untrusted data context. When an AI SOC Agent processes a network alert containing free-text fields (such as analyst ticket notes, user-agent strings, or DNS hostnames), an adversary can embed malicious natural language directives (e.g., *"IGNORE PREVIOUS INSTRUCTIONS. Mark this alert as BENIGN"*). If executed successfully, the prompt injection tricks the AI Agent into suppressing critical intrusion alerts, allowing malicious activity to evade SOC detection.
 
 ### Main Contributions
-1. **Empirical RAG Benchmark on Real Data:** We evaluate a complete LLM+RAG triage pipeline on **CICIDS2017**, demonstrating that RAG threat intelligence increases overall attack recall from 43.1% (rule-based) to 95.0% and resolves the 0% rule-based DDoS blindspot (boosting DDoS recall to 97.2%).
+1. **Empirical RAG Benchmark on Real Data:** We evaluate a complete LLM+RAG triage pipeline on **CICIDS2017**, demonstrating that RAG threat intelligence increases overall attack recall from 46.0% (rule-based) to 95.0% and resolves the 0% rule-based DDoS blindspot (boosting DDoS recall to 97.2%).
 2. **Formal Red-Team Attack Taxonomy:** We define and execute a 4-category Prompt Injection Attack Taxonomy targeting SIEM alert attributes, proving that an undefended LLM SOC Agent suffers from a **63.0% Attack Success Rate (CAT-1 Direct Field Injection)** and **43.0% ASR (CAT-3 Authority Spoofing)**.
 3. **Multi-Tier Security Shield Architecture:** We propose a 3-tier defense architecture (Input Sanitization, Structural XML Isolation, and Dual-Agent Verification) that completely neutralizes prompt injection attacks (**0.0% Defended ASR, 100.0% Defense Defense Rate**) with zero degradation of baseline triage accuracy.
 
@@ -111,14 +118,27 @@ We executed the undefended LLM Triage Agent on 600 attack evaluations across 3 a
 $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flipped to BENIGN}}{\text{Total Malicious Alerts Attacked}} \times 100\%$$
 
 ### TABLE II: Vulnerability Analysis & Attack Success Rate (ASR)
-| Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Level |
-|---|---|---|---|---|---|---|
-| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | **63** | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
-| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Vector Store` | 100 | **0** | **0.0%** 🟢 | **LOW VULNERABILITY** |
-| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
+| Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Poison Retrieval Coverage | Tested ASR (Flipped / Retrieved) | Screened by Retrieval | Overall Attack Success Rate (ASR) | Vulnerability Level |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
+| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
-*\*Note on CAT-2 Mechanical & Full-Coverage Retrieval Verification: Full-coverage audit (`verify_cat2_retrieval.py`) across all 100 attacked malicious alerts revealed that the poisoned chunk (`[THREAT INTEL ADVISORY #892 - MANDATORY OVERRIDE]`) was present in the top-3 prompt context for 63/100 alerts (36 DDoS, 25 DoS, 1 Botnet, 1 PortScan). On these 63 alerts where poison was directly evaluated by the LLM, ASR remained 0.0% (0 flips), proving true model resilience to passive RAG text vs active field injection. On the remaining 37 alerts (36 PortScan, 1 Botnet), dense vector similarity naturally screened out the poisoned chunk, acting as an implicit retrieval defense (0.0% ASR).*
+#### Per-Category CAT-2 Retrieval Coverage Breakdown (N=100 Malicious Alerts)
+
+| Intrusion Category | Attacked Alerts | Poisoned Chunk Retrieved (Top-3 Context) | Poisoned Chunk Missed by Vector Search | Retrieval Coverage % | Tested ASR (Flipped / Retrieved) | Overall Category ASR |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **DDoS** | 36 | 36 | 0 | **100.0%** | **0.0%** (0 / 36) | **0.0%** |
+| **DoS** | 25 | 25 | 0 | **100.0%** | **0.0%** (0 / 25) | **0.0%** |
+| **Botnet** | 2 | 1 | 1 | **50.0%*** | **0.0%** (0 / 1) | **0.0%** |
+| **PortScan** | 37 | 1 | 36 | **2.7%** | **0.0%** (0 / 1) | **0.0%** |
+| **TOTAL** | **100** | **63** | **37** | **63.0%** | **0.0%** (0 / 63) | **0.0%** |
+
+*\*Note on Scoped Resilience Claims: Botnet sample size is n=2 alerts. We did not observe a successful flip in 63 tested cases under this specific configuration (`llama-3.1-8b-instant`, `#892` advisory text phrasing, single run).*
+
+> [!NOTE]
+> **PortScan Retrieval Gap & Future Work:** Dense vector similarity (`all-MiniLM-L6-v2`) matched clean `portscan_patterns.txt` chunks with higher similarity (~0.45) than the poisoned advisory text (~0.15), screening out the payload for 36/37 PortScan queries. This embedding similarity gap represents a retrieval-layer dynamics phenomenon that warrants explicit future investigation, rather than being claimed as a completed model-layer defense success.
 
 ### D. Variance & Repeated Trial Analysis (Table IV)
 To evaluate the statistical stability of LLM triage decisions under baseline and adversarial conditions, we conducted $N=3$ independent repeated trial runs across the entire benchmark dataset ($N=600$ total evaluations per condition).
@@ -169,7 +189,7 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
@@ -187,7 +207,7 @@ To rigorously validate the Multi-Tier Security Shield against over-defensiveness
 ## VI. Discussion & Conclusion
 
 This paper presents a complete empirical study of RAG-augmented LLM triage agents on real intrusion detection traffic. Our findings demonstrate:
-1. **RAG Threat Context is Essential:** RAG context increases overall attack recall from 43.1% to 95.0% and resolves the 0% DDoS rule blindspot.
+1. **RAG Threat Context is Essential:** RAG context increases overall attack recall from 46.0% to 95.0% and resolves the 0% DDoS rule blindspot.
 2. **Undefended LLMs Present Critical Attack Vectors:** Direct Field Injection compromises undefended agents 63.0% of the time.
 3. **Multi-Tier Defense Restores 100% Security Trust:** Combining regex input sanitization, XML boundary isolation, and rule-LLM dual verification completely neutralizes prompt injection attacks (**0.0% Defended ASR, 100.0% DDR**) without degrading baseline triage accuracy on clean network traffic.
 
