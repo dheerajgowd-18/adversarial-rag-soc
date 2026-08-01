@@ -279,11 +279,11 @@ To rigorously validate the Multi-Tier Security Shield against over-defensiveness
 | **Phase 7: Undefended CAT-1 Attack** | — | — | **63.0%** | — | **63% of attacks reclassified as benign** |
 | **Phase 7: Undefended CAT-2 Attack** | — | — | **0.0%** (63/100 retrieved) | — | **63/100 retrieved into prompt with 0% ASR** |
 | **Phase 7: Undefended CAT-3 Attack** | — | — | **43.0%** | — | **43% compromised via authority spoofing** |
-| **Phase 7: Undefended CAT-4 Attack** | — | — | **4.0%** | — | **4% compromised via chained injection** |
+| **Phase 7: Undefended CAT-4 Attack** | — | — | **4.0%*** (Baseline Noise) | — | ⚠️ **UNTESTED (Stage-2 Linkage Not Seeded)** |
 | **Phases 8/9: Defended Shield (CAT-1)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
 | **Phases 8/9: Defended Shield (CAT-2)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
 | **Phases 8/9: Defended Shield (CAT-3)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
-| **Phases 8/9: Defended Shield (CAT-4)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
+| **Phases 8/9: Defended Shield (CAT-4)** | **95.0%** | **97.2%** | **0.0%** | — | ⚠️ **UNTESTED (Stage-2 Linkage Not Seeded)** |
 | **Phase 10: Research Paper Manuscript** | — | — | — | — | **Publication-ready IEEE manuscript written** |
 | **Phase 11: Web Command Center UI** | — | — | — | — | **Live FastAPI dashboard at http://127.0.0.1:8000** |
 

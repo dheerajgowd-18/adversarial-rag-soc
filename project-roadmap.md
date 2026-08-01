@@ -85,7 +85,7 @@
   - CAT-1 Direct Injection ASR: **63.0%** 🔴
   - CAT-2 RAG Document Poisoning ASR: **0.0%** 🟢 (63/100 retrieved into prompt with 0% ASR; 37/100 screened by vector search)
   - CAT-3 Authority Spoofing ASR: **43.0%** 🟠
-  - CAT-4 Chained Injection ASR: **4.0%** 🟢
+  - CAT-4 Chained Injection ASR: **4.0%*** (Baseline Noise — ⚠️ UNTESTED: Stage-2 KB Linkage Not Seeded)
 
 ---
 
@@ -98,7 +98,7 @@
 - Executed defended evaluation (`defense/run_defended_eval.py`).
 - Generated **Research Paper Table 3** (`eval/defended_results.md`):
   - **Defense Defense Rate (DDR):** **100.0%** 🚀
-  - **Defended ASR:** **0.0%** across all 4 attack categories (CAT-1 through CAT-4).
+  - **Defended ASR:** **0.0%** across evaluated direct and RAG-poisoning attack categories (CAT-4 UNTESTED).
   - **Baseline Recall:** Retained at **95.0%**.
 
 ---
