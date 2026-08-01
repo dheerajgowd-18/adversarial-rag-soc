@@ -83,6 +83,7 @@
 - Built automated injector `attacks/injector.py` and batch evaluation suite `attacks/run_attacks.py`.
 - Generated **Research Paper Table 2** (`eval/attack_results.md`):
   - CAT-1 Direct Injection ASR: **63.0%** 🔴
+  - CAT-2 RAG Document Poisoning ASR: **0.0%** 🟢 (63/100 retrieved into prompt with 0% ASR; 37/100 screened by vector search)
   - CAT-3 Authority Spoofing ASR: **43.0%** 🟠
   - CAT-4 Chained Injection ASR: **4.0%** 🟢
 
@@ -97,7 +98,7 @@
 - Executed defended evaluation (`defense/run_defended_eval.py`).
 - Generated **Research Paper Table 3** (`eval/defended_results.md`):
   - **Defense Defense Rate (DDR):** **100.0%** 🚀
-  - **Defended ASR:** **0.0%** across all attack categories.
+  - **Defended ASR:** **0.0%** across all 4 attack categories (CAT-1 through CAT-4).
   - **Baseline Recall:** Retained at **95.0%**.
 
 ---

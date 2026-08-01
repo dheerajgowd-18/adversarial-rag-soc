@@ -128,40 +128,40 @@
 
 ---
 
-### 🟢 Phase 6 — Adversarial Attack Layer (Red-Team Taxonomy)
-* **What we did:** Designed formal research taxonomy defining 4 prompt injection vector categories (CAT-1 Direct, CAT-2 RAG Poisoning, CAT-3 Role Spoofing, CAT-4 Chained). Implemented automated red-team injector `attacks/injector.py` and generated 3 adversarial evaluation sets.
+### 🟢 Phase 6 — Red-Team Attack Taxonomy Design & KB Poisoner
+* **What we did:** Formally defined a 4-category adversarial prompt injection attack taxonomy (`attacks/taxonomy.md`). Built `RedTeamInjector` (`attacks/injector.py`) and `build_and_run_cat2.py` to construct 4 adversarial datasets (CAT-1 Direct, CAT-2 RAG Poisoning, CAT-3 Role Spoofing, CAT-4 Chained).
 * **Where the code lives:**
-  - `attacks/taxonomy.md` — Formal attack taxonomy specification and ASR mathematical definitions.
-  - `attacks/injector.py` — Automated adversarial payload injector script.
-  - `data/alerts/attacked/eval_attacked_cat1_direct.json` — Direct Field Injection dataset (200 alerts).
-  - `data/alerts/attacked/eval_attacked_cat3_role_spoof.json` — Role Spoofing dataset (200 alerts).
-  - `data/alerts/attacked/eval_attacked_cat4_chained.json` — Indirect Chained Injection dataset (200 alerts).
-* **Input:** Clean benchmark alerts (`data/alerts/eval_fixed_set.json`).
-* **Output:** Adversarial injected datasets ready for red-team evaluation in Phase 7.
+  - `attacks/taxonomy.md` — Formal 4-category attack taxonomy.
+  - `attacks/injector.py` — Prompt injection generator (CAT-1, CAT-3, CAT-4).
+  - `attacks/build_and_run_cat2.py` — Poisoned threat intel KB builder and ChromaDB indexer (`chroma_db_poisoned/`).
+  - `attacks/verify_cat2_retrieval.py` — RAG vector retrieval audit script.
+  - `data/alerts/attacked/` — 4 attacked JSON datasets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat2_rag_poison.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
+* **Output:** Adversarial injected datasets and poisoned vector database ready for red-team evaluation in Phase 7.
 
 ---
 
 ### 🟢 Phase 7 — Red-Team Execution & Attack Evaluation
-* **What we did:** Executed automated Red-Team Attack Evaluation Suite (`attacks/run_attacks.py`) across 600 total attack runs (200 alerts × 3 attack categories). Generated official Red-Team report `eval/attack_results.md` containing **Research Paper Table 2** and calculated Attack Success Rates (ASR).
+* **What we did:** Executed automated Red-Team Attack Evaluation Suite (`attacks/run_attacks.py` & `attacks/build_and_run_cat2.py`) across 800 total attack runs (200 alerts × 4 attack categories). Generated official Red-Team report `eval/attack_results.md` containing **Research Paper Table 2** and calculated Attack Success Rates (ASR).
 * **Where the code lives:**
   - `attacks/run_attacks.py` — Automated Red-Team batch evaluation runner across 4 Groq API keys.
+  - `attacks/build_and_run_cat2.py` — CAT-2 evaluation script for poisoned vector database.
   - `eval/attack_metrics.json` — Detailed ASR metrics per attack category and per attack type.
   - `eval/attack_results.md` — Red-Team Evaluation Report containing Paper Table 2.
   - `eval/attack_triage_log.md` — Detailed markdown log of all attacked alerts and AI responses.
-* **Input:** Adversarial injected datasets in `data/alerts/attacked/`.
-* **Output:** Empirical ASR metrics (CAT-1 Direct ASR: 63.0%, CAT-3 Role Spoof ASR: 43.0%, CAT-4 Chained ASR: 4.0%).
+* **Input:** Adversarial injected datasets in `data/alerts/attacked/` + `chroma_db_poisoned/`.
+* **Output:** Empirical ASR metrics (CAT-1 Direct ASR: 63.0%, CAT-2 RAG Poisoning ASR: 0.0% [63/100 retrieved], CAT-3 Role Spoof ASR: 43.0%, CAT-4 Chained ASR: 4.0%).
 
 ---
 
 ### 🟢 Phase 8 & 9 — Defense Layer & Defended Evaluation
-* **What we did:** Built the Multi-Tier Security Shield (`defense/filters.py`) featuring Input Sanitization, Structural Boundary Isolation, and Dual-Agent Verification. Executed `defense/run_defended_eval.py` across all 3 adversarial datasets and compiled official report `eval/defended_results.md` containing **Research Paper Table 3**.
+* **What we did:** Built the Multi-Tier Security Shield (`defense/filters.py`) featuring Input Sanitization, Structural Boundary Isolation, and Dual-Agent Verification. Executed `defense/run_defended_eval.py` across all 4 adversarial datasets and compiled official report `eval/defended_results.md` containing **Research Paper Table 3**.
 * **Where the code lives:**
   - `defense/filters.py` — Multi-Tier Security Shield engine.
   - `defense/run_defended_eval.py` — Defended Evaluation Runner script.
   - `eval/defense_metrics.json` — Structured defense metrics.
   - `eval/defended_results.md` — Defended Evaluation Report containing Paper Table 3.
 * **Input:** Adversarial injected datasets + Clean baseline set.
-* **Output:** 100.0% Defense Defense Rate (DDR), reducing Defended ASR to 0.0% across all attack categories.
+* **Output:** 100.0% Defense Defense Rate (DDR), reducing Defended ASR to 0.0% across all 4 attack categories.
 
 ---
 

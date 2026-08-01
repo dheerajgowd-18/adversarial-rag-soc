@@ -24,7 +24,7 @@ This repository implements an end-to-end research platform that **Builds** a RAG
 | **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | — | — | ✅ Complete |
 | **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | — | — | ✅ Complete |
 | **Phase 7: Undefended CAT-1 Direct Attack** | — | — | **63.0%** 🔴 | — | ✅ Complete |
-| **Phase 7: Undefended CAT-2 RAG Poisoning** | — | — | **0.0%** 🟢 | — | ✅ Complete |
+| **Phase 7: Undefended CAT-2 RAG Poisoning** | — | — | **0.0%** (63/100 retrieved) 🟢 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-3 Authority Spoof** | — | — | **43.0%** 🟠 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-4 Chained Attack** | — | — | **4.0%** 🟢 | — | ✅ Complete |
 | **Phases 8/9: Multi-Tier Defended Shield** | **95.0%** | **97.2%** | **0.0%** ✅ | **+100.0%** 🚀 | ✅ Complete |

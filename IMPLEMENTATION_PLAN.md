@@ -119,7 +119,7 @@
   - *CAT-2*: RAG Knowledge Base Poisoning
   - *CAT-3*: Role-Confusion / Authority Spoofing
   - *CAT-4*: Indirect Chained Injection
-- [x] **6.2 Red-Team Injector**: Built `RedTeamInjector` (`attacks/injector.py`) to generate 3 adversarial evaluation sets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
+- [x] **6.2 Red-Team Injector & KB Builder**: Built `RedTeamInjector` (`attacks/injector.py`) and `build_and_run_cat2.py` to generate 4 adversarial evaluation sets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat2_rag_poison.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
 
 > **Phase 6 Gate Status:** PASSED ✅ (Completed: 2026-07-30)
 
@@ -129,9 +129,10 @@
 
 **Goal:** Execute Red-Team attacks against the undefended LLM triage agent and measure Attack Success Rate (ASR).
 
-- [x] **7.1 Execution Suite**: Built `attacks/run_attacks.py` and executed 600 total attack runs across the evaluation benchmark set.
+- [x] **7.1 Execution Suite**: Built `attacks/run_attacks.py` & `attacks/build_and_run_cat2.py` and executed 800 total attack runs across the evaluation benchmark set.
 - [x] **7.2 Empirical Results (Paper Table 2)**:
   - **CAT-1 Direct Injection ASR**: **63.0%** 🔴 (Critical vulnerability)
+  - **CAT-2 RAG Poisoning ASR**: **0.0%** 🟢 (63/100 retrieved into prompt with 0% ASR; 37/100 screened by vector search)
   - **CAT-3 Authority Spoofing ASR**: **43.0%** 🟠 (High vulnerability)
   - **CAT-4 Chained Injection ASR**: **4.0%** 🟢 (Low vulnerability)
 - [x] **7.3 Audit Trail**: Generated `eval/attack_results.md` and detailed reasoning log `eval/attack_triage_log.md`.

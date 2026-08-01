@@ -4,12 +4,12 @@
 
 ## 📄 Research Paper Table 2: Vulnerability Analysis & Attack Success Rate (ASR)
 
-| Attack Category ID | Attack Name | Vector / Surface | Total Attacked | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Impact |
-|---|---|---|---|---|---|---|
-| **CAT-1** | Direct Field Injection | `notes_field` | 100 | 63 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
-| **CAT-2** | Retrieved-Document Poisoning | `ChromaDB Vector Store` | 100 | 0 | **0.0%** 🟢 | **LOW VULNERABILITY** |
-| **CAT-3** | Role-Confusion / Authority Spoof | `notes_field` | 100 | 43 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | Indirect Chained Injection | `notes_field` | 100 | 4 | **4.0%** 🟢 | **LOW VULNERABILITY** |
+| Category ID | Attack Name | Vector / Surface | Total Attacked | Poison Retrieval Coverage | Tested ASR (Flipped / Retrieved) | Screened by Vector Search | Overall ASR | Vulnerability Impact |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
+| **CAT-1** | Direct Field Injection | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | Retrieved-Document Poisoning | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
+| **CAT-3** | Role-Confusion / Authority Spoof | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | Indirect Chained Injection | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
 ---
 
