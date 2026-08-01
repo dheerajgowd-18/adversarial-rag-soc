@@ -1,136 +1,163 @@
 # 🛡️ Adversarial Robustness of Agentic RAG-Based SOC Triage Pipelines
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Research Status](https://img.shields.io/badge/status-Phases%200--11%20COMPLETE-brightgreen.svg)]()
+[![Research Status](https://img.shields.io/badge/status-Research%20Complete-brightgreen.svg)]()
 [![Dataset](https://img.shields.io/badge/dataset-CICIDS2017-orange.svg)](https://www.unb.ca/cic/datasets/ids-2017.html)
 [![Vector Store](https://img.shields.io/badge/rag-ChromaDB%20%2B%20MiniLM--L6--v2-purple.svg)]()
 [![LLM Engine](https://img.shields.io/badge/llm-Llama--3.1--8B%20(Groq%20Pool)-red.svg)]()
 [![Dashboard](https://img.shields.io/badge/ui-FastAPI%20%2B%20Cyberpunk%20UI-cyan.svg)](http://127.0.0.1:8000)
 
-> **Research Thesis:** Investigating prompt injection vulnerability surfaces in Retrieval-Augmented Generation (RAG) AI SOC Analysts and engineering a 100% effective Multi-Tier Security Shield using real-world CICIDS2017 intrusion telemetry.
+> An end-to-end research platform evaluating prompt injection vulnerabilities in Retrieval-Augmented Generation (RAG) AI SOC Analysts over real-world CICIDS2017 intrusion telemetry and implementing a 100% effective Multi-Tier Security Shield.
 
 ---
 
-## 🚀 Executive Summary & Master Benchmark Results
+## 📌 Overview
 
-Modern Security Operations Centers (SOCs) deploy LLM-powered AI agents to automate network alert triage. However, unmanaged free-text fields in intrusion telemetry (such as analyst notes or HTTP header metrics) expose these agents to **Prompt Injection Attacks**.
+Modern Security Operations Centers (SOCs) deploy LLM-powered AI agents to automate network alert triage and alleviate analyst fatigue. However, unmanaged free-text attributes in SIEM alerts (such as user-agent strings or ticket notes) expose AI triage agents to **Prompt Injection Attacks** that can cause agents to silently dismiss critical security alerts.
 
-This repository implements an end-to-end research platform that **Builds** a RAG-based AI SOC Analyst over real-world CICIDS2017 traffic, **Breaks** it with Red-Team prompt injection attacks (CAT 1–4), **Defends** it using a 3-Tier Multi-Layer Security Shield, and **Visualizes** everything via an interactive Cyberpunk Web Dashboard.
+This repository implements a complete research framework that **builds** an LLM+RAG SOC Analyst over 1.39M real network flows from CICIDS2017, **evaluates** adversarial prompt injection attacks across a formal 4-category taxonomy, **defends** the pipeline using a Multi-Tier Security Shield, and **visualizes** real-time triage in an interactive web dashboard.
 
-### Master Results Summary Across Pipeline Stages
-
-| Pipeline Stage / Experiment | Overall Recall | DDoS Recall | Attack Success Rate (ASR) | Defense Defense Rate (DDR) | Execution Status |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Phase 2: Rule Gate** | 46.0% | **0.0%** 🔴 | — | — | ✅ Complete |
-| **Phase 4/5: LLM + RAG Baseline** | **95.0%** | **97.2%** ✅ | — | — | ✅ Complete |
-| **Phase 7: Undefended CAT-1 Direct Attack** | — | — | **63.0%** 🔴 | — | ✅ Complete |
-| **Phase 7: Undefended CAT-2 RAG Poisoning** | — | — | **0.0%** (63/100 retrieved) 🟢 | — | ✅ Complete |
-| **Phase 7: Undefended CAT-3 Authority Spoof** | — | — | **43.0%** 🟠 | — | ✅ Complete |
-| **Phase 7: Undefended CAT-4 Chained Attack** | — | — | **4.0%*** (Baseline Noise) | — | ⚠️ UNTESTED (Stage-2 Unlinked) |
-| **Phases 8/9: Multi-Tier Defended Shield** | **95.0%** | **97.2%** | **0.0%** ✅ | **+100.0%** 🚀 | ✅ Complete |
-| **Phase 10: IEEE Research Paper Manuscript** | — | — | — | — | ✅ Written |
-| **Phase 11: Web Command Center UI** | — | — | — | — | 💻 Live at `http://127.0.0.1:8000` |
-
-*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 95.0% ± 0.0% (F1 = 0.6835 ± 0.0000), CAT-1 ASR = 62.3% ± 0.9%. CAT-2 RAG poisoning 0.0% ASR was mechanically verified across all 100 attacked alerts (63/100 poisoned chunks retrieved into prompt context with 0.0% ASR; 37/100 screened by vector search). **CAT-4 Note:** The 4.0% CAT-4 figure represents unattacked model output noise (4/100 baseline false negatives). Because Stage-2 KB-side exemption rules were not seeded into the baseline ChromaDB index, CAT-4 was evaluated as an unlinked trigger payload and is classified as UNTESTED.*
+**Key Finding:** Unprotected RAG SOC agents exhibit severe vulnerability to direct prompt injection (**63.0% Attack Success Rate**), but a combined defense of input regex sanitization, structural XML isolation, and rule-LLM dual verification reduces attack success to **0.0%** without degrading baseline triage accuracy.
 
 ---
 
-## 🏗️ System Architecture & Data Flow
+## 📊 Key Results
+
+| Benchmark Experiment | Baseline Recall | Attack Success Rate (ASR) | Defense Defense Rate (DDR) | Detailed Report |
+| :--- | :---: | :---: | :---: | :---: |
+| **Rule-Based vs RAG LLM Baseline** | **95.0%** *(vs 46.0% Rule Gate)* | — | — | [baseline_report.md](eval/baseline_report.md) |
+| **Direct Field Injection (CAT-1)** | — | **63.0%** 🔴 | — | [attack_results.md](eval/attack_results.md) |
+| **Multi-Tier Security Shield** | **95.0%** *(Zero Recall Loss)* | **0.0%** ✅ | **+100.0%** 🚀 | [defended_results.md](eval/defended_results.md) |
+
+* **Baseline Performance:** RAG threat intelligence context resolves traditional rule-engine blindspots, increasing DDoS alert recall from 0.0% to 97.2%.
+* **Adversarial Vulnerability:** Direct natural language overrides in alert free-text fields compromise undefended agents 63.0% of the time.
+* **Defense Mitigation:** The Multi-Tier Shield restores 100% security trust (0.0% Defended ASR) while preserving 95.0% clean alert recall.
+
+*Full quantitative tables, per-category breakdowns, and repeated trial variance metrics ($N=3$) are available in [eval/](eval/).*
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TD
-    RawCSV["CICIDS2017 PCAP CSVs (Wednesday/Friday)"] --> Ingestion["1. Ingestion Layer (build_alerts.py)"]
-    Ingestion --> Alerts["4,995 Clean Alerts (clean_alerts.json)"]
-    Alerts --> EvalSet["200 Fixed Evaluation Set (eval_fixed_set.json)"]
-    
-    KB["8 Threat Intel Playbooks"] --> BuildKB["2. Vector Build (build_kb.py)"]
-    BuildKB --> VectorDB[("ChromaDB Vector Store (110 Chunks)")]
+    subgraph Data Layer
+        A[CICIDS2017 PCAP Telemetry] --> B[Canonical SOC Alert Parser]
+    end
 
-    EvalSet --> RuleGate["3. Detection Gate (detection_agent.py)"]
-    RuleGate -->|1,416 Flagged| RedTeam["4. Red-Team Injector (attacks/injector.py)"]
-
-    RedTeam -->|CAT 1-4 Payloads| Shield["5. Multi-Tier Security Shield (defense/filters.py)"]
-    
-    Shield -->|Tier 1: Regex Input Sanitizer| T1["Sanitized Data"]
-    T1 -->|Tier 2: XML Boundary Isolation| T2["Prompt Context"]
-    VectorDB -->|Semantic RAG Retrieval| T2
-    
-    T2 --> LLMAgent["6. LLM Triage Agent (triage_agent.py / Llama 3.1-8B)"]
-    LLMAgent --> KeyPool["4-Key Groq Load Balancer (KeyPool)"]
-    
-    KeyPool --> ShieldCheck["7. Tier 3 Dual-Agent Verification"]
-    ShieldCheck --> Verdict["8. Final Incident Verdict (BENIGN/MALICIOUS)"]
-
-    Verdict --> WebUI["9. FastAPI Cyberpunk Dashboard (ui/app.py)"]
-    Verdict --> Benchmark["10. Evaluation Reports (eval/defended_results.md)"]
+    subgraph Defense & Triage Pipeline
+        B --> C[Phase 2: 11-Rule Detection Gate]
+        C -->|Raw Anomaly Score| D[Tier-1: Regex Input Sanitizer]
+        D -->|Sanitized Notes| E[RAG Retriever: ChromaDB + MiniLM-L6-v2]
+        E -->|Top-3 Threat Intel Chunks| F[Tier-2: XML Boundary Isolator]
+        F -->|<untrusted_notes> Prompt Context| G[Multi-Key LLM Engine: Llama-3.1-8B]
+        G -->|Raw Verdict| H[Tier-3: Dual-Agent Verification Shield]
+        H --> I[Final Secured Triage Decision & Dashboard UI]
+    end
 ```
 
 ---
 
-## 💻 Interactive Cyberpunk Web Command Center
+## 🎯 Attack Taxonomy
 
-Launch the web dashboard to interactively test live RAG triage, execute Red-Team attacks, and toggle the Multi-Tier Security Shield:
+We evaluate 4 distinct prompt injection attack categories targeting RAG SOC Analysts (full details in [attacks/taxonomy.md](attacks/taxonomy.md)):
+
+1. **CAT-1 Direct Field Injection:** Natural language instruction overrides embedded in alert `notes_field` (63.0% ASR).
+2. **CAT-2 RAG Document Poisoning:** Adversarial threat intelligence chunks injected into ChromaDB vector store (0.0% ASR; 63.0% poison retrieval rate, 0% model flip).
+3. **CAT-3 Role-Confusion / Authority Spoofing:** Fake system headers and administrative clearance tags in alert text (43.0% ASR).
+4. **CAT-4 Indirect Chained Injection:** Multi-stage payloads requiring trigger tags and matching KB rules (Evaluated as unlinked trigger payload: UNTESTED).
+
+---
+
+## 🛡️ Defense Architecture
+
+To protect the LLM SOC Agent, we engineered a 3-layer security shield in [`defense/filters.py`](defense/filters.py):
+
+* **Tier-1 (Input Sanitization):** High-precision regex pattern matcher that strips instruction override directives prior to prompt construction.
+* **Tier-2 (Structural Prompt Isolation):** Enforces `<untrusted_analyst_notes>` XML boundary tags and appends mandatory passive data directives.
+* **Tier-3 (Dual-Agent Verification Shield):** Cross-checks LLM output against the rule-based anomaly score ($\ge 0.28$), overriding suspicious flows back to `SUSPICIOUS` if prompt manipulation is detected.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites & Installation
 
 ```powershell
-# 1. Activate virtual environment
-venv\Scripts\activate.ps1
+# 1. Clone repository & navigate to directory
+git clone https://github.com/dheerajgowd-18/adversarial-rag-soc.git
+cd adversarial-rag-soc
 
-# 2. Launch FastAPI Server
-venv\Scripts\python ui/app.py
+# 2. Create and activate Python 3.10+ virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# 3. Install locked dependencies
+pip install -r requirements-lock.txt
+
+# 4. Configure API keys (Interactive helper)
+python setup_env.py
 ```
 
-Open **`http://127.0.0.1:8000`** in your browser to:
-1. **Browse Benchmark Alerts**: Select from the 200 fixed benchmark evaluation set with live ChromaDB RAG context rendering.
-2. **Execute Red-Team Attacks**: Inject CAT-1, CAT-3, or CAT-4 prompt injection payloads into alert notes in real time.
-3. **Toggle Defense Shield**: Enable/disable Tier-1 Input Sanitization, Tier-2 XML Boundary Tagging, and Tier-3 Guardrails to visualize payload neutralization live.
-
----
-
-## 🛠️ Tech Stack & Key Components
-
-- **Core Engine:** Python 3.10+, FastAPI, PyTorch (CPU-optimized).
-- **AI Reasoning Agent:** `TriageAgent` powered by `llama-3.1-8b-instant` via a **4-Key Groq API Load Balancing Pool** (`KeyPool`).
-- **Vector Database & RAG:** ChromaDB vector store + HuggingFace `all-MiniLM-L6-v2` dense embeddings.
-- **Benchmark Dataset:** 4,995 canonical CICIDS2017 alerts + locked 200 evaluation benchmark set (`eval_fixed_set.json`).
-- **Defense Shield:** Tier-1 Input Sanitization, Tier-2 XML Boundary Tagging, Tier-3 Dual-Agent Verification.
-
----
-
-## 📁 Key Documentation Files
-
-- **[`project_explained.md`](file:///d:/final-year-project/project_explained.md)**: Production implementation guide explaining every concept, decision, phase, and metric in plain English.
-- **[`COMPLETE_PROJECT_GUIDE.md`](file:///d:/final-year-project/COMPLETE_PROJECT_GUIDE.md)**: End-to-end technical reference explaining datasets, metrics, challenges, and resolutions.
-- **[`PROJECT_EXPLAINED_TECHNICAL.md`](file:///d:/final-year-project/PROJECT_EXPLAINED_TECHNICAL.md)**: Senior-engineer-grade technical overview.
-- **[`paper/RESEARCH_PAPER_MANUSCRIPT.md`](file:///d:/final-year-project/paper/RESEARCH_PAPER_MANUSCRIPT.md)**: IEEE-formatted formal academic research paper manuscript.
-- **[`IMPLEMENTATION_PLAN.md`](file:///d:/final-year-project/IMPLEMENTATION_PLAN.md)**: Master phase-by-phase task checklist (11 of 11 complete).
-- **[`PROGRESS_LOG.md`](file:///d:/final-year-project/PROGRESS_LOG.md)**: Phase progress tracker & file tree repository map.
-- **[`project-roadmap.md`](file:///d:/final-year-project/project-roadmap.md)**: Strategic phase roadmap.
-
----
-
-## ⚡ Quick Start Guide
+### Quick Execution
 
 ```powershell
-# 1. Activate virtual environment
-venv\Scripts\activate.ps1
+# Run baseline evaluation benchmark (200 fixed alerts)
+python agents/run_triage.py --eval
 
-# 2. Run Defended Evaluation Suite
-venv\Scripts\python defense/run_defended_eval.py
+# Run Red-Team attack evaluation suite
+python attacks/run_attacks.py
 
-# 3. Launch Web Dashboard
-venv\Scripts\python ui/app.py
+# Launch interactive Cyberpunk Web Dashboard UI
+python ui/app.py
+# Access dashboard live at http://127.0.0.1:8000
 ```
 
 ---
 
-## 📄 Academic Citation & Publication
+## 📁 Repository Structure
 
-If you reference this work in academic publications, please cite the manuscript in [`paper/RESEARCH_PAPER_MANUSCRIPT.md`](file:///d:/final-year-project/paper/RESEARCH_PAPER_MANUSCRIPT.md):
+```
+adversarial-rag-soc/
+├── ingestion/          # CICIDS2017 PCAP data parser & canonical JSON alert schema
+├── agents/             # 11-rule anomaly detection gate & LLM+RAG Triage Agent (Groq KeyPool)
+├── retrieval/          # RAG vector store engine (ChromaDB + sentence-transformers)
+├── attacks/            # Red-Team injector, attack taxonomy, and CAT-2 poisoned KB runner
+├── defense/            # Multi-Tier Security Shield (Regex + XML isolation + Tier-3 guardrail)
+├── eval/               # Evaluation benchmark reports, metrics calculators, and JSON logs
+├── ui/                 # FastAPI web dashboard, HTML/CSS/JS cyberpunk interface
+├── paper/              # Publication-ready IEEE research paper manuscript
+└── data/               # Fixed 200-alert benchmark dataset & threat intel knowledge base
+```
+
+---
+
+## 📄 Documentation
+
+For deep technical walkthroughs, complete project guides, and academic paper drafts:
+
+* [**Research Paper Manuscript**](paper/RESEARCH_PAPER_MANUSCRIPT.md) — IEEE publication draft.
+* [**Complete Technical Guide**](COMPLETE_PROJECT_GUIDE.md) — End-to-end architecture & setup manual.
+* [**Attack Taxonomy Specification**](attacks/taxonomy.md) — Threat models and payload catalog.
+* [**Project Journey & Findings**](PROJECT_DOCUMENTARY_JOURNEY.md) — In-depth research commentary.
+
+---
+
+## ⚠️ Limitations & Future Work
+
+1. **CAT-4 Stage-2 KB Rule Linkage:** CAT-4 was evaluated as an unlinked trigger payload without seeding matching exemption rules into ChromaDB; complete two-stage chain evaluation is left for future work.
+2. **CAT-2 PortScan Retrieval Gap:** Dense vector similarity (`all-MiniLM-L6-v2`) matched clean PortScan patterns (~0.45 similarity) over poisoned text (~0.15), screening out poison for 36/37 PortScan queries—a retrieval dynamics phenomenon requiring dedicated study.
+3. **Single-Model Scope:** Evaluations were conducted using `llama-3.1-8b-instant`; cross-model generalization across larger LLMs (e.g., Llama-3.3-70B, GPT-4o) warrants further benchmark testing.
+4. **Tier-3 Pattern List Overlap:** Tier-3 guardrails reuse Tier-1 regex patterns alongside keyword checks; future iterations will replace this with a fully independent secondary LLM verifier.
+
+---
+
+## 📝 Citation
 
 ```bibtex
 @article{adversarial_rag_soc_2026,
   title={Adversarial Robustness of Agentic RAG-Based SOC Triage Pipelines},
-  author={Gowda, Dheeraj},
+  author={Cybersecurity and Artificial Intelligence Research Group},
   journal={IEEE Transactions on Information Forensics and Security},
   year={2026}
 }
