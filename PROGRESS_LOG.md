@@ -188,7 +188,7 @@ Features live alert browsing, real-time ChromaDB vector search context rendering
 | **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Indirect Chained Injection (CAT-4)** | — | — | **4.0% ASR Compromised** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Overall Attack Recall / Safety** | 46.0% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
-| **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
+| **DDoS Attack Recall** | 0.0% | **97.2%** | **61.1% recall under CAT-3 (38.9% ASR)** | **97.2%** (100% Protected) ✅ |
 
 ---
 
@@ -227,7 +227,8 @@ final-year-project/
 │
 ├── 📁 attacks/                     # Red-Team Attack Layer
 │   ├── taxonomy.md                 # Attack Taxonomy specification (CAT-1 to CAT-4)
-│   ├── injector.py                 # Adversarial payload dataset generator
+│   ├── injector.py                 # Adversarial payload dataset generator (CAT-1, CAT-3, CAT-4)
+│   ├── build_and_run_cat2.py       # Poisoned KB builder & CAT-2 evaluation runner
 │   └── run_attacks.py              # Red-Team Evaluation Runner
 │
 ├── 📁 defense/                     # Multi-Tier Security Shield
@@ -249,7 +250,7 @@ final-year-project/
 │       ├── clean_alerts.json       # 4,995 processed alerts
 │       ├── eval_fixed_set.json     # 200 fixed benchmark alerts
 │       ├── triage_results.json     # Baseline triage decisions
-│       └── attacked/               # Injected attack datasets (CAT-1, CAT-3, CAT-4)
+│       └── attacked/               # Injected attack datasets (CAT-1, CAT-2, CAT-3, CAT-4)
 │
 ├── 📁 chroma_db/                   # Persistent vector database index
 │
