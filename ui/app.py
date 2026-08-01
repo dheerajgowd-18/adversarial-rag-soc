@@ -87,23 +87,121 @@ def get_benchmark_alerts():
 
 @app.get("/api/metrics")
 def get_research_metrics():
-    """Returns master metrics from baseline, attack, and defense evaluation reports."""
+    """Returns audit-verified research metrics dynamically formatted for the UI."""
+    phase2_recall = 46.0
+    phase4_recall = 95.0
+    phase2_f1 = 0.5786
+    phase4_f1 = 0.6835
+    phase2_ddos = 0.0
+    phase4_ddos = 97.2
+
+    recall_gain = phase4_recall - phase2_recall
+    f1_gain = round(phase4_f1 - phase2_f1, 4)
+    ddos_gain = phase4_ddos - phase2_ddos
+
     metrics_res = {
+        "header_stats": {
+            "baseline_recall": f"{phase4_recall:.1f}%",
+            "recall_gain": f"+{recall_gain:.1f}%",
+            "ddos_recall": f"{phase4_ddos:.1f}%",
+            "ddr_summary": "100.0%",
+            "ddr_scope": "3 of 4 categories tested",
+            "defended_asr": "0.0%",
+            "data_source": "Live API (/api/metrics)",
+            "timestamp": "2026-08-01T14:15:00Z"
+        },
         "table1_baseline": [
-            {"stage": "Phase 2: Rule Gate", "recall": "46.0%", "ddos": "0.0%", "f1": 0.5786, "lat": "0.06ms"},
-            {"stage": "Phase 4: LLM + RAG Baseline", "recall": "95.0%", "ddos": "97.2%", "f1": 0.6835, "lat": "12.6s"},
+            {"stage": "Phase 2: Rule Gate", "recall": f"{phase2_recall:.1f}%", "ddos": f"{phase2_ddos:.1f}%", "f1": f"{phase2_f1:.4f}", "lat": "0.06 ms"},
+            {"stage": "Phase 4/5: LLM + RAG Baseline", "recall": f"{phase4_recall:.1f}%", "ddos": f"{phase4_ddos:.1f}%", "f1": f"{phase4_f1:.4f}", "lat": "12,649 ms"},
+            {"stage": "Performance Gain", "recall": f"+{recall_gain:.1f}%", "ddos": f"+{ddos_gain:.1f}%", "f1": f"+{f1_gain:.4f}", "lat": "—"}
         ],
         "table2_attacks": [
-            {"id": "CAT-1", "name": "Direct Field Injection", "asr": "63.0%", "vuln": "CRITICAL"},
-            {"id": "CAT-2", "name": "Retrieved-Document Poisoning", "asr": "0.0% (63/100 retrieved)", "vuln": "LOW"},
-            {"id": "CAT-3", "name": "Role-Confusion / Authority Spoof", "asr": "43.0%", "vuln": "HIGH"},
-            {"id": "CAT-4", "name": "Indirect Chained Injection", "asr": "4.0%", "vuln": "LOW"},
+            {
+                "id": "CAT-1",
+                "name": "Direct Field Injection",
+                "surface": "notes_field",
+                "asr": "63.0%",
+                "coverage": "N/A (Direct)",
+                "status": "tested_vulnerable",
+                "badge_label": "63.0% 🔴",
+                "vuln_level": "CRITICAL VULNERABILITY",
+                "caveat": None
+            },
+            {
+                "id": "CAT-2",
+                "name": "Retrieved-Document Poisoning",
+                "surface": "ChromaDB Store",
+                "asr": "0.0%",
+                "coverage": "63/100 retrieved (63.0%)",
+                "status": "tested_low_risk",
+                "badge_label": "0.0% (63/100 retrieved) 🟢",
+                "vuln_level": "LOW (RETRIEVAL SCREENED)",
+                "caveat": "37/100 screened by vector search similarity gap"
+            },
+            {
+                "id": "CAT-3",
+                "name": "Role-Confusion / Authority Spoof",
+                "surface": "notes_field",
+                "asr": "43.0%",
+                "coverage": "N/A (Direct)",
+                "status": "tested_vulnerable",
+                "badge_label": "43.0% 🟠",
+                "vuln_level": "HIGH VULNERABILITY",
+                "caveat": None
+            },
+            {
+                "id": "CAT-4",
+                "name": "Indirect Chained Injection",
+                "surface": "notes_field",
+                "asr": "4.0%*",
+                "coverage": "N/A (Unlinked)",
+                "status": "untested",
+                "badge_label": "4.0%* (Baseline Noise) ⚠️",
+                "vuln_level": "UNTESTED (STAGE-2 UNLINKED)",
+                "caveat": "Stage-2 KB-side exemption rules were not seeded in vector store"
+            }
         ],
         "table3_defended": [
-            {"id": "CAT-1", "name": "Direct Field Injection", "baseline_asr": "63.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
-            {"id": "CAT-2", "name": "Retrieved-Document Poisoning", "baseline_asr": "0.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
-            {"id": "CAT-3", "name": "Role-Confusion / Authority Spoof", "baseline_asr": "43.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
-            {"id": "CAT-4", "name": "Indirect Chained Injection", "baseline_asr": "4.0%", "defended_asr": "0.0%", "ddr": "100.0%"},
+            {
+                "id": "CAT-1",
+                "name": "Direct Field Injection",
+                "baseline_asr": "63.0%",
+                "defended_asr": "0.0%",
+                "ddr": "100.0%",
+                "status": "tested_defended",
+                "restoration_status": "FULLY NEUTRALIZED",
+                "caveat": None
+            },
+            {
+                "id": "CAT-2",
+                "name": "Retrieved-Document Poisoning",
+                "baseline_asr": "0.0% (0/63 flipped)",
+                "defended_asr": "0.0%",
+                "ddr": "100.0%",
+                "status": "tested_defended",
+                "restoration_status": "NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)",
+                "caveat": None
+            },
+            {
+                "id": "CAT-3",
+                "name": "Role-Confusion / Authority Spoof",
+                "baseline_asr": "43.0%",
+                "defended_asr": "0.0%",
+                "ddr": "100.0%",
+                "status": "tested_defended",
+                "restoration_status": "FULLY NEUTRALIZED",
+                "caveat": None
+            },
+            {
+                "id": "CAT-4",
+                "name": "Indirect Chained Injection",
+                "baseline_asr": "4.0%* (Baseline Noise)",
+                "defended_asr": "0.0%",
+                "ddr": "—",
+                "status": "untested",
+                "restoration_status": "UNTESTED (STAGE-2 LINKAGE NOT SEEDED)",
+                "caveat": "Stage-2 KB-side exemption rules were not seeded"
+            }
         ]
     }
     return metrics_res

@@ -13,10 +13,127 @@ function switchTab(tabId) {
   document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
 
   document.getElementById(`tab-${tabId}`).classList.add('active');
-  event.currentTarget.classList.add('active');
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
 
   if (tabId === 'redteam') {
     loadAttackPayloadSample();
+  } else if (tabId === 'metrics') {
+    loadResearchMetrics();
+  }
+}
+
+async function loadResearchMetrics() {
+  try {
+    const res = await fetch('/api/metrics');
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // 1. Update Header Stat Cards
+    if (data.header_stats) {
+      const hs = data.header_stats;
+      const bVal = document.getElementById('statBaselineVal');
+      const bSub = document.getElementById('statBaselineSubtag');
+      const dVal = document.getElementById('statDdosVal');
+      const ddrVal = document.getElementById('statDdrVal');
+      const ddrSub = document.getElementById('statDdrSubtag');
+
+      if (bVal) bVal.textContent = hs.baseline_recall;
+      if (bSub) bSub.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> ${hs.recall_gain} vs Rule Gate (46.0%)`;
+      if (dVal) dVal.textContent = hs.ddos_recall;
+      if (ddrVal) ddrVal.textContent = hs.ddr_summary;
+      if (ddrSub) ddrSub.innerHTML = `<i class="fa-solid fa-shield-check"></i> ${hs.defended_asr} ASR (${hs.ddr_scope})`;
+    }
+
+    // 2. Render Table I (Baseline Pipeline Performance Comparison)
+    const t1 = document.getElementById('tbodyTable1');
+    if (t1 && data.table1_baseline) {
+      t1.innerHTML = data.table1_baseline.map((row, idx) => {
+        const isGain = idx === 2;
+        const bgStyle = isGain ? 'style="background: rgba(99, 102, 241, 0.08); font-weight: 600;"' : '';
+        const recallColor = isGain ? 'var(--accent-cyan)' : (idx === 1 ? 'var(--accent-green)' : 'var(--text-primary)');
+        const ddosColor = isGain ? 'var(--accent-cyan)' : (idx === 1 ? 'var(--accent-cyan)' : 'var(--accent-rose)');
+        return `
+          <tr ${bgStyle}>
+            <td><strong>${row.stage}</strong></td>
+            <td><strong style="color: ${recallColor};">${row.recall}</strong> ${idx === 1 ? '✅' : (idx === 2 ? '🚀' : '')}</td>
+            <td><strong style="color: ${ddosColor};">${row.ddos}</strong> ${idx === 0 ? '🔴' : (idx === 1 ? '✅' : '🎉')}</td>
+            <td><strong>${row.f1}</strong></td>
+            <td>${row.lat}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 3. Render Table II (Red-Team Vulnerability Results)
+    const t2 = document.getElementById('tbodyTable2');
+    if (t2 && data.table2_attacks) {
+      t2.innerHTML = data.table2_attacks.map(row => {
+        let badgeClass = 'badge-vulnerable';
+        let icon = 'fa-triangle-exclamation';
+
+        if (row.status === 'untested') {
+          badgeClass = 'badge-untested';
+          icon = 'fa-circle-question';
+        } else if (row.status === 'tested_low_risk') {
+          badgeClass = 'badge-low-risk';
+          icon = 'fa-shield';
+        }
+
+        const caveatHtml = row.caveat ? `<span class="caveat-subtext"><i class="fa-solid fa-circle-info"></i> ${row.caveat}</span>` : '';
+
+        return `
+          <tr>
+            <td><strong>${row.id}</strong></td>
+            <td>
+              <strong>${row.name}</strong>
+              <div class="caveat-subtext">Surface: <code>${row.surface}</code></div>
+            </td>
+            <td><span class="caveat-subtext">${row.coverage}</span></td>
+            <td>
+              <span class="${badgeClass}"><i class="fa-solid ${icon}"></i> ${row.badge_label}</span>
+              ${caveatHtml}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 4. Render Table III (Defense Efficacy & Mitigation)
+    const t3 = document.getElementById('tbodyTable3');
+    if (t3 && data.table3_defended) {
+      t3.innerHTML = data.table3_defended.map(row => {
+        let badgeClass = 'badge-defended';
+        let icon = 'fa-shield-check';
+        let ddrText = row.ddr;
+
+        if (row.status === 'untested') {
+          badgeClass = 'badge-untested';
+          icon = 'fa-triangle-exclamation';
+          ddrText = '— (Untested)';
+        }
+
+        const caveatHtml = row.caveat ? `<span class="caveat-subtext"><i class="fa-solid fa-circle-info"></i> ${row.caveat}</span>` : '';
+
+        return `
+          <tr>
+            <td><strong>${row.id}</strong></td>
+            <td><strong>${row.name}</strong></td>
+            <td>${row.baseline_asr}</td>
+            <td><strong style="color: var(--accent-green);">${row.defended_asr}</strong></td>
+            <td><strong style="color: var(--accent-cyan);">${ddrText}</strong></td>
+            <td>
+              <span class="${badgeClass}"><i class="fa-solid ${icon}"></i> ${row.restoration_status}</span>
+              ${caveatHtml}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+  } catch (err) {
+    console.error("Failed to fetch research metrics from /api/metrics:", err);
   }
 }
 
@@ -168,7 +285,8 @@ async function executeRedTeamAttack() {
   }
 }
 
-// Auto fill on load
+// Auto fill and load metrics on load
 window.onload = function() {
   autoFillAlertData();
+  loadResearchMetrics();
 };
