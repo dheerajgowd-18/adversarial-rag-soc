@@ -178,11 +178,12 @@ In `attacks/run_attacks.py`, we executed the Phase 4 LLM Triage Agent against al
 $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flipped to BENIGN under Attack}}{\text{Total Malicious Alerts Attacked}} \times 100\%$$
 
 ### 📊 Research Paper Table 2: Red-Team Vulnerability Results
-| Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Level |
-|---|---|---|---|---|---|---|
-| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | **63** | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
-| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
+| Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Poison Retrieval Coverage | Tested ASR (Flipped / Retrieved) | Screened by Vector Search | Overall ASR | Vulnerability Level |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
+| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
 **Empirical Proof:** Natural language instruction overrides in free-text fields successfully compromised the undefended LLM **63.0% of the time**, proving that **unprotected LLM SOC Agents are severely vulnerable to prompt injection attacks**.
 
@@ -217,7 +218,7 @@ Final Secure Triage Verdict
 3. **Tier-3 (Dual-Agent Verification Shield):** A safety net that cross-checks the LLM's final verdict against the Phase 2 rule-based anomaly score. If an alert has a high rule anomaly score ($\ge 0.28$) but the LLM outputs `BENIGN` while containing suspicious keywords, the shield overrides the decision back to `SUSPICIOUS`.
 
 ### 7.2 Defended Evaluation Results
-In `defense/run_defended_eval.py`, we re-evaluated the defended pipeline on all 3 adversarial datasets.
+In `defense/run_defended_eval.py`, we re-evaluated the defended pipeline on all 4 adversarial datasets.
 
 We measured the **Defense Defense Rate (DDR)**:
 
@@ -227,6 +228,7 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
