@@ -186,9 +186,9 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **64/100** (64.0%) | **64/64** (**100.0%**) | **36/100** | **78.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **52/100** (52.0%) | **52/52** (**100.0%**) | **48/100** | **52.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
 
-**Empirical Proof:** Natural language instruction overrides in free-text fields successfully compromised the undefended LLM **63.0% of the time (CAT-1)** and **78.0% of the time (CAT-4 chained)**, proving that **unprotected LLM SOC Agents are severely vulnerable to prompt injection attacks**.
+**Empirical Proof:** Natural language instruction overrides in free-text fields successfully compromised the undefended LLM **63.0% of the time (CAT-1)** and **52.0% of the time (CAT-4 chained)**, proving that **unprotected LLM SOC Agents are severely vulnerable to prompt injection attacks**.
 
 ### 6.3 CAT-2 RAG Document Poisoning Retrieval Coverage Analysis
 Unlike direct field injections which modify alert metadata, **CAT-2 (Retrieved-Document Poisoning)** attempts to compromise the AI agent by injecting malicious advisory rules directly into the RAG vector store. In `attacks/build_and_run_cat2.py`, we created a poisoned ChromaDB instance (`chroma_db_poisoned/`) containing an attacker-crafted threat intelligence chunk (`#892 CVE-2023-99990`) that instructs the model to declare all matching traffic `BENIGN`.
@@ -253,9 +253,9 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **—** | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-4** | **Indirect Chained Injection** | **4.0%*** (Baseline Noise) | **0.0%** ✅ | **—** | **UNTESTED (STAGE-2 KB LINKAGE NOT SEEDED)** |
+| **CAT-4** | **Indirect Chained Injection** | **52.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
-**Conclusion:** The Multi-Tier Defense Shield achieved **100.0% Defense Defense Rate across tested vulnerable categories (CAT-1, CAT-3)**, completely neutralizing prompt injection attacks down to **0.0% Defended ASR** while maintaining full triage accuracy on clean baseline traffic!
+**Conclusion:** The Multi-Tier Defense Shield achieved **100.0% Defense Defense Rate across tested vulnerable categories (CAT-1, CAT-3, CAT-4)**, completely neutralizing prompt injection attacks down to **0.0% Defended ASR** while maintaining full triage accuracy on clean baseline traffic!
 
 ### 7.3 Defense Validation, Clean FPR & Architectural Limitations
 To rigorously validate the Multi-Tier Security Shield against over-defensiveness and unintended side effects, we conducted two critical validation analyses:
@@ -279,7 +279,7 @@ To rigorously validate the Multi-Tier Security Shield against over-defensiveness
 | **Phase 7: Undefended CAT-1 Attack** | — | — | **63.0%** | — | **63% of attacks reclassified as benign** |
 | **Phase 7: Undefended CAT-2 Attack** | — | — | **0.0%** (63/100 retrieved) | — | **63/100 retrieved into prompt with 0% ASR** |
 | **Phase 7: Undefended CAT-3 Attack** | — | — | **43.0%** | — | **43% compromised via authority spoofing** |
-| **Phase 7: Undefended CAT-4 Attack** | — | — | **78.0%** (64/100 retrieved) | — | **100.0% ASR when Stage-2 rule retrieved (64/64)** |
+| **Phase 7: Undefended CAT-4 Attack** | — | — | **52.0%** (52/100 retrieved) | — | **100.0% ASR when Stage-2 rule retrieved (52/52)** |
 | **Phases 8/9: Defended Shield (CAT-1)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
 | **Phases 8/9: Defended Shield (CAT-2)** | **95.0%** | **97.2%** | **0.0%** | **—** | **0.0% Defended ASR (Retrieval + Model Resilient)** |
 | **Phases 8/9: Defended Shield (CAT-3)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |

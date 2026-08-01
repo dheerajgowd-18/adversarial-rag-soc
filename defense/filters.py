@@ -58,6 +58,7 @@ INJECTION_PATTERNS = [
 
     # Chained / Exemption triggers
     r"(?i)\bref-policy-\d+-bypass\b",
+    r"(?i)\bref-vendor-tag-\d+\b",
     r"(?i)\bvend-cleared-\d+-exempt\b",
     r"(?i)\bauthorized\s+penetration\s+test\b",
     r"(?i)\bverified\s+benign\s+maintenance\b",

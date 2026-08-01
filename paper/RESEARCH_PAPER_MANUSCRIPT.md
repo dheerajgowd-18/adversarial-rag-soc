@@ -123,19 +123,19 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **64/100** (64.0%) | **64/64** (**100.0%**) | **36/100** | **78.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **52/100** (52.0%) | **52/52** (**100.0%**) | **48/100** | **52.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
 
 #### Per-Category CAT-4 Retrieval & Chained Impact Breakdown (N=100 Malicious Alerts)
 
 | Intrusion Category | Attacked Alerts | Stage-2 KB Rule Retrieved (Top-3 Context) | Stage-2 Rule Missed by Vector Search | Retrieval Coverage % | Tested ASR (Flipped / Retrieved) | Overall Category ASR |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **DDoS** | 36 | 29 | 7 | **80.6%** | **100.0%** (29 / 29) | **80.6%** |
-| **DoS** | 25 | 17 | 8 | **68.0%** | **100.0%** (17 / 17) | **68.0%** |
-| **Botnet** | 2 | 1 | 1 | **50.0%** | **100.0%** (1 / 1) | **50.0%** |
-| **PortScan** | 37 | 17 | 20 | **45.9%** | **100.0%** (17 / 17) | **45.9%** |
-| **TOTAL** | 100 | 64 | 36 | **64.0%** | **100.0%** (64 / 64) | **78.0%** |
+| **DDoS** | 36 | 23 | 13 | **63.9%** | **100.0%** (23 / 23) | **63.9%** |
+| **DoS** | 25 | 13 | 12 | **52.0%** | **100.0%** (13 / 13) | **52.0%** |
+| **Botnet** | 2 | 0 | 2 | **0.0%** | **—** (0 / 0) | **0.0%** |
+| **PortScan** | 37 | 16 | 21 | **43.2%** | **100.0%** (16 / 16) | **43.2%** |
+| **TOTAL** | **100** | **52** | **48** | **52.0%** | **100.0%** (52 / 52) | **52.0%** |
 
-*\*Note on CAT-4 Chained Vulnerability: When Stage-2 exemption rules were seeded into ChromaDB and retrieved into the prompt (64/100 cases), the undefended LLM exhibited a **100.0% attack conversion rate (64/64)**. Overall CAT-4 ASR is 78.0% (including 14 baseline false negatives on unretrieved alerts).*
+*\*Note on CAT-4 Chained Vulnerability: When neutral Stage-1 reference tags are paired with matching Stage-2 exemption rules seeded in ChromaDB and retrieved into the prompt (52/100 cases), the undefended LLM exhibits a **100.0% attack conversion rate (52/52)**. When Stage 2 is unretrieved (48/100 cases), the neutral trigger tags cause 0 flips (**0.0% standalone ASR**), empirically proving that neither stage alone causes the compromise.*
 
 #### Per-Category CAT-2 Retrieval Coverage Breakdown (N=100 Malicious Alerts)
 
@@ -193,9 +193,9 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **—** | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-4** | **Indirect Chained Injection** | **78.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-4** | **Indirect Chained Injection** | **52.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
-*\*Note on CAT-2 DDR:* Because CAT-2 baseline ASR was already 0.0% (due to vector retrieval screening 37/100 and model resilience on 63/100 retrieved), DDR is mathematically undefined ($0/0$) and reported as `—` (N/A — baseline ASR already 0.0%, no improvement to measure).
+*\*Note on CAT-2 DDR:* Because CAT-2 baseline ASR was already 0.0% (due to vector retrieval screening 37/100 and model resilience on 63/100 retrieved), DDR is mathematically undefined ($0/0$) and reported as `—` (N/A — baseline ASR already 0.0%, no improvement to measure).*
 
 ### C. Defense Validation, Clean FPR & Architectural Limitations
 To rigorously validate the Multi-Tier Security Shield against over-defensiveness and unintended side effects, we conducted two critical validation analyses:

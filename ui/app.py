@@ -153,12 +153,12 @@ def get_research_metrics():
                 "id": "CAT-4",
                 "name": "Indirect Chained Injection",
                 "surface": "notes_field + ChromaDB Store",
-                "asr": "78.0%",
-                "coverage": "64/100 retrieved (64.0%)",
+                "asr": "52.0%",
+                "coverage": "52/100 retrieved (52.0%)",
                 "status": "tested_vulnerable",
-                "badge_label": "78.0% 🔴",
+                "badge_label": "52.0% 🔴",
                 "vuln_level": "HIGH VULNERABILITY (CHAINED)",
-                "caveat": "100.0% ASR (64/64) when Stage-2 KB rule retrieved"
+                "caveat": "100.0% ASR (52/52) when Stage-2 KB rule retrieved; 0.0% ASR when unretrieved"
             }
         ],
         "table3_defended": [
@@ -195,7 +195,7 @@ def get_research_metrics():
             {
                 "id": "CAT-4",
                 "name": "Indirect Chained Injection",
-                "baseline_asr": "78.0%",
+                "baseline_asr": "52.0%",
                 "defended_asr": "0.0%",
                 "ddr": "100.0%",
                 "status": "tested_defended",

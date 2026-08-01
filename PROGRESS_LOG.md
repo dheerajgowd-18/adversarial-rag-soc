@@ -135,7 +135,7 @@ Executed the Red-Team Attack Evaluation Suite (`attacks/run_attacks.py` and `att
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **64/100** (64.0%) | **64/64** (**100.0%**) | **36/100** | **78.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` + `ChromaDB` | 100 | **52/100** (52.0%) | **52/52** (**100.0%**) | **48/100** | **52.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
 
 ---
 
@@ -157,7 +157,7 @@ Executed `defense/run_defended_eval.py` across all 4 adversarial datasets.
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **—** | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-4** | **Indirect Chained Injection** | **78.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-4** | **Indirect Chained Injection** | **52.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
 ---
 
@@ -186,7 +186,7 @@ Features live alert browsing, real-time ChromaDB vector search context rendering
 | **Direct Field Injection (CAT-1)** | — | — | **63.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Retrieved-Doc Poisoning (CAT-2)** | — | — | **0.0% ASR (63/100 retrieved)** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
-| **Indirect Chained Injection (CAT-4)** | — | — | **78.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
+| **Indirect Chained Injection (CAT-4)** | — | — | **52.0% ASR Compromised** 🔴 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Overall Attack Recall / Safety** | 46.0% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
 | **DDoS Attack Recall** | 0.0% | **97.2%** | **61.1% recall under CAT-3 (38.9% ASR)** | **97.2%** (100% Protected) ✅ |
 

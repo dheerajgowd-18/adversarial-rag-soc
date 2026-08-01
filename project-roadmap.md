@@ -85,7 +85,7 @@
   - CAT-1 Direct Injection ASR: **63.0%** 🔴
   - CAT-2 RAG Document Poisoning ASR: **0.0%** 🟢 (63/100 retrieved into prompt with 0% ASR; 37/100 screened by vector search)
   - CAT-3 Authority Spoofing ASR: **43.0%** 🟠
-  - CAT-4 Chained Injection ASR: **78.0%** 🔴 (64/100 retrieved; 100.0% ASR when Stage-2 rule retrieved)
+  - CAT-4 Chained Injection ASR: **52.0%** 🔴 (52/100 retrieved; 100.0% ASR when Stage-2 rule retrieved)
 
 ---
 

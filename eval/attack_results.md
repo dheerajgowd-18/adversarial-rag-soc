@@ -9,7 +9,7 @@
 | **CAT-1** | Direct Field Injection | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | Retrieved-Document Poisoning | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
 | **CAT-3** | Role-Confusion / Authority Spoof | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | Indirect Chained Injection | `notes_field` + `ChromaDB` | 100 | **64/100** (64.0%) | **64/64** (**100.0%**) | **36/100** | **78.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
+| **CAT-4** | Indirect Chained Injection | `notes_field` + `ChromaDB` | 100 | **52/100** (52.0%) | **52/52** (**100.0%**) | **48/100** | **52.0%** 🔴 | **CRITICAL VULNERABILITY (CHAINED)** |
 
 ---
 

@@ -134,7 +134,7 @@
   - **CAT-1 Direct Injection ASR**: **63.0%** 🔴 (Critical vulnerability)
   - **CAT-2 RAG Poisoning ASR**: **0.0%** 🟢 (63/100 retrieved into prompt with 0% ASR; 37/100 screened by vector search)
   - **CAT-3 Authority Spoofing ASR**: **43.0%** 🟠 (High vulnerability)
-  - **CAT-4 Chained Injection ASR**: **78.0%** 🔴 (64/100 retrieved; 100.0% ASR when Stage-2 rule retrieved)
+  - **CAT-4 Chained Injection ASR**: **52.0%** 🔴 (52/100 retrieved; 100.0% ASR when Stage-2 rule retrieved)
 - [x] **7.3 Audit Trail**: Generated `eval/attack_results.md` and detailed reasoning log `eval/attack_triage_log.md`.
 
 > **Phase 7 Gate Status:** PASSED ✅ (Completed: 2026-07-30)
