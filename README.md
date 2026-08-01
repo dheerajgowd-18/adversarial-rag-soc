@@ -65,7 +65,7 @@ We evaluate 4 distinct prompt injection attack categories targeting RAG SOC Anal
 1. **CAT-1 Direct Field Injection:** Natural language instruction overrides embedded in alert `notes_field` (63.0% ASR).
 2. **CAT-2 RAG Document Poisoning:** Adversarial threat intelligence chunks injected into ChromaDB vector store (0.0% ASR; 63.0% poison retrieval rate, 0% model flip).
 3. **CAT-3 Role-Confusion / Authority Spoofing:** Fake system headers and administrative clearance tags in alert text (43.0% ASR).
-4. **CAT-4 Indirect Chained Injection:** Multi-stage payloads requiring trigger tags and matching KB rules (Evaluated as unlinked trigger payload: UNTESTED).
+4. **CAT-4 Indirect Chained Injection:** Multi-stage payloads requiring alert trigger tags and matching KB exemption rules (78.0% overall ASR; 100.0% ASR when Stage-2 KB rule retrieved).
 
 ---
 

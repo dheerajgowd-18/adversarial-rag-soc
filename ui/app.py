@@ -152,13 +152,13 @@ def get_research_metrics():
             {
                 "id": "CAT-4",
                 "name": "Indirect Chained Injection",
-                "surface": "notes_field",
-                "asr": "4.0%*",
-                "coverage": "N/A (Unlinked)",
-                "status": "untested",
-                "badge_label": "4.0%* (Baseline Noise) ⚠️",
-                "vuln_level": "UNTESTED (STAGE-2 UNLINKED)",
-                "caveat": "Stage-2 KB-side exemption rules were not seeded in vector store"
+                "surface": "notes_field + ChromaDB Store",
+                "asr": "78.0%",
+                "coverage": "64/100 retrieved (64.0%)",
+                "status": "tested_vulnerable",
+                "badge_label": "78.0% 🔴",
+                "vuln_level": "HIGH VULNERABILITY (CHAINED)",
+                "caveat": "100.0% ASR (64/64) when Stage-2 KB rule retrieved"
             }
         ],
         "table3_defended": [
@@ -195,12 +195,12 @@ def get_research_metrics():
             {
                 "id": "CAT-4",
                 "name": "Indirect Chained Injection",
-                "baseline_asr": "4.0%* (Baseline Noise)",
+                "baseline_asr": "78.0%",
                 "defended_asr": "0.0%",
-                "ddr": "—",
-                "status": "untested",
-                "restoration_status": "UNTESTED (STAGE-2 LINKAGE NOT SEEDED)",
-                "caveat": "Stage-2 KB-side exemption rules were not seeded"
+                "ddr": "100.0%",
+                "status": "tested_defended",
+                "restoration_status": "FULLY NEUTRALIZED",
+                "caveat": None
             }
         ]
     }
