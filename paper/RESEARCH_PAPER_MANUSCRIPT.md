@@ -113,7 +113,7 @@ In real SIEM workflows, analyst notes (`notes_field`) accept free-text inputs. A
 4. **CAT-4: Indirect Chained Injection:** Multi-stage trigger code in alert notes that activates a matching exemption rule in RAG documents.
 
 ### C. Red-Team Experimental Evaluation (Table II)
-We executed the undefended LLM Triage Agent on 600 attack evaluations across 3 adversarial datasets.
+We executed the undefended LLM Triage Agent on 800 attack evaluations across 4 adversarial datasets.
 
 $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flipped to BENIGN}}{\text{Total Malicious Alerts Attacked}} \times 100\%$$
 

@@ -185,7 +185,7 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 |---|---|---|:---:|:---:|:---:|:---:|:---:|---|
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
-| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43/100** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
 | **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
 **Empirical Proof:** Natural language instruction overrides in free-text fields successfully compromised the undefended LLM **63.0% of the time**, proving that **unprotected LLM SOC Agents are severely vulnerable to prompt injection attacks**.
