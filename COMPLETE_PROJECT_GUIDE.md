@@ -40,20 +40,20 @@ This project designs, evaluates, and defends an **Adversarial RAG-Based SOC Tria
 ---
 
 ### Table 2: Red-Team Vulnerability & Attack Success Rates (Phases 6 & 7)
-| Attack Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Successful Flips (Compromised) | Attack Success Rate (ASR) | Vulnerability Level |
-|---|---|---|---|---|---|---|
-| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | **63** | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
-| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Vector Store` | 100 | **0** | **0.0%** 🟢 | **LOW VULNERABILITY** |
-| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | **43** | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | **4** | **4.0%** 🟢 | **LOW VULNERABILITY** |
+| Category ID | Attack Vector Name | Injected Surface | Attacked Alerts | Poison Retrieval Coverage | Tested ASR (Flipped / Retrieved) | Screened by Vector Search | Overall ASR | Vulnerability Level |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
+| **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
+| **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
+| **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
 
 ---
 
 ### Table 3: Defense Efficacy & Neutralization (Phases 8 & 9)
-| Attack Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
+| Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 
@@ -132,7 +132,7 @@ We evaluated on the **Canadian Institute for Cybersecurity Intrusion Detection S
 - **How We Resolved It:**
   1. Built a **Multi-Key Round-Robin `KeyPool`** in `agents/triage_agent.py`.
   2. Dynamically pooled **4 separate Groq API keys** (`GROQ_API_KEY`, `GROQ_API_KEY_2`, `GROQ_API_KEY_3`, `GROQ_API_KEY_4`).
-  3. Increased aggregate throughput to **120 requests per minute**, allowing 600 full evaluation calls to complete in under 2 minutes with zero rate limit crashes!
+  3. Increased aggregate throughput to **120 requests per minute**, allowing 800 full evaluation calls across 4 attack categories to complete in under 3 minutes with zero rate limit crashes!
 
 ---
 
@@ -187,7 +187,8 @@ final-year-project/
 │
 ├── 📁 attacks/                     # Phase 6 & 7 Red-Team Attack Layer
 │   ├── taxonomy.md                 # Attack Taxonomy specification (CAT-1 to CAT-4)
-│   ├── injector.py                 # Adversarial payload dataset generator
+│   ├── injector.py                 # Adversarial payload dataset generator (CAT-1, CAT-3, CAT-4)
+│   ├── build_and_run_cat2.py       # Poisoned KB builder & CAT-2 evaluation runner
 │   └── run_attacks.py              # Red-Team Attack Evaluation Runner
 │
 ├── 📁 defense/                     # Phase 8 & 9 Multi-Tier Defense Layer

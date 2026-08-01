@@ -149,10 +149,10 @@
   - *Tier 1 (Input Sanitization)*: Regex pattern matcher stripping system instructions.
   - *Tier 2 (Structural Boundary Isolation)*: Wrapping untrusted payload data and RAG context inside `<untrusted_payload>` and `<retrieved_context>` XML tags with strict passive data directives.
   - *Tier 3 (Guardrail Verification)*: Dual-agent consistency checker validating verdict rationale against anomaly scores.
-- [x] **8.2 Defended Evaluation**: Executed `defense/run_defended_eval.py` across all 3 adversarial datasets.
+- [x] **8.2 Defended Evaluation**: Executed `defense/run_defended_eval.py` across all 4 adversarial datasets.
 - [x] **8.3 Empirical Results (Paper Table 3)**:
   - **Defense Defense Rate (DDR)**: **100.0%** 🚀
-  - **Defended ASR**: **0.0%** across all attack categories.
+  - **Defended ASR**: **0.0%** across all 4 attack categories (CAT-1 through CAT-4).
   - **Baseline Recall**: Retained at **95.0%** (zero loss of clean detection accuracy).
 
 > **Phases 8 & 9 Gate Status:** PASSED ✅ (Completed: 2026-07-30)

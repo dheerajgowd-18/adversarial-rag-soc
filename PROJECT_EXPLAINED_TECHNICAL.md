@@ -191,7 +191,7 @@
 | **Role-Confusion Spoofing (CAT-3)** | — | — | **43.0% ASR Compromised** 🟠 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Indirect Chained Injection (CAT-4)** | — | — | **4.0% ASR Compromised** 🟢 | **0.0% ASR (100% DDR Neutralized)** 🛡️ |
 | **Overall Attack Recall / Safety** | 46.0% | **95.0%** | **63.0% Vulnerable** | **100% Protected** ✅ |
-| **DDoS Attack Recall** | 0.0% | **97.2%** | 61.1% Compromised | **100% Protected** ✅ |
+| **DDoS Attack Recall** | 0.0% | **97.2%** | **61.1% recall under CAT-3 (38.9% ASR)** | **97.2%** (100% Protected) ✅ |
 
 ---
 *Last updated: 2026-07-31 | All 11 phases complete*
