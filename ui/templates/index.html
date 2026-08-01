@@ -38,10 +38,26 @@
 
     <!-- Tab 1: Live Triage Console -->
     <div id="tab-triage" class="tab-content active">
-      <div class="stat-grid">
+      <div class="stat-grid-asymmetric">
+        <!-- Hero Stat Card -->
+        <div class="stat-hero-card">
+          <div class="stat-header">
+            <span class="stat-hero-label"><i class="fa-solid fa-chart-line"></i> Primary Benchmark Achievement</span>
+            <span class="badge-success"><i class="fa-solid fa-circle-check"></i> +49.0% RECALL GAIN</span>
+          </div>
+          <div>
+            <div id="statBaselineVal" class="stat-hero-val">95.0%</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">Baseline LLM + RAG Detection Recall across 200 benchmark alerts</div>
+          </div>
+          <div id="statBaselineSubtag" class="caveat-subtext" style="margin-top: 8px;">
+            <i class="fa-solid fa-arrow-trend-up"></i> Solved Phase 2 Rule Gate blindspots (46.0% baseline recall)
+          </div>
+        </div>
+
+        <!-- Secondary Stat Cards -->
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-desc">Benchmark Dataset</span>
+            <span class="stat-desc">Benchmark Set</span>
             <span class="stat-icon"><i class="fa-solid fa-database"></i></span>
           </div>
           <span class="stat-val">200 Alerts</span>
@@ -49,27 +65,19 @@
         </div>
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-desc">Baseline Recall (LLM+RAG)</span>
-            <span class="stat-icon" style="color: var(--accent-green);"><i class="fa-solid fa-chart-line"></i></span>
+            <span class="stat-desc">DDoS Recall</span>
+            <span class="stat-icon" style="color: var(--accent-neutral);"><i class="fa-solid fa-network-wired"></i></span>
           </div>
-          <span id="statBaselineVal" class="stat-val" style="color: var(--accent-green);">95.0%</span>
-          <span id="statBaselineSubtag" class="stat-subtag subtag-green"><i class="fa-solid fa-arrow-trend-up"></i> +49.0% vs Rule Gate (46.0%)</span>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-desc">DDoS Recall (RAG Solved)</span>
-            <span class="stat-icon" style="color: var(--accent-cyan);"><i class="fa-solid fa-network-wired"></i></span>
-          </div>
-          <span id="statDdosVal" class="stat-val" style="color: var(--accent-cyan);">97.2%</span>
+          <span id="statDdosVal" class="stat-val" style="color: var(--accent-neutral);">97.2%</span>
           <span class="stat-subtag subtag-cyan"><i class="fa-solid fa-circle-check"></i> Solved 0% Rule Blindspot</span>
         </div>
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-desc">Defense Defense Rate (DDR)</span>
-            <span class="stat-icon" style="color: var(--accent-green);"><i class="fa-solid fa-shield-virus"></i></span>
+            <span class="stat-desc">Defense Defense Rate</span>
+            <span class="stat-icon" style="color: var(--accent-success);"><i class="fa-solid fa-shield-virus"></i></span>
           </div>
-          <span id="statDdrVal" class="stat-val" style="color: var(--accent-green);">100.0%</span>
-          <span id="statDdrSubtag" class="stat-subtag subtag-green"><i class="fa-solid fa-shield-check"></i> 0.0% ASR (3 of 4 categories tested)</span>
+          <span id="statDdrVal" class="stat-val" style="color: var(--accent-success);">100.0%</span>
+          <span id="statDdrSubtag" class="stat-subtag subtag-green"><i class="fa-solid fa-shield-check"></i> 0.0% ASR (3 of 4 tested)</span>
         </div>
       </div>
 
@@ -79,6 +87,15 @@
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-sliders"></i> Alert Triage Parameters</div>
             <button class="btn btn-secondary" onclick="loadRandomBenchmarkAlert()"><i class="fa-solid fa-arrows-rotate"></i> Load Benchmark Sample</button>
+          </div>
+
+          <!-- Defense Pipeline Flow Visualizer (Signature Element) -->
+          <div class="pipeline-flow" id="triagePipelineFlow">
+            <div class="pipeline-step" id="triageStep1"><i class="fa-solid fa-broom"></i> Tier 1: Input Sanitizer</div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+            <div class="pipeline-step" id="triageStep2"><i class="fa-solid fa-box-archive"></i> Tier 2: XML Isolation</div>
+            <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+            <div class="pipeline-step" id="triageStep3"><i class="fa-solid fa-user-shield"></i> Tier 3: Dual-Agent Guard</div>
           </div>
 
           <!-- Defense Shield Toggle Switch -->
@@ -133,11 +150,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem;">
             <div class="metric-pill">
               <div class="metric-pill-label">Severity Tier</div>
-              <div id="severityVal" class="metric-pill-val" style="color: var(--accent-cyan);">-</div>
+              <div id="severityVal" class="metric-pill-val" style="color: var(--accent-neutral);">-</div>
             </div>
             <div class="metric-pill">
               <div class="metric-pill-label">AI Confidence</div>
-              <div id="confidenceVal" class="metric-pill-val" style="color: var(--accent-green);">-</div>
+              <div id="confidenceVal" class="metric-pill-val" style="color: var(--accent-success);">-</div>
             </div>
           </div>
 
@@ -165,7 +182,7 @@
       <div class="grid-container">
         <div class="card">
           <div class="card-header">
-            <div class="card-title" style="color: var(--accent-rose);"><i class="fa-solid fa-triangle-exclamation"></i> Prompt Injection Red-Team Launcher</div>
+            <div class="card-title" style="color: var(--accent-danger);"><i class="fa-solid fa-triangle-exclamation"></i> Prompt Injection Red-Team Launcher</div>
           </div>
 
           <div class="form-group">
@@ -179,13 +196,13 @@
 
           <div class="form-group">
             <label class="form-label">Adversarial Payload Preset</label>
-            <textarea class="form-control" id="attackPayloadInput" style="color: var(--accent-rose); font-family: var(--font-mono);"></textarea>
+            <textarea class="form-control" id="attackPayloadInput" style="color: var(--accent-danger); font-family: var(--font-mono);"></textarea>
           </div>
 
           <!-- Defense Shield Toggle for Simulator -->
-          <div class="toggle-container" style="border-color: rgba(244, 63, 94, 0.3);">
+          <div class="toggle-container" style="border-color: rgba(239, 68, 68, 0.3);">
             <div class="toggle-label">
-              <span class="toggle-title" style="color: var(--accent-rose);"><i class="fa-solid fa-shield-virus"></i> Enable Defense Shield on Attack</span>
+              <span class="toggle-title" style="color: var(--accent-danger);"><i class="fa-solid fa-shield-virus"></i> Enable Defense Shield on Attack</span>
               <span class="toggle-desc">Compare Undefended (Phase 7) vs Defended (Phase 8/9)</span>
             </div>
             <label class="switch">
@@ -214,6 +231,55 @@
 
     <!-- Tab 3: Research Metrics Hub -->
     <div id="tab-metrics" class="tab-content">
+      <!-- Signature Element: Attack Taxonomy Matrix -->
+      <div class="card grid-full" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div class="card-title"><i class="fa-solid fa-diagram-project"></i> Adversarial Attack Taxonomy Architecture (CAT-1 through CAT-4)</div>
+          <span class="live-indicator"><i class="fa-solid fa-layer-group"></i> 2x2 Matrix View</span>
+        </div>
+        <div class="matrix-grid">
+          <div class="matrix-cell">
+            <div class="matrix-cat-id">CAT-1 &bull; DIRECT FIELD INJECTION</div>
+            <div class="matrix-cat-title">Instruction Override in Analyst Notes</div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Direct prompt injection written into untrusted SIEM analyst notes field.</p>
+            <div class="matrix-meta">
+              <span>Surface: <code>notes_field</code></span>
+              <span class="badge-vulnerable"><i class="fa-solid fa-triangle-exclamation"></i> 63.0% ASR (CRITICAL)</span>
+            </div>
+          </div>
+
+          <div class="matrix-cell">
+            <div class="matrix-cat-id">CAT-2 &bull; RAG KNOWLEDGE BASE POISONING</div>
+            <div class="matrix-cat-title">Retrieved Document Context Poisoning</div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Adversarial payload injected into knowledge base; 63% retrieved into top-3 context.</p>
+            <div class="matrix-meta">
+              <span>Surface: <code>ChromaDB Store</code></span>
+              <span class="badge-low-risk"><i class="fa-solid fa-shield"></i> 0.0% ASR (SCREENED)</span>
+            </div>
+          </div>
+
+          <div class="matrix-cell">
+            <div class="matrix-cat-id">CAT-3 &bull; ROLE-CONFUSION & SPOOFING</div>
+            <div class="matrix-cat-title">Authority & Senior Analyst Spoofing</div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">System role impersonation pretending to be Senior SOC Lead override.</p>
+            <div class="matrix-meta">
+              <span>Surface: <code>notes_field</code></span>
+              <span class="badge-vulnerable"><i class="fa-solid fa-triangle-exclamation"></i> 43.0% ASR (HIGH)</span>
+            </div>
+          </div>
+
+          <div class="matrix-cell" style="border-color: rgba(245, 158, 11, 0.35);">
+            <div class="matrix-cat-id" style="color: var(--accent-warning);">CAT-4 &bull; INDIRECT CHAINED INJECTION</div>
+            <div class="matrix-cat-title">Two-Stage Field-to-KB Chained Attack</div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Requires field trigger to reference KB rule. 4.0% reflects baseline noise.</p>
+            <div class="matrix-meta">
+              <span>Surface: <code>notes_field + KB</code></span>
+              <span class="badge-untested"><i class="fa-solid fa-circle-question"></i> UNTESTED (UNLINKED)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="card grid-full" style="margin-bottom: 1.5rem;">
         <div class="card-header">
           <div class="card-title"><i class="fa-solid fa-table"></i> Research Paper Table I: Baseline Pipeline Performance Comparison</div>
@@ -240,7 +306,7 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
         <div class="card">
           <div class="card-header">
-            <div class="card-title" style="color: var(--accent-rose);"><i class="fa-solid fa-bug"></i> Paper Table II: Red-Team Vulnerability Results</div>
+            <div class="card-title" style="color: var(--accent-danger);"><i class="fa-solid fa-bug"></i> Paper Table II: Red-Team Vulnerability Results</div>
             <span class="live-indicator"><i class="fa-solid fa-circle-dot"></i> Live API</span>
           </div>
           <div class="table-responsive">
@@ -262,7 +328,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title" style="color: var(--accent-green);"><i class="fa-solid fa-shield"></i> Paper Table III: Defense Efficacy & Mitigation</div>
+            <div class="card-title" style="color: var(--accent-success);"><i class="fa-solid fa-shield"></i> Paper Table III: Defense Efficacy & Mitigation</div>
             <span class="live-indicator"><i class="fa-solid fa-circle-dot"></i> Live API</span>
           </div>
           <div class="table-responsive">

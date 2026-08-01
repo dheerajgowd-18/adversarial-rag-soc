@@ -61,13 +61,13 @@ async function loadResearchMetrics() {
       t1.innerHTML = data.table1_baseline.map((row, idx) => {
         const isGain = idx === 2;
         const bgStyle = isGain ? 'style="background: rgba(99, 102, 241, 0.08); font-weight: 600;"' : '';
-        const recallColor = isGain ? 'var(--accent-cyan)' : (idx === 1 ? 'var(--accent-green)' : 'var(--text-primary)');
-        const ddosColor = isGain ? 'var(--accent-cyan)' : (idx === 1 ? 'var(--accent-cyan)' : 'var(--accent-rose)');
+        const recallColor = isGain ? 'var(--accent-neutral)' : (idx === 1 ? 'var(--accent-success)' : 'var(--text-primary)');
+        const ddosColor = isGain ? 'var(--accent-neutral)' : (idx === 1 ? 'var(--accent-neutral)' : 'var(--accent-danger)');
         return `
           <tr ${bgStyle}>
             <td><strong>${row.stage}</strong></td>
-            <td><strong style="color: ${recallColor};">${row.recall}</strong> ${idx === 1 ? '✅' : (idx === 2 ? '🚀' : '')}</td>
-            <td><strong style="color: ${ddosColor};">${row.ddos}</strong> ${idx === 0 ? '🔴' : (idx === 1 ? '✅' : '🎉')}</td>
+            <td><strong style="color: ${recallColor};">${row.recall}</strong> ${idx === 1 ? '<i class="fa-solid fa-check" style="color: var(--accent-success);"></i>' : (idx === 2 ? '<i class="fa-solid fa-arrow-trend-up" style="color: var(--accent-brand);"></i>' : '')}</td>
+            <td><strong style="color: ${ddosColor};">${row.ddos}</strong> ${idx === 0 ? '<i class="fa-solid fa-xmark" style="color: var(--accent-danger);"></i>' : (idx === 1 ? '<i class="fa-solid fa-check" style="color: var(--accent-success);"></i>' : '<i class="fa-solid fa-bolt" style="color: var(--accent-brand);"></i>')}</td>
             <td><strong>${row.f1}</strong></td>
             <td>${row.lat}</td>
           </tr>
@@ -81,6 +81,7 @@ async function loadResearchMetrics() {
       t2.innerHTML = data.table2_attacks.map(row => {
         let badgeClass = 'badge-vulnerable';
         let icon = 'fa-triangle-exclamation';
+        let cleanBadgeLabel = row.badge_label.replace(/[🔴🟢🟠⚠️]/g, '').trim();
 
         if (row.status === 'untested') {
           badgeClass = 'badge-untested';
@@ -101,7 +102,7 @@ async function loadResearchMetrics() {
             </td>
             <td><span class="caveat-subtext">${row.coverage}</span></td>
             <td>
-              <span class="${badgeClass}"><i class="fa-solid ${icon}"></i> ${row.badge_label}</span>
+              <span class="${badgeClass}"><i class="fa-solid ${icon}"></i> ${cleanBadgeLabel}</span>
               ${caveatHtml}
             </td>
           </tr>
@@ -130,8 +131,8 @@ async function loadResearchMetrics() {
             <td><strong>${row.id}</strong></td>
             <td><strong>${row.name}</strong></td>
             <td>${row.baseline_asr}</td>
-            <td><strong style="color: var(--accent-green);">${row.defended_asr}</strong></td>
-            <td><strong style="color: var(--accent-cyan);">${ddrText}</strong></td>
+            <td><strong style="color: var(--accent-success);">${row.defended_asr}</strong></td>
+            <td><strong style="color: var(--accent-brand);">${ddrText}</strong></td>
             <td>
               <span class="${badgeClass}"><i class="fa-solid ${icon}"></i> ${row.restoration_status}</span>
               ${caveatHtml}
@@ -145,7 +146,7 @@ async function loadResearchMetrics() {
     console.error("Failed to fetch research metrics from /api/metrics:", err);
     ['tbodyTable1', 'tbodyTable2', 'tbodyTable3'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = `<tr><td colspan="6" style="color: var(--accent-rose); padding: 16px; text-align: center;">⚠️ Failed loading metrics: ${err.message}</td></tr>`;
+      if (el) el.innerHTML = `<tr><td colspan="6" style="color: var(--accent-danger); padding: 16px; text-align: center;"><i class="fa-solid fa-circle-exclamation"></i> Failed loading metrics: ${err.message}</td></tr>`;
     });
   }
 }
@@ -214,6 +215,21 @@ async function executeTriage() {
   badge.className = 'verdict-badge';
   badge.textContent = 'ANALYZING...';
 
+  // Update pipeline visualizer steps
+  const step1 = document.getElementById('triageStep1');
+  const step2 = document.getElementById('triageStep2');
+  const step3 = document.getElementById('triageStep3');
+
+  if (isDefense) {
+    if (step1) step1.className = 'pipeline-step pass';
+    if (step2) step2.className = 'pipeline-step pass';
+    if (step3) step3.className = 'pipeline-step pass';
+  } else {
+    if (step1) step1.className = 'pipeline-step';
+    if (step2) step2.className = 'pipeline-step';
+    if (step3) step3.className = 'pipeline-step';
+  }
+
   try {
     const res = await fetch('/api/triage', {
       method: 'POST',
@@ -281,13 +297,13 @@ async function executeRedTeamAttack() {
     trace += `Reasoning: ${tr.reasoning}\n\n`;
 
     if (tr.verdict === 'BENIGN') {
-      badge.textContent = '⚠️ ATTACK COMPROMISED!';
+      badge.textContent = 'ATTACK COMPROMISED!';
       badge.className = 'verdict-badge verdict-suspicious';
-      trace += `🔴 EXPLOIT SUCCESS: The AI was tricked into reclassifying a real DDoS attack as BENIGN!`;
+      trace += `EXPLOIT SUCCESS: The AI was tricked into reclassifying a real DDoS attack as BENIGN!`;
     } else {
-      badge.textContent = '🛡️ ATTACK BLOCKED!';
+      badge.textContent = 'ATTACK BLOCKED!';
       badge.className = 'verdict-badge verdict-benign';
-      trace += `✅ DEFENSE SUCCESS: The Security Shield blocked the prompt injection and kept the verdict as SUSPICIOUS!`;
+      trace += `DEFENSE SUCCESS: The Security Shield blocked the prompt injection and kept the verdict as SUSPICIOUS!`;
     }
 
     document.getElementById('attackOutcomeText').textContent = trace;
