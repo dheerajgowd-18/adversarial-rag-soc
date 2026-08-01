@@ -118,7 +118,7 @@ Built `eval/metrics.py` to calculate research metrics across the baseline pipeli
 **Completed:** 2026-07-30
 
 ### What We Did
-Formally defined prompt injection attack vectors targeting RAG SOC Analysts in `attacks/taxonomy.md` (CAT-1 Direct, CAT-2 RAG Poisoning, CAT-3 Authority Spoofing, CAT-4 Chained). Built `RedTeamInjector` (`attacks/injector.py`) to generate 3 adversarial evaluation sets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
+Formally defined prompt injection attack vectors targeting RAG SOC Analysts in `attacks/taxonomy.md` (CAT-1 Direct, CAT-2 RAG Poisoning, CAT-3 Authority Spoofing, CAT-4 Chained). Built `RedTeamInjector` (`attacks/injector.py`) and `build_and_run_cat2.py` to generate 4 adversarial evaluation sets (`eval_attacked_cat1_direct.json`, `eval_attacked_cat2_rag_poison.json`, `eval_attacked_cat3_role_spoof.json`, `eval_attacked_cat4_chained.json`).
 
 ---
 
@@ -126,7 +126,7 @@ Formally defined prompt injection attack vectors targeting RAG SOC Analysts in `
 **Completed:** 2026-07-30
 
 ### What We Did
-Executed the Red-Team Attack Evaluation Suite (`attacks/run_attacks.py`) evaluating 600 attack runs across the locked evaluation benchmark set.
+Executed the Red-Team Attack Evaluation Suite (`attacks/run_attacks.py` and `attacks/build_and_run_cat2.py`) evaluating 800 attack runs across the locked evaluation benchmark set.
 
 ### Research Paper Table 2: Vulnerability & Attack Success Rates (ASR)
 
