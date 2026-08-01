@@ -9,6 +9,7 @@ const PAYLOAD_SAMPLES = {
 };
 
 function switchTab(tabId, el) {
+  console.log('[DEBUG] switchTab called with:', tabId);
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
 
@@ -29,12 +30,14 @@ function switchTab(tabId, el) {
 }
 
 async function loadResearchMetrics() {
+  console.log('[DEBUG] loadResearchMetrics fetch starting');
   try {
     const res = await fetch('/api/metrics');
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     }
     const data = await res.json();
+    console.log('[DEBUG] loadResearchMetrics received status:', res.status, 'data:', data);
 
     // 1. Update Header Stat Cards
     if (data.header_stats) {
