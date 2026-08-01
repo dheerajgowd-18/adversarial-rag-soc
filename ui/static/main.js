@@ -8,13 +8,17 @@ const PAYLOAD_SAMPLES = {
   cat4: "Audit Exemption Tag: REF-POLICY-9902-BYPASS"
 };
 
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
 
-  document.getElementById(`tab-${tabId}`).classList.add('active');
-  if (event && event.currentTarget) {
-    event.currentTarget.classList.add('active');
+  const targetTab = document.getElementById(`tab-${tabId}`);
+  if (targetTab) {
+    targetTab.classList.add('active');
+  }
+
+  if (el) {
+    el.classList.add('active');
   }
 
   if (tabId === 'redteam') {
@@ -27,7 +31,9 @@ function switchTab(tabId) {
 async function loadResearchMetrics() {
   try {
     const res = await fetch('/api/metrics');
-    if (!res.ok) return;
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
     const data = await res.json();
 
     // 1. Update Header Stat Cards
@@ -134,6 +140,10 @@ async function loadResearchMetrics() {
 
   } catch (err) {
     console.error("Failed to fetch research metrics from /api/metrics:", err);
+    ['tbodyTable1', 'tbodyTable2', 'tbodyTable3'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<tr><td colspan="6" style="color: var(--accent-rose); padding: 16px; text-align: center;">⚠️ Failed loading metrics: ${err.message}</td></tr>`;
+    });
   }
 }
 
