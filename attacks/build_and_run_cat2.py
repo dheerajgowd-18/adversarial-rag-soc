@@ -181,9 +181,10 @@ def run_cat2_eval():
             logger.info(f"  Processed [{idx}/200]...")
 
     asr_defended = (flipped_defended / malicious_total) * 100.0 if malicious_total > 0 else 0.0
-    ddr = ((asr_undefended - asr_defended) / asr_undefended * 100.0) if asr_undefended > 0 else 100.0
+    ddr = ((asr_undefended - asr_defended) / asr_undefended * 100.0) if asr_undefended > 0 else None
+    ddr_str = f"{ddr:.2f}%" if ddr is not None else "N/A (baseline ASR is 0.0%)"
     logger.info(f"CAT-2 Defended ASR: {asr_defended:.2f}% ({flipped_defended}/{malicious_total} flipped)")
-    logger.info(f"CAT-2 DDR: {ddr:.2f}%")
+    logger.info(f"CAT-2 DDR: {ddr_str}")
 
     out_metrics = {
         "cat2_rag_poison": {
@@ -191,7 +192,8 @@ def run_cat2_eval():
             "flipped_undefended": flipped_undefended,
             "defended_asr": round(asr_defended, 2),
             "flipped_defended": flipped_defended,
-            "ddr": round(ddr, 2),
+            "ddr": round(ddr, 2) if ddr is not None else None,
+            "ddr_note": "N/A — baseline ASR already 0.0%, no improvement to measure",
             "malicious_total": malicious_total
         }
     }

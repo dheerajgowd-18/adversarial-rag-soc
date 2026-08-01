@@ -27,11 +27,11 @@ This repository implements a complete research framework that **builds** an LLM+
 | :--- | :---: | :---: | :---: | :---: |
 | **Rule-Based vs RAG LLM Baseline** | **95.0%** *(vs 46.0% Rule Gate)* | — | — | [baseline_report.md](eval/baseline_report.md) |
 | **Direct Field Injection (CAT-1)** | — | **63.0%** 🔴 | — | [attack_results.md](eval/attack_results.md) |
-| **Multi-Tier Security Shield** | **95.0%** *(Zero Recall Loss)* | **0.0%** ✅ | **+100.0%** 🚀 | [defended_results.md](eval/defended_results.md) |
+| **Multi-Tier Security Shield (CAT-1 & CAT-3)** | **95.0%** *(Zero Recall Loss)* | **0.0%** ✅ | **+100.0%** 🚀 | [defended_results.md](eval/defended_results.md) |
 
 * **Baseline Performance:** RAG threat intelligence context resolves traditional rule-engine blindspots, increasing DDoS alert recall from 0.0% to 97.2%.
-* **Adversarial Vulnerability:** Direct natural language overrides in alert free-text fields compromise undefended agents 63.0% of the time.
-* **Defense Mitigation:** The Multi-Tier Shield restores 100% security trust (0.0% Defended ASR) while preserving 95.0% clean alert recall.
+* **Adversarial Vulnerability:** Direct natural language overrides in alert free-text fields compromise undefended agents 63.0% of the time (CAT-1).
+* **Defense Mitigation:** The Multi-Tier Shield restores security trust (0.0% Defended ASR; +100% DDR on tested vulnerable CAT-1/CAT-3) while preserving 95.0% clean alert recall.
 
 *Full quantitative tables, per-category breakdowns, and repeated trial variance metrics ($N=3$) are available in [eval/](eval/).*
 

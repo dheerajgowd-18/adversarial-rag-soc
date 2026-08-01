@@ -177,10 +177,10 @@ def get_research_metrics():
                 "name": "Retrieved-Document Poisoning",
                 "baseline_asr": "0.0% (0/63 flipped)",
                 "defended_asr": "0.0%",
-                "ddr": "100.0%",
+                "ddr": "—",
                 "status": "tested_defended",
                 "restoration_status": "NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)",
-                "caveat": None
+                "caveat": "N/A — baseline ASR already 0.0%, no improvement to measure"
             },
             {
                 "id": "CAT-3",

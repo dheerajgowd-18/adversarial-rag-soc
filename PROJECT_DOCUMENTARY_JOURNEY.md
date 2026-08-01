@@ -251,11 +251,11 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **—** | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%*** (Baseline Noise) | **0.0%** ✅ | **—** | **UNTESTED (STAGE-2 KB LINKAGE NOT SEEDED)** |
 
-**Conclusion:** The Multi-Tier Defense Shield achieved **100.0% Defense Defense Rate**, completely neutralizing prompt injection attacks down to **0.0% Defended ASR** while maintaining full triage accuracy on clean baseline traffic!
+**Conclusion:** The Multi-Tier Defense Shield achieved **100.0% Defense Defense Rate across tested vulnerable categories (CAT-1, CAT-3)**, completely neutralizing prompt injection attacks down to **0.0% Defended ASR** while maintaining full triage accuracy on clean baseline traffic!
 
 ### 7.3 Defense Validation, Clean FPR & Architectural Limitations
 To rigorously validate the Multi-Tier Security Shield against over-defensiveness and unintended side effects, we conducted two critical validation analyses:
@@ -281,7 +281,7 @@ To rigorously validate the Multi-Tier Security Shield against over-defensiveness
 | **Phase 7: Undefended CAT-3 Attack** | — | — | **43.0%** | — | **43% compromised via authority spoofing** |
 | **Phase 7: Undefended CAT-4 Attack** | — | — | **4.0%*** (Baseline Noise) | — | ⚠️ **UNTESTED (Stage-2 Linkage Not Seeded)** |
 | **Phases 8/9: Defended Shield (CAT-1)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
-| **Phases 8/9: Defended Shield (CAT-2)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
+| **Phases 8/9: Defended Shield (CAT-2)** | **95.0%** | **97.2%** | **0.0%** | **—** | **0.0% Defended ASR (Retrieval + Model Resilient)** |
 | **Phases 8/9: Defended Shield (CAT-3)** | **95.0%** | **97.2%** | **0.0%** | **+100.0%** | **100% attacks neutralized, zero accuracy loss** |
 | **Phases 8/9: Defended Shield (CAT-4)** | **95.0%** | **97.2%** | **0.0%** | — | ⚠️ **UNTESTED (Stage-2 Linkage Not Seeded)** |
 | **Phase 10: Research Paper Manuscript** | — | — | — | — | **Publication-ready IEEE manuscript written** |

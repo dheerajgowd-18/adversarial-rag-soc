@@ -179,9 +179,11 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | Category ID | Attack Vector Name | Baseline ASR (Phase 7 Undefended) | Defended ASR (Phases 8 & 9) | Defense Defense Rate (DDR) | Security Restoration Status |
 |---|---|---|---|---|---|
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
+| **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **—** | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-4** | **Indirect Chained Injection** | **4.0%*** (Baseline Noise) | **0.0%** ✅ | **—** | **UNTESTED (STAGE-2 KB LINKAGE NOT SEEDED)** |
+
+*\*Note on CAT-2 DDR:* Because CAT-2 baseline ASR was already 0.0% (due to vector retrieval screening 37/100 and model resilience on 63/100 retrieved), DDR is mathematically undefined ($0/0$) and reported as `—` (N/A — baseline ASR already 0.0%, no improvement to measure).*
 
 ### C. Defense Validation, Clean FPR & Architectural Limitations
 To rigorously validate the Multi-Tier Security Shield against over-defensiveness and unintended side effects, we conducted two critical validation analyses:
