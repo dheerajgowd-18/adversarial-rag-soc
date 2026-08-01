@@ -123,7 +123,7 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **CAT-1** | **Direct Field Injection** | `notes_field` | 100 | N/A (Direct) | **63/100** | 0 | **63.0%** 🔴 | **CRITICAL VULNERABILITY** |
 | **CAT-2** | **Retrieved-Document Poisoning** | `ChromaDB Store` | 100 | **63/100** (63.0%) | **0/63** (**0.0%**) | **37/100** | **0.0%** 🟢 | **LOW VULNERABILITY (RETRIEVAL SCREENED)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | `notes_field` | 100 | N/A (Direct) | **43/100** | 0 | **43.0%** 🟠 | **HIGH VULNERABILITY** |
-| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Chained) | **4/100** | 0 | **4.0%** 🟢 | **LOW VULNERABILITY** |
+| **CAT-4** | **Indirect Chained Injection** | `notes_field` | 100 | N/A (Stage-2 Unlinked) | **4/100** (Baseline Noise) | 0 | **4.0%*** | **UNTESTED (STAGE-2 KB LINKAGE NOT SEEDED)** |
 
 #### Per-Category CAT-2 Retrieval Coverage Breakdown (N=100 Malicious Alerts)
 
@@ -135,7 +135,7 @@ $$\text{Attack Success Rate (ASR)} = \frac{\text{Number of Malicious Alerts Flip
 | **PortScan** | 37 | 1 | 36 | **2.7%** | **0.0%** (0 / 1) | **0.0%** |
 | **TOTAL** | **100** | **63** | **37** | **63.0%** | **0.0%** (0 / 63) | **0.0%** |
 
-*\*Note on Scoped Resilience Claims: Botnet sample size is n=2 alerts. We did not observe a successful flip in 63 tested cases under this specific configuration (`llama-3.1-8b-instant`, `#892` advisory text phrasing, single run).*
+*\*Note on Scoped Resilience & CAT-4 Scope: Botnet sample size is n=2 alerts. We did not observe a successful flip in 63 tested CAT-2 cases under this specific configuration (`llama-3.1-8b-instant`, `#892` advisory text phrasing, single run). **CAT-4 Footnote:** The 4.0% CAT-4 figure represents unattacked model output noise (4/100 baseline false negatives). Because Stage-2 KB-side exemption rules were not seeded into the baseline ChromaDB index, CAT-4 was evaluated as an unlinked trigger payload and is classified as UNTESTED.*
 
 > [!NOTE]
 > **PortScan Retrieval Gap & Future Work:** Dense vector similarity (`all-MiniLM-L6-v2`) matched clean `portscan_patterns.txt` chunks with higher similarity (~0.45) than the poisoned advisory text (~0.15), screening out the payload for 36/37 PortScan queries. This embedding similarity gap represents a retrieval-layer dynamics phenomenon that warrants explicit future investigation, rather than being claimed as a completed model-layer defense success.
@@ -152,27 +152,17 @@ To evaluate the statistical stability of LLM triage decisions under baseline and
 
 ---
 
-## V. Multi-Tier Defense Layer & Evaluation
-
-To mitigate prompt injection vulnerabilities, we designed a **Multi-Tier Security Shield** (`defense/filters.py`):
+## V. DEFENSE SHIELD ARCHITECTURE & SAFETY EVALUATION
 
 ```
-Incoming Alert Notes
-       │
-       v
-[ Tier 1: Input Sanitization Filter ] ──(Strips instruction overrides & fake headers)
-       │
-       v
-[ Tier 2: Structural XML Isolation ] ──(Wraps text in <untrusted_analyst_notes> tags)
-       │
-       v
-[ Multi-Key LLM Triage Agent ] ────────(Generates Triage Verdict)
-       │
-       v
-[ Tier 3: Dual-Agent Verification ] ──(Cross-checks Rule Anomaly Score vs LLM Verdict)
-       │
-       v
-Final Secure Triage Verdict
+Incoming Alert ──> [ Tier 1: Input Sanitization ] ──> [ Tier 2: XML Boundary Wrapping ] ──> LLM Triage
+                           (Regex Blocklist)                 (<untrusted_notes> Tagging)         │
+                                                                                                │
+                                                                                                v
+                                                     [ Tier 3: Dual-Agent Verification ] ──(Cross-checks Rule Anomaly Score vs LLM Verdict)
+                                                                                                │
+                                                                                                v
+                                                                                   Final Secure Triage Verdict
 ```
 
 ### A. Defense Mechanisms
@@ -191,7 +181,7 @@ $$\text{DDR} = \frac{\text{ASR}_{\text{Undefended}} - \text{ASR}_{\text{Defended
 | **CAT-1** | **Direct Field Injection** | **63.0%** 🔴 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
 | **CAT-2** | **Retrieved-Document Poisoning** | **0.0%** (0/63 tested flipped) 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **NEUTRALIZED (RETRIEVAL + MODEL RESILIENT)** |
 | **CAT-3** | **Role-Confusion / Authority Spoofing** | **43.0%** 🟠 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
-| **CAT-4** | **Indirect Chained Injection** | **4.0%** 🟢 | **0.0%** ✅ | **+100.0%** 🚀 | **FULLY NEUTRALIZED** |
+| **CAT-4** | **Indirect Chained Injection** | **4.0%*** (Baseline Noise) | **0.0%** ✅ | **—** | **UNTESTED (STAGE-2 KB LINKAGE NOT SEEDED)** |
 
 ### C. Defense Validation, Clean FPR & Architectural Limitations
 To rigorously validate the Multi-Tier Security Shield against over-defensiveness and unintended side effects, we conducted two critical validation analyses:

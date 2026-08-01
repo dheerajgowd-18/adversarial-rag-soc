@@ -26,12 +26,12 @@ This repository implements an end-to-end research platform that **Builds** a RAG
 | **Phase 7: Undefended CAT-1 Direct Attack** | — | — | **63.0%** 🔴 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-2 RAG Poisoning** | — | — | **0.0%** (63/100 retrieved) 🟢 | — | ✅ Complete |
 | **Phase 7: Undefended CAT-3 Authority Spoof** | — | — | **43.0%** 🟠 | — | ✅ Complete |
-| **Phase 7: Undefended CAT-4 Chained Attack** | — | — | **4.0%** 🟢 | — | ✅ Complete |
+| **Phase 7: Undefended CAT-4 Chained Attack** | — | — | **4.0%*** (Baseline Noise) | — | ⚠️ UNTESTED (Stage-2 Unlinked) |
 | **Phases 8/9: Multi-Tier Defended Shield** | **95.0%** | **97.2%** | **0.0%** ✅ | **+100.0%** 🚀 | ✅ Complete |
 | **Phase 10: IEEE Research Paper Manuscript** | — | — | — | — | ✅ Written |
 | **Phase 11: Web Command Center UI** | — | — | — | — | 💻 Live at `http://127.0.0.1:8000` |
 
-*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 95.0% ± 0.0% (F1 = 0.6835 ± 0.0000), CAT-1 ASR = 62.3% ± 0.9%. CAT-2 RAG poisoning 0.0% ASR was mechanically verified across all 100 attacked alerts (63/100 poisoned chunks retrieved into prompt context with 0.0% ASR; 37/100 screened by vector search). Implementation sprint completed in 4 days (2026-07-28 to 2026-07-31).*
+*\*Note on Sample Size & Variance: Botnet sample size in eval_fixed_set.json is n=2 alerts; metrics carry higher variance. Repeated trial runs (N=3) yield low model variance: Baseline Recall = 95.0% ± 0.0% (F1 = 0.6835 ± 0.0000), CAT-1 ASR = 62.3% ± 0.9%. CAT-2 RAG poisoning 0.0% ASR was mechanically verified across all 100 attacked alerts (63/100 poisoned chunks retrieved into prompt context with 0.0% ASR; 37/100 screened by vector search). **CAT-4 Note:** The 4.0% CAT-4 figure represents unattacked model output noise (4/100 baseline false negatives). Because Stage-2 KB-side exemption rules were not seeded into the baseline ChromaDB index, CAT-4 was evaluated as an unlinked trigger payload and is classified as UNTESTED.*
 
 ---
 
