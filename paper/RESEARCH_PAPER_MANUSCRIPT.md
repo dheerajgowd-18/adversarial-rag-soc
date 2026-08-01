@@ -199,8 +199,8 @@ To rigorously validate the Multi-Tier Security Shield against over-defensiveness
 1. **Clean Baseline Performance & False Positive Rate (FPR):**
    Evaluating the complete defended pipeline against the unattacked, clean 200-alert benchmark (`eval_fixed_set.json`) confirmed a **0.0% false modification rate** (zero benign analyst notes were erroneously altered by the Tier-1 regex sanitizer). Furthermore, the defended pipeline maintained a **100.0% clean baseline recall retention** (95.0% overall recall, identical to baseline) with an unattacked Benign False Positive Rate of **10.0%** (10/100 benign flows flagged, zero increase over baseline).
 
-2. **Tier-3 Independence & Defense Limitations:**
-   While Tier-1 input sanitization and Tier-2 XML wrapping eliminate 100% of explicit instruction overrides, Tier-3 (Dual-Agent Verification) acts as an independent safety net by comparing LLM verdicts against Phase 2 rule anomaly scores ($\alpha \ge 0.28$). To maintain true architectural decoupling from Tier-1, Tier-3 enforces a pure semantic consistency boundary: any flow with a high rule anomaly score ($\alpha \ge 0.28$) that an LLM reclassifies as `BENIGN` while containing non-standard text attributes triggers an automated safety override back to `SUSPICIOUS`, regardless of whether specific Tier-1 regex blocklist patterns matched.
+2. **Tier-3 Implementation & Defense Limitations:**
+   While Tier-1 input sanitization and Tier-2 XML wrapping eliminate explicit instruction overrides at the input stage, Tier-3 (Dual-Agent Verification) acts as a post-LLM safety net by comparing LLM verdicts against Phase 2 rule anomaly scores ($\alpha \ge 0.28$). Specifically, Tier-3 evaluates whether an alert flagged with a high anomaly score ($\alpha \ge 0.28$) was reclassified as `BENIGN` by the LLM while its text attributes contain blocklist regex patterns or suspicious keywords (`ignore`, `override`, `benign`, `system`, `admin`). If triggered, Tier-3 overrides the decision back to `SUSPICIOUS`, ensuring high-anomaly alerts cannot be silently suppressed even if prior defense tiers were bypassed.
 
 ---
 
